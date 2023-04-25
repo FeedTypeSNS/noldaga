@@ -12,4 +12,7 @@ public class FeedModifyRequest {
 
     private String title;
     private String content;
+    private String groupId;
+    private String range;
+
 }
