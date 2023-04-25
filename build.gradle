@@ -60,6 +60,9 @@ dependencies {
             "javax.annotation:javax.annotation-api",
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
+    //이미지 썸네일
+    implementation 'net.coobird:thumbnailator:0.4.16'
+
     //Mapstruct
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
