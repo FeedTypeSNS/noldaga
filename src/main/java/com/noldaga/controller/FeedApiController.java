@@ -31,7 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FeedApiController {
 
-    @Value("${com.multicampus.upload.path}")
+    @Value("${com.noldaga.upload.path}")
     private String path;
 
     private final FeedService feedService;
