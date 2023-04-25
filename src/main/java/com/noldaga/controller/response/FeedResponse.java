@@ -14,7 +14,7 @@ public class FeedResponse {
     private Long id;
     private String title;
     private String content;
-    private UserResponse userResponse;
+    //private UserResponse userResponse;
     private LocalDateTime ModDate;
     private LocalDateTime RegDate;
 
@@ -23,7 +23,7 @@ public class FeedResponse {
         return new FeedResponse(feedDto.getId(),
                 feedDto.getTitle(),
                 feedDto.getContent(),
-                UserResponse.fromUserDto(feedDto.getUserDto()),
+                //UserResponse.fromUserDto(feedDto.getUserDto()),
                 feedDto.getModDate(),
                 feedDto.getRegDate()
         );
