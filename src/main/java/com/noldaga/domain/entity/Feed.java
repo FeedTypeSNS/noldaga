@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter //Dto 만들때 쓰임
-@Builder
-@AllArgsConstructor
+//@Builder
+//@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Table(name="feed") //db 테이블 만들때 예약어는 피해야하는것을 염두해야함
