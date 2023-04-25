@@ -3,7 +3,6 @@ package com.noldaga.service;
 
 import com.noldaga.controller.request.FeedCreateRequest;
 import com.noldaga.controller.request.FeedModifyRequest;
-import com.noldaga.domain.Mapper.Feed.FeedMapper;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.FeedDto;
