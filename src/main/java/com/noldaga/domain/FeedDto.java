@@ -1,21 +1,27 @@
 package com.noldaga.domain;
 
 import com.noldaga.domain.entity.Feed;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter //response 로 변환해줄때 필요 등
 public class FeedDto {
     private Long id;
     private String title;
     private String content;
     private UserDto userDto;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
+    private long groupId;
+    private int range;
+    private LocalDateTime modDate;
+    private LocalDateTime regDate;
+    private long totalView;
 
+    /*
     private FeedDto(Long id, String title, String content, UserDto userDto, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.title = title;
@@ -36,7 +42,6 @@ public class FeedDto {
                 feed.getModifiedAt(),
                 feed.getDeletedAt()
         );
-
     }
-
+     */
 }
