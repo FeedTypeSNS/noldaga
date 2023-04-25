@@ -1,3 +1,9 @@
+buildscript {
+    ext{
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
@@ -44,6 +50,22 @@ dependencies {
     implementation 'com.vladmihalcea:hibernate-types-52:2.20.0' //for jsonb
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' //for kakao login
+
+    //vaild 유효성
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //querydsl
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor(
+            "javax.persistence:javax.persistence-api",
+            "javax.annotation:javax.annotation-api",
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+
+    //Mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    annotationProcessor(
+            'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    )
 }
 
 tasks.named('test') {
