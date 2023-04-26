@@ -15,9 +15,8 @@ public class FeedResponse {
     private String title;
     private String content;
     private UserResponse userResponse;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
+    private LocalDateTime ModDate;
+    private LocalDateTime RegDate;
 
 
     public static FeedResponse fromFeedDto(FeedDto feedDto) {
@@ -25,9 +24,8 @@ public class FeedResponse {
                 feedDto.getTitle(),
                 feedDto.getContent(),
                 UserResponse.fromUserDto(feedDto.getUserDto()),
-                feedDto.getCreatedAt(),
-                feedDto.getModifiedAt(),
-                feedDto.getDeletedAt()
+                feedDto.getModDate(),
+                feedDto.getRegDate()
         );
     }
 }
