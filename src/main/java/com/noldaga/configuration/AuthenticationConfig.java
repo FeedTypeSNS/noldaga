@@ -38,8 +38,8 @@ public class AuthenticationConfig {
                         .mvcMatchers(
                                 HttpMethod.POST,
                                 "/test",
-                                "/api/*/users/join",
-                                "/api/*/users/login"
+                                "/api/users/join",
+                                "/api/users/login"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
