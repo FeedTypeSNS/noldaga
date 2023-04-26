@@ -13,10 +13,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
+//@Builder
+//@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Getter //Dto 만들때 쓰임
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Table(name="feed") //db 테이블 만들때 예약어는 피해야하는것을 염두해야함
@@ -28,16 +28,17 @@ public class Feed {
     @Column(name="feed_id")
     private Long id;
 
-    @Setter
+    //@Setter
     @NotEmpty
     @Column(nullable = false, length = 100, name="title")
     private String title;
 
+    //@Setter
     @NotEmpty
-    @Setter
     @Column(nullable=false, columnDefinition = "TEXT")//TEXT 타입으로 컬럼이 생성됨(그냥 String 디폴트보다 더 길게 저장가능)
     private String content;
 
+    //@Setter
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
@@ -46,11 +47,11 @@ public class Feed {
 //    @OneToOne
 //    @JoinColumn(name="group_id")
 //    private Group group;
-    @Setter
+//    @Setter
     @Column(nullable = false, name="group_id")
     private long groupId;
 
-    @Setter
+    //@Setter
     @Column(nullable = false, name="open_range") //전체 0 부분공개 1
     private int range;
 
@@ -67,11 +68,22 @@ public class Feed {
     @Column(name="total_view")
     private long totalView;
 
-    public void change(String title, String content, long groupId, int range){
-        this.setTitle(title);
-        this.setContent(content);
-        this.setGroupId(groupId);
-        this.setRange(range);
+    public Feed(String title, String content, long groupId, int range, User user) {
+        this.title = title;
+        this.content = content;
+        this.groupId = groupId;
+        this.range = range;
+        this.user = user;
     }
 
+    public static Feed of(String title, String content, long groupId, int range, User user) {
+        return new Feed(title, content, groupId, range, user);
+    }
+
+    public void change(String title, String content, long groupId, int range){
+        this.title = title;
+        this.content = content;
+        this.groupId = groupId;
+        this.range = range;
+    }
 }

@@ -12,4 +12,6 @@ public class FeedCreateRequest {
 
     private String title;
     private String content;
+    private Long groupId;
+    private int range;
 }
