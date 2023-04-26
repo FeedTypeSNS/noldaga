@@ -21,6 +21,13 @@ public enum ErrorCode {
 
     ALREADY_LIKED(HttpStatus.CONFLICT, "User has already liked the Feed"), //feedLike 개발하면서 추가
 
+
+    //follow
+    CAN_NOT_FOLLOW_SELF(HttpStatus.CONFLICT, "User cannot follow yourself"),
+    CAN_NOT_UNFOLLOW_SELF(HttpStatus.CONFLICT, "User cannot unfollow yourself"),
+    ALREADY_FOLLOW(HttpStatus.CONFLICT, "User has already follow"),
+    ALREADY_UNFOLLOW(HttpStatus.CONFLICT, "User has already unfollow"),
+
     ;
 
     private HttpStatus status;
