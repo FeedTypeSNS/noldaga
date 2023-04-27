@@ -16,6 +16,8 @@ public class UserDto {
     private Long id;
     private String username;
     private String password;
+
+    private String nickname;
     private Gender gender;
     private LocalDate birthday;
     private String profileImageUrl;
@@ -29,10 +31,11 @@ public class UserDto {
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
 
-    private UserDto(Long id, String username, String password, Gender gender, LocalDate birthday, String profileImageUrl, String profileMessage, String email, Long totalFollower, Long totalFollowing, UserRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt) {
+    private UserDto(Long id, String username, String password, String nickname,Gender gender, LocalDate birthday, String profileImageUrl, String profileMessage, String email, Long totalFollower, Long totalFollowing, UserRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.nickname = nickname;
         this.gender = gender;
         this.birthday = birthday;
         this.profileImageUrl = profileImageUrl;
@@ -61,6 +64,7 @@ public class UserDto {
                 entity.getId(),
                 entity.getUsername(),
                 entity.getPassword(),
+                entity.getNickname(),
                 entity.getGender(),
                 entity.getBirthday(),
                 entity.getProfileImageUrl(),
