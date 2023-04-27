@@ -36,3 +36,8 @@ jwt:
   secret-key: this-Key-Is-Over-32Bytes-For-HmacShaKey
   #30days
   token.expired-time-ms: 2592000000
+
+com:
+  noldaga:
+    upload:
+      path: C:\\upload
