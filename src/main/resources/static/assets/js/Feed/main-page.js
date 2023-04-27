@@ -1,23 +1,54 @@
 function init() {
 
+    var page = 0;
+
     $.ajax({
         type: "GET",
-        url: "/api/feeds",
+        url: "/api/feeds/"+page,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initMainPage(resp);
-        initLoadMoreButton();
+        initMainPageOriginal(resp);
+        //initLoadMoreButton();
     }).fail(function(error){
         alert(JSON.stringify(error));
+    });
+
+    $("#loadmore-button").on("click",()=>{
+        alert("버튼확인");
+        this.loadmore(++page);
     });
 }
 
 init();
 
 
-function initMainPage(data) {
+function loadmore(currentPage){
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feeds/"+currentPage,
+        dataType: "json"
+    }).done(function(resp){
+        initMainPageOriginal(resp);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function initMainPageSimpleModified(data) {
     for(let i=0; i<data.length; i++){
-        let feedBox = document.querySelector("#feedBox");
+        let feedBox = document.querySelector("#feed");
+        let cardBox = document.createElement("div"); //<div></div>
+        cardBox.className = "card"; //<div class="card"></div>
+
+        cardBox.innerHTML = getFeedBoxContent(data[i]);
+        feedBox.append(cardBox); //그걸 feedBox에 붙임
+    }
+}
+
+function initMainPageOriginal(data) {
+    for(let i=0; i<data.length; i++){
+        let feedBox = document.querySelector("#feed");
         let cardBox = document.createElement("div"); //<div></div>
         cardBox.className = "card"; //<div class="card"></div>
 
@@ -26,6 +57,32 @@ function initMainPage(data) {
     }
 }
 
+//안씀
+function initMainPage(data) {
+    for(let i=0; i<data.length; i++){
+        let feedBox = document.querySelector("#feed");
+        //피드 카드하나 만들기
+        let feedOneDiv = document.createElement("div");
+        feedOneDiv.className = "card";
+        //헤더div만들기
+        let feedHeaderDiv = document.createElement("div"); //<div></div>
+        feedHeaderDiv.className = "card-header border-0 pb-0";
+        //헤더내용 넣기
+        feedHeaderDiv.innerHTML = getHeaderContent(data[i]);
+        //바디div만들기
+        let feedBodyDiv = document.createElement("div"); //<div></div>
+        feedBodyDiv.className = "card-body";
+        //바디내용 넣기
+        feedBodyDiv.innerHTML = getBodyContentContent(data[i]);
+        feedBodyDiv.innerHTML = getBodyContentImage(data[i]);
+
+        feedOneDiv.append(feedHeaderDiv); //그걸 feedBox에 붙임
+        feedOneDiv.append(feedBodyDiv); //그걸 feedBox에 붙임
+        feedBox.append(feedOneDiv); //그걸 feedBox에 붙임
+    }
+}
+
+//안씀
 function initLoadMoreButton() {
     let feedBox = document.querySelector("#feedBox");
     let cardBox = document.createElement("a");
@@ -33,12 +90,12 @@ function initLoadMoreButton() {
     cardBox.role = "button";
     cardBox.className = "btn btn-loader btn-primary-soft";
     cardBox.ariaPressed = "true";
-    //cardBox.data-bs-toggle = "button";
     cardBox.innerHTML = getLoadMoreButton();
 
     feedBox.append(cardBox);
 }
 
+//안씀
 function getLoadMoreButton(){
     return `<span className="load-text"> Load more </span>
         <div className="load-icon">
@@ -48,10 +105,24 @@ function getLoadMoreButton(){
         </div>`;
 
 }
+//안씀
+function getBodyContentImage(data) {
+    return `<img
+                  class="card-img"
+                  src="assets/images/post/3by2/01.jpg"
+                  alt="Post"
+           />`;
+}
+//안씀
+function getBodyContentContent(data) {
+    return `<p>
+              ${data.content}
+            </p>`;
+}
 
-function getFeedBoxContent(data) {
-    return `<div class="card-header border-0 pb-0">
-                <div class="d-flex align-items-center justify-content-between">
+//안씀
+function getHeaderContent(data) {
+    return `<div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
@@ -67,7 +138,7 @@ function getFeedBoxContent(data) {
                     <div>
                       <div class="nav nav-divider">
                         <h6 class="nav-item card-title mb-0">
-                          <a href="#!"> ${data.users.name}</a>
+                          <a href="#!"> ${data.userName}</a>
                         </h6>
                         <span class="nav-item small"> ${data.modDate}</span>
                       </div>
@@ -123,13 +194,91 @@ function getFeedBoxContent(data) {
                     </ul>
                   </div>
                   <!-- Card feed action dropdown END -->
+                </div>`;
+}
+
+
+function getFeedBoxContent(data) {
+    return `<div class="card-header border-0 pb-0">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-story me-2">
+                      <a href="#!">
+                        <img
+                          class="avatar-img rounded-circle"
+                          src="assets/images/avatar/04.jpg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <!-- Info -->
+                    <div>
+                      <div class="nav nav-divider">
+                        <h6 class="nav-item card-title mb-0">
+                          <a href="#">${data.userDto.name} </a>
+                        </h6>
+                        <span class="nav-item small">${data.modDate} </span>
+                      </div>
+                      <h6 class="nav-item card-title mb-0">
+                          <a href="/feed?id=${data.id}">${data.title}  </a>
+                        </h6>
+                    </div>
+                  </div>
+                  <!-- Card feed action dropdown START -->
+                  <div class="dropdown">
+                    <a
+                      href="#"
+                      class="text-secondary btn btn-secondary-soft-hover py-1 px-2"
+                      id="cardFeedAction"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="bi bi-three-dots"></i>
+                    </a>
+                    <!-- Card feed action dropdown menu -->
+                
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="cardFeedAction"
+                    >
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori
+                          ferguson
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a
+                        >
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-flag fa-fw pe-2"></i>Report post</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Card feed action dropdown END -->
                 </div>
-              </div>
+             </div>
               <!-- Card header END -->
               <!-- Card body START -->
               <div class="card-body">
                 <p>
-                  ${data.content}
+                  ${data.content} 
                 </p>
                 <!-- Card img -->
                 <img
@@ -149,6 +298,7 @@ function getFeedBoxContent(data) {
                       data-bs-html="true"
                       data-bs-custom-class="tooltip-text-start"
                       data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
+                      onclick="like()"
                     >
                       <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
                       (56)</a
@@ -232,10 +382,12 @@ function getFeedBoxContent(data) {
                       class="form-control pe-5 bg-light"
                       rows="1"
                       placeholder="Add a comment..."
+                      id="replyContent"
                     ></textarea>
+                    <input type ="hidden" id="feedId" />
                     <button
                       class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0"
-                      type="submit"
+                      type="submit" id="reply-button" onclick="reply()"
                     >
                       <i class="bi bi-send-fill"> </i>
                     </button>
@@ -243,145 +395,6 @@ function getFeedBoxContent(data) {
                 </div>
                 <!-- Comment wrap START -->
                 <ul class="comment-wrap list-unstyled">
-                  <!-- Comment item START -->
-                  <li class="comment-item">
-                    <div class="d-flex position-relative">
-                      <!-- Avatar -->
-                      <div class="avatar avatar-xs">
-                        <a href="#!"
-                          ><img
-                            class="avatar-img rounded-circle"
-                            src="assets/images/avatar/05.jpg"
-                            alt=""
-                        /></a>
-                      </div>
-                      <div class="ms-2">
-                        <!-- Comment by -->
-                        <div class="bg-light rounded-start-top-0 p-3 rounded">
-                          <div class="d-flex justify-content-between">
-                            <h6 class="mb-1">
-                              <a href="#!"> Frances Guerrero </a>
-                            </h6>
-                            <small class="ms-2">5hr</small>
-                          </div>
-                          <p class="small mb-0">
-                            Removed demands expense account in outward tedious
-                            do. Particular way thoroughly unaffected projection.
-                          </p>
-                        </div>
-                        <!-- Comment react -->
-                        <ul class="nav nav-divider py-2 small">
-                          <li class="nav-item">
-                            <a class="nav-link" href="#!"> Like (3)</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="#!"> Reply</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="#!"> View 5 replies</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <!-- Comment item nested START -->
-                    <ul class="comment-item-nested list-unstyled">
-                      <!-- Comment item START -->
-                      <li class="comment-item">
-                        <div class="d-flex">
-                          <!-- Avatar -->
-                          <div class="avatar avatar-xs">
-                            <a href="#!"
-                              ><img
-                                class="avatar-img rounded-circle"
-                                src="assets/images/avatar/06.jpg"
-                                alt=""
-                            /></a>
-                          </div>
-                          <!-- Comment by -->
-                          <div class="ms-2">
-                            <div class="bg-light p-3 rounded">
-                              <div class="d-flex justify-content-between">
-                                <h6 class="mb-1">
-                                  <a href="#!"> Lori Stevens </a>
-                                </h6>
-                                <small class="ms-2">2hr</small>
-                              </div>
-                              <p class="small mb-0">
-                                See resolved goodness felicity shy civility
-                                domestic had but Drawings offended yet answered
-                                Jennings perceive.
-                              </p>
-                            </div>
-                            <!-- Comment react -->
-                            <ul class="nav nav-divider py-2 small">
-                              <li class="nav-item">
-                                <a class="nav-link" href="#!"> Like (5)</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#!"> Reply</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </li>
-                      <!-- Comment item END -->
-                      <!-- Comment item START -->
-                      <li class="comment-item">
-                        <div class="d-flex">
-                          <!-- Avatar -->
-                          <div class="avatar avatar-story avatar-xs">
-                            <a href="#!"
-                              ><img
-                                class="avatar-img rounded-circle"
-                                src="assets/images/avatar/07.jpg"
-                                alt=""
-                            /></a>
-                          </div>
-                          <!-- Comment by -->
-                          <div class="ms-2">
-                            <div class="bg-light p-3 rounded">
-                              <div class="d-flex justify-content-between">
-                                <h6 class="mb-1">
-                                  <a href="#!"> Billy Vasquez </a>
-                                </h6>
-                                <small class="ms-2">15min</small>
-                              </div>
-                              <p class="small mb-0">
-                                Wishing calling is warrant settled was lucky.
-                              </p>
-                            </div>
-                            <!-- Comment react -->
-                            <ul class="nav nav-divider py-2 small">
-                              <li class="nav-item">
-                                <a class="nav-link" href="#!"> Like</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#!"> Reply</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </li>
-                      <!-- Comment item END -->
-                    </ul>
-                    <!-- Load more replies -->
-                    <a
-                      href="#!"
-                      role="button"
-                      class="btn btn-link btn-link-loader btn-sm text-secondary d-flex align-items-center mb-3 ms-5"
-                      data-bs-toggle="button"
-                      aria-pressed="true"
-                    >
-                      <div class="spinner-dots me-2">
-                        <span class="spinner-dot"></span>
-                        <span class="spinner-dot"></span>
-                        <span class="spinner-dot"></span>
-                      </div>
-                      Load more replies
-                    </a>
-                    <!-- Comment item nested END -->
-                  </li>
-                  <!-- Comment item END -->
                   <!-- Comment item START -->
                   <li class="comment-item">
                     <div class="d-flex">
@@ -452,4 +465,30 @@ function modi() {
     $("#deletetest").on("click", () => {
         alert("수정하기 버튼 클릭");
     });
+}
+
+function reply() {
+    let content={
+        content: $("#replyContent").val(),
+        feedId: $("#feedId").val()
+    };
+    alert(content.content+'  '+content.feedId);
+    $.ajax({
+        type: "POST",
+        url: "/api/comment",
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        alert('댓글 등록 완료');
+        window.location.href = "/test";
+    }).fail(function(error){
+        alert('댓글 등록 실패');
+        alert(JSON.stringify(error));
+        window.location.href = "/test";
+    });
+}
+
+function like() {
+    alert('피드 좋아요');
 }
