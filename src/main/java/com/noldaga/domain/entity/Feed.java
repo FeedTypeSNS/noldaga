@@ -4,6 +4,7 @@ package com.noldaga.domain.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
@@ -69,7 +70,7 @@ public class Feed {
     private LocalDateTime modDate;
 
     @Column(name="total_view")
-    private Long totalView;
+    private long totalView; //default로 0들어가게 long설정
 
  //   @JsonIgnoreProperties({"feed,user"})
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
