@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
-    @Bean //UserService 와의 순환문제 때문에 SecurityConfig 로 뺏음
+    @Bean
     public BCryptPasswordEncoder encodePassword(){
         return new BCryptPasswordEncoder();
     }

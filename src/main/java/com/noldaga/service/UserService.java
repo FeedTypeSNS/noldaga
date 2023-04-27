@@ -60,10 +60,10 @@ public class UserService {
         return token;
     }
 
-    public UserDto loadUserByUsername(String username) {
-        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
-    }
+//    public UserDto loadUserByUsername(String username) {
+//        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
+//                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+//    }
 
 
 

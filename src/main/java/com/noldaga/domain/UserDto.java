@@ -15,7 +15,7 @@ import java.util.List;
  * 엔티티 클래스는 db에 저장할때만 사용하는것이 좋음 : 엔티티 객체의 영향을 준다라는것은 db에 영향을 준다는것을 의미함
  */
 @Getter
-public class UserDto implements UserDetails {
+public class UserDto {
 
     private Long id;
     private String username;
@@ -49,29 +49,4 @@ public class UserDto implements UserDetails {
     }
 
 
-    //implements UserDetails
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.getRole().toString()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.deletedAt == null;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.deletedAt == null;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.deletedAt == null;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.deletedAt == null;
-    }
 }
