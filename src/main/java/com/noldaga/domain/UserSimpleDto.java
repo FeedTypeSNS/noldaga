@@ -1,6 +1,8 @@
 package com.noldaga.domain;
 
 import com.noldaga.domain.entity.User;
+import com.noldaga.domain.userdto.UserDto;
+import com.noldaga.domain.userdto.UserRole;
 import lombok.Getter;
 
 @Getter

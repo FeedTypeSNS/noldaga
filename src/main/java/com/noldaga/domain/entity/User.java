@@ -1,7 +1,8 @@
 package com.noldaga.domain.entity;
 
 
-import com.noldaga.domain.UserRole;
+import com.noldaga.domain.userdto.Gender;
+import com.noldaga.domain.userdto.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -24,17 +26,27 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_at is NULL") // 조회시 이 조건이 자동 추가
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="user_id")
     private Long id;
 
     @Column(nullable=false ,updatable = false,unique = true)
     private String username;
 
-    @Setter
-    @Column(nullable = false)
+    @Setter @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
+    private LocalDate birthday;
+
+
+    private String profileImageUrl;
+    private String profileMessage;
+    private String email;
+    private Long totalFollower;
+    private Long totalFollowing;
 
     @Setter
     @Column(name = "role")

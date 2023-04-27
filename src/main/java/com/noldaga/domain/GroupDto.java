@@ -1,11 +1,8 @@
 package com.noldaga.domain;
 
-import com.noldaga.domain.entity.Feed;
 import com.noldaga.domain.entity.Group;
-import com.noldaga.domain.entity.User;
+import com.noldaga.domain.userdto.UserDto;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Setter

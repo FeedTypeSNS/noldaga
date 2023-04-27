@@ -53,7 +53,7 @@ public class FeedApiController {
 
     @GetMapping(value="/api/feeds/{page}")
     public Response<List<FeedResponse>> getFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
-        List<FeedDto> feedDtoList = feedService.getMainFeed(page, authentication.getName());
+        List<FeedDto> feedDtoList = feedService.getMainFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
         feedDtoList.forEach(feedDto->{
