@@ -2,7 +2,7 @@ package com.noldaga.service;
 
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
-import com.noldaga.domain.UserDto;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.UserRepository;
 import com.noldaga.util.JwtTokenUtils;
@@ -60,10 +60,10 @@ public class UserService {
         return token;
     }
 
-    public UserDto loadUserByUsername(String username) {
-        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
-    }
+//    public UserDto loadUserByUsername(String username) {
+//        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
+//                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+//    }
 
 
 

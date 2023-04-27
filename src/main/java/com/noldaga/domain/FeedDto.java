@@ -1,7 +1,7 @@
 package com.noldaga.domain;
 
 import com.noldaga.domain.entity.Feed;
-import lombok.AllArgsConstructor;
+import com.noldaga.domain.userdto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
