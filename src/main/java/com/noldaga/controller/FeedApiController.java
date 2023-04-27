@@ -36,6 +36,14 @@ public class FeedApiController {
 
     private final FeedService feedService;
 
+    @GetMapping("/api/feed/getuser")
+    public String getUserAtFeed(Authentication authentication) {
+
+        //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
+
+        return authentication.getName();
+    }
+
     @PostMapping("/api/feed")
     public Response<FeedResponse> create(@RequestBody FeedCreateRequest request, Authentication authentication) {
         FeedDto feedDto = feedService.create(request, authentication.getName());
