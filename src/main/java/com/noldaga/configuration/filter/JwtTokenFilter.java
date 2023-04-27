@@ -50,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
         if(cookies !=null){
             tokenCookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equals("tokenCookie")).findFirst();
             if(tokenCookie.isEmpty()){
-                log.error("Error occurs while getting token. cookie is null or invalid{}",request.getRequestURL());
+                log.error("Error occurs while getting token. cookie is null or invalid {}",request.getRequestURL());
                 filterChain.doFilter(request, response);
                 return;
             }
