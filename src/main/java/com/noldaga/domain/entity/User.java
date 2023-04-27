@@ -32,6 +32,7 @@ public class User {
     @Column(nullable=false ,updatable = false,unique = true)
     private String username;
 
+    private String nickname;
     @Setter @Column(nullable = false)
     private String password;
 
