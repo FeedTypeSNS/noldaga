@@ -32,14 +32,14 @@ public class AuthenticationConfig {
         return http.csrf().disable()//csrf disable 안해주면 get만 가능함...
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(
-                                HttpMethod.GET,
-                                "/"
+                                HttpMethod.GET
+//                                , "/"
                         ).permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
                                 "/test",
-                                "/api/*/users/join",
-                                "/api/*/users/login"
+                                "/api/users/join",
+                                "/api/users/login"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
