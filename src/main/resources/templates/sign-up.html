@@ -106,14 +106,14 @@
           <form class="mt-4">
             <!-- Email -->
             <div class="mb-3 input-group-lg">
-              <input type="email" class="form-control" placeholder="Enter email">
+              <input type="text" name = "username" class="form-control" placeholder="Enter email">
               <small>We'll never share your email with anyone else.</small>
             </div>
             <!-- New password -->
             <div class="mb-3 position-relative">
               <!-- Input group -->
               <div class="input-group input-group-lg">
-                <input class="form-control fakepassword" type="password" id="psw-input" placeholder="Enter new password">
+                <input class="form-control fakepassword" type="password" name="password" id="psw-input" placeholder="Enter new password">
                 <span class="input-group-text p-0">
                   <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
                 </span>
@@ -165,6 +165,45 @@ JS libraries, plugins and custom scripts -->
 
 <!-- Theme Functions -->
 <script src="assets/js/functions.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 폼 전송 이벤트 핸들러 등록
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // 폼 전송 막기
+            e.preventDefault();
+
+            // 폼 데이터를 JSON 형태로 직렬화
+            let formData = new FormData(document.querySelector('form'));
+            let jsonData = {};
+            formData.forEach(function(value, key) {
+                jsonData[key] = value;
+            });
+
+            // AJAX 요청 보내기
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/users/join', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+
+                let response = JSON.parse(xhr.responseText);
+                if(response.resultCode ==='SUCCESS'){
+                    console.log(response);
+                    window.location.href = "/login-form";
+                }
+                else{
+                    //todo 실패시
+                }
+
+            };
+            xhr.onerror = function() {
+                // 요청 실패시 처리
+            };
+            xhr.send(JSON.stringify(jsonData));
+        });
+    });
+
+</script>
 
 </body>
 </html>
