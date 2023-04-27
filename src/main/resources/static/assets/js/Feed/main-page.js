@@ -7,7 +7,7 @@ function init() {
         url: "/api/feeds/"+page,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initMainPageOriginal(resp);
+        initMainPageSimpleModified(resp.result);
         //initLoadMoreButton();
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -29,7 +29,7 @@ function loadmore(currentPage){
         url: "/api/feeds/"+currentPage,
         dataType: "json"
     }).done(function(resp){
-        initMainPageOriginal(resp);
+        initMainPageSimpleModified(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -41,11 +41,12 @@ function initMainPageSimpleModified(data) {
         let cardBox = document.createElement("div"); //<div></div>
         cardBox.className = "card"; //<div class="card"></div>
 
-        cardBox.innerHTML = getFeedBoxContent(data[i]);
+        cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
         feedBox.append(cardBox); //그걸 feedBox에 붙임
     }
 }
 
+//댓글까지 나오는거
 function initMainPageOriginal(data) {
     for(let i=0; i<data.length; i++){
         let feedBox = document.querySelector("#feed");
@@ -57,72 +58,10 @@ function initMainPageOriginal(data) {
     }
 }
 
-//안씀
-function initMainPage(data) {
-    for(let i=0; i<data.length; i++){
-        let feedBox = document.querySelector("#feed");
-        //피드 카드하나 만들기
-        let feedOneDiv = document.createElement("div");
-        feedOneDiv.className = "card";
-        //헤더div만들기
-        let feedHeaderDiv = document.createElement("div"); //<div></div>
-        feedHeaderDiv.className = "card-header border-0 pb-0";
-        //헤더내용 넣기
-        feedHeaderDiv.innerHTML = getHeaderContent(data[i]);
-        //바디div만들기
-        let feedBodyDiv = document.createElement("div"); //<div></div>
-        feedBodyDiv.className = "card-body";
-        //바디내용 넣기
-        feedBodyDiv.innerHTML = getBodyContentContent(data[i]);
-        feedBodyDiv.innerHTML = getBodyContentImage(data[i]);
 
-        feedOneDiv.append(feedHeaderDiv); //그걸 feedBox에 붙임
-        feedOneDiv.append(feedBodyDiv); //그걸 feedBox에 붙임
-        feedBox.append(feedOneDiv); //그걸 feedBox에 붙임
-    }
-}
-
-//안씀
-function initLoadMoreButton() {
-    let feedBox = document.querySelector("#feedBox");
-    let cardBox = document.createElement("a");
-    cardBox.href = "#";
-    cardBox.role = "button";
-    cardBox.className = "btn btn-loader btn-primary-soft";
-    cardBox.ariaPressed = "true";
-    cardBox.innerHTML = getLoadMoreButton();
-
-    feedBox.append(cardBox);
-}
-
-//안씀
-function getLoadMoreButton(){
-    return `<span className="load-text"> Load more </span>
-        <div className="load-icon">
-            <div className="spinner-grow spinner-grow-sm" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </div>
-        </div>`;
-
-}
-//안씀
-function getBodyContentImage(data) {
-    return `<img
-                  class="card-img"
-                  src="assets/images/post/3by2/01.jpg"
-                  alt="Post"
-           />`;
-}
-//안씀
-function getBodyContentContent(data) {
-    return `<p>
-              ${data.content}
-            </p>`;
-}
-
-//안씀
-function getHeaderContent(data) {
-    return `<div class="d-flex align-items-center justify-content-between">
+function getFeedBoxContentRemoveComment(data) {
+    return `<div class="card-header border-0 pb-0">
+                <div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
@@ -138,12 +77,12 @@ function getHeaderContent(data) {
                     <div>
                       <div class="nav nav-divider">
                         <h6 class="nav-item card-title mb-0">
-                          <a href="#!"> ${data.userName}</a>
+                          <a href="#">${data.userResponse.username} </a>
                         </h6>
-                        <span class="nav-item small"> ${data.modDate}</span>
+                        <span class="nav-item small">${data.modDate} </span>
                       </div>
                       <h6 class="nav-item card-title mb-0">
-                          <a href="/feed?id=${data.id}"> ${data.title}</a>
+                          <a href="/feed?id=${data.id}">${data.title}  </a>
                         </h6>
                     </div>
                   </div>
@@ -194,8 +133,109 @@ function getHeaderContent(data) {
                     </ul>
                   </div>
                   <!-- Card feed action dropdown END -->
-                </div>`;
+                </div>
+             </div>
+              <!-- Card header END -->
+              <!-- Card body START -->
+              <div class="card-body">
+                <p>
+                  ${data.content} 
+                </p>
+                <!-- Card img -->
+                <img
+                  class="card-img"
+                  src="assets/images/post/3by2/01.jpg"
+                  alt="Post"
+                />
+                <!-- Feed react START -->
+                <ul class="nav nav-stack py-3 small">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      href="#!"
+                      data-bs-container="body"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-custom-class="tooltip-text-start"
+                      data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
+                      onclick="like()"
+                    >
+                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
+                      (56)</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">
+                      <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a
+                    >
+                  </li>
+                  <!-- Card share action START -->
+                  <li class="nav-item dropdown ms-sm-auto">
+                    <a
+                      class="nav-link mb-0"
+                      href="#"
+                      id="cardShareAction"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
+                      (3)
+                    </a>
+                    <!-- Card share action dropdown menu -->
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="cardShareAction"
+                    >
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-envelope fa-fw pe-2"></i>Send via
+                          Direct Message</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-bookmark-check fa-fw pe-2"></i
+                          >Bookmark
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-link fa-fw pe-2"></i>Copy link to
+                          post</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-share fa-fw pe-2"></i>Share post via
+                          …</a
+                        >
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to
+                          News Feed</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- Card share action END -->
+                </ul>
+                <!-- Feed react END -->
+
+                <!-- Add comment -->
+                
+                <!-- Comment wrap START -->
+                
+                <!-- Comment wrap END -->
+              </div>
+              <!-- Card body END -->
+              <!-- Card footer START -->
+              <div class="card-footer border-0 pt-0>
+               </div>`;
 }
+
 
 
 function getFeedBoxContent(data) {
