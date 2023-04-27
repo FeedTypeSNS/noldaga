@@ -14,9 +14,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,16 +37,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        final String tokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);//헤더 필드중에서 토큰이 들어있는 부분의 헤더를 꺼냄
+//        final String tokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);//헤더 필드중에서 토큰이 들어있는 부분의 헤더를 꺼냄
+//
+//        if(tokenHeader == null || ! tokenHeader.startsWith("Bearer ")){//토큰이 없는경우
+//            log.error("Error occurs while getting header. header is null or invalid {}",request.getRequestURL());
+//            filterChain.doFilter(request,response);
+//            return;
+//        }
 
-        if(tokenHeader == null || ! tokenHeader.startsWith("Bearer ")){//토큰이 없는경우
-            log.error("Error occurs while getting header. header is null or invalid {}",request.getRequestURL());
-            filterChain.doFilter(request,response);
-            return;
+        Cookie[] cookies = request.getCookies();
+        Optional<Cookie> tokenCookie =null;
+        if(cookies !=null){
+            tokenCookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equals("tokenCookie")).findFirst();
+            if(tokenCookie.isEmpty()){
+                log.error("Error occurs while getting token. cookie is null or invalid{}",request.getRequestURL());
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
         try {
-            final String token = tokenHeader.split(" ")[1].trim(); //토큰 꺼냄
+//            final String token = tokenHeader.split(" ")[1].trim(); //토큰 꺼냄
+            final String token = tokenCookie.get().getValue();
 
             //토큰이 유효한지 검사 (유통기한 확인)
             if (JwtTokenUtils.isExpired(token, key)) {
