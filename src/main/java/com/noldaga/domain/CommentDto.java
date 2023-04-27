@@ -2,6 +2,7 @@ package com.noldaga.domain;
 
 import com.noldaga.domain.entity.Comment;
 import com.noldaga.domain.entity.Feed;
+import com.noldaga.domain.userdto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,6 +44,8 @@ public class CommentDto {
     }
 
     public static List<CommentDto> listFromEntity(List<Comment> commentList) {
+        if(commentList == null)
+            return null;
         List<CommentDto> commentDtoList = new ArrayList<>();
         commentList.forEach(comment -> {
             CommentDto commentDto = CommentDto.fromEntity(comment);
