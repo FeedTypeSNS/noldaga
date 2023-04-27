@@ -1,5 +1,19 @@
-function init() {
+function iinit() {
 
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/getuser",
+        async: false
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        init(resp);
+    }).fail(function(error){
+        alert("오류인듯");
+        alert(JSON.stringify(error));
+    });
+}
+iinit();
+
+function init(username) {
     const queryString = window.location.search;
     var comment_page = 0;
     let responseData;
@@ -10,29 +24,28 @@ function init() {
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         responseData = resp.result;
-        initDetailPage(resp.result,comment_page);//여기서 넘길 때 로그인한 회원도 받아서 올 수 있다면
+        initDetailPage(resp.result,comment_page,username);//여기서 넘길 때 로그인한 회원도 받아서 올 수 있다면
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 
     $("#comment-loadmore-button").on("click",()=>{
-        this.loadmoreComments(responseData,++comment_page);
+        this.loadmoreComments(responseData,++comment_page,username);
     });
 }
 
-init();
 
-function loadmoreComments(data,comment_page){
+function loadmoreComments(data,comment_page,username){
 
     let page = Math.ceil(data.commentList.length/10);
     if(comment_page < page) { //아직 보여줄 댓글이 남음
         for (let i = comment_page*10; i < comment_page*10+10; i++) {
             let ReplyBox = document.querySelector("#FeedReplycontent");
             let cardBox2 = document.createElement("div");
-            //if(commentList[i].userDto.id == resp.userDto.name)
-            //cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
-            //else(~~~~면)
-            cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            if(data.commentList[i].userDto.username == username)
+              cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            else
+              cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
             ReplyBox.append(cardBox2);
         }
     }
@@ -41,7 +54,7 @@ function loadmoreComments(data,comment_page){
     }
 }
 
-function initDetailPage(data,comment_page){
+function initDetailPage(data,comment_page,username){
     let feedBox = document.querySelector("#FeedDetailcontent");
     let cardBox = document.createElement("div");
 
@@ -60,11 +73,13 @@ function initDetailPage(data,comment_page){
         for (let i = comment_page*10; i < comment_page*10+10; i++) {
             let ReplyBox = document.querySelector("#FeedReplycontent");
             let cardBox2 = document.createElement("div");
-            //if(~~~~면) resp.user.name == resp.userDto.name 이런식으로 비교해서 내꺼 남의꺼 구분하기
-            cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
-            //else(~~~~면)
-            //cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            if(data.commentList[i].userDto.username == username)
+                cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            else
+                cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
+
             ReplyBox.append(cardBox2);
+
         }
     }
     else{
