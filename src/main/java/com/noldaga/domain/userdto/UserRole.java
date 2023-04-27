@@ -1,4 +1,4 @@
-package com.noldaga.domain;
+package com.noldaga.domain.userdto;
 
 
 

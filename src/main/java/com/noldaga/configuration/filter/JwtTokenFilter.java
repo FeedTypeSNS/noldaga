@@ -1,12 +1,9 @@
 package com.noldaga.configuration.filter;
 
 
-import com.noldaga.domain.UserDto;
-import com.noldaga.service.UserService;
 import com.noldaga.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

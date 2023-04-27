@@ -1,6 +1,7 @@
 package com.noldaga.domain;
 
 import com.noldaga.domain.entity.Follow;
+import com.noldaga.domain.userdto.UserDto;
 import lombok.Getter;
 
 @Getter

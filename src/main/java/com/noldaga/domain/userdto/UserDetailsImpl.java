@@ -1,4 +1,4 @@
-package com.noldaga.domain;
+package com.noldaga.domain.userdto;
 
 import com.noldaga.domain.entity.User;
 import lombok.Getter;

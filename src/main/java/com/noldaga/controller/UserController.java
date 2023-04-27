@@ -5,7 +5,7 @@ import com.noldaga.controller.request.UserJoinRequest;
 import com.noldaga.controller.request.UserLoginRequest;
 import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserJoinResponse;
-import com.noldaga.domain.UserDto;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +31,7 @@ public class UserController {
 
         return Response.success(token);
     }
+
 
 
 

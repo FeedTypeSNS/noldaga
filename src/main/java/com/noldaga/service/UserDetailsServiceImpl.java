@@ -1,6 +1,6 @@
 package com.noldaga.service;
 
-import com.noldaga.domain.UserDetailsImpl;
+import com.noldaga.domain.userdto.UserDetailsImpl;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.UserRepository;

@@ -2,7 +2,7 @@ package com.noldaga.service;
 
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
-import com.noldaga.domain.UserDto;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.UserRepository;
 import com.noldaga.util.JwtTokenUtils;
