@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -30,8 +32,8 @@ public class UserService {
     @Transactional//예외발생시 회원가입 되지않고 롤백 되어야함 (save 다음에 예외 터지면 롤백 되어야함)
     public UserDto join(String username, String password) {
         //username 이 이미 회원가입 되어있는지 확인
-        userRepository.findByUsername(username).ifPresent((alreadyExists) -> {
-            throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_ID, String.format("%s is duplicated", alreadyExists.getUsername()));
+        userRepository.findByUsername(username).ifPresent(it -> {
+            throw new SnsApplicationException(ErrorCode.DUPLICATED_USERNAME, String.format("%s is duplicated", it.getUsername()));
         });
 
         //username 이 회원가입이되어있지않아 유효하면 회원으로서 저장하는 로직
@@ -59,6 +61,12 @@ public class UserService {
 
         return token;
     }
+
+    public Optional<UserDto> check(String username){
+        return userRepository.findByUsername(username).map(UserDto::fromEntity);
+    }
+
+
 
 //    public UserDto loadUserByUsername(String username) {
 //        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->

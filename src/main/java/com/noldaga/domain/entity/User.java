@@ -46,8 +46,8 @@ public class User {
     private String profileImageUrl;
     private String profileMessage;
     private String email;
-    private Long totalFollower;
-    private Long totalFollowing;
+    private Long totalFollower=Long.valueOf(0);
+    private Long totalFollowing=Long.valueOf(0);
 
     @Setter
     @Column(name = "role")

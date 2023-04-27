@@ -3,9 +3,12 @@ package com.noldaga.controller;
 
 import com.noldaga.controller.request.UserJoinRequest;
 import com.noldaga.controller.request.UserLoginRequest;
+import com.noldaga.controller.request.UsernameRequest;
 import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserJoinResponse;
 import com.noldaga.domain.userdto.UserDto;
+import com.noldaga.exception.ErrorCode;
+import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,14 @@ public class UserController {
         return Response.success(token);
     }
 
+    @PostMapping("/check")
+    public Response<Void> login(@RequestBody UsernameRequest request){
+        userService.check(request.getUsername()).ifPresent(it -> {
+            throw new SnsApplicationException(ErrorCode.DUPLICATED_USERNAME, String.format("%s is duplicated", it.getUsername()));
+        });
+
+        return Response.success();
+    }
 
 
 
