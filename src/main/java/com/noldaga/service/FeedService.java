@@ -3,6 +3,7 @@ package com.noldaga.service;
 
 import com.noldaga.controller.request.FeedCreateRequest;
 import com.noldaga.controller.request.FeedModifyRequest;
+import com.noldaga.domain.entity.Comment;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.FeedDto;
@@ -11,6 +12,7 @@ import com.noldaga.domain.entity.User;
 import com.noldaga.repository.Feed.FeedRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class FeedService {
@@ -123,7 +126,7 @@ public class FeedService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
+        Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
 
         FeedDto feedDto = FeedDto.fromEntity(feed);

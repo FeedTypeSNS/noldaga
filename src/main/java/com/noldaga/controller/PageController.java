@@ -18,4 +18,15 @@ public class PageController {
         System.out.println("PageController.join");
         return "sign-up";
     }
+
+    @GetMapping("/")
+    public String home(){
+        return "index";
+    }
+
+    @GetMapping("/feed")
+    public String detail(){
+        return "post-details";
+    }
+
 }
