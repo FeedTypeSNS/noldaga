@@ -1,23 +1,13 @@
 package com.noldaga.controller;
 
 
-import com.noldaga.controller.response.FeedResponse;
 import com.noldaga.controller.response.Response;
-import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.entity.Group;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
