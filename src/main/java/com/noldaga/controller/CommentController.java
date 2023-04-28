@@ -2,6 +2,9 @@ package com.noldaga.controller;
 
 import com.noldaga.controller.request.CommentCreateRequest;
 import com.noldaga.controller.request.CommentModifyRequest;
+import com.noldaga.controller.response.CommentResponse;
+import com.noldaga.controller.response.FeedResponse;
+import com.noldaga.controller.response.Response;
 import com.noldaga.domain.CommentDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.service.CommentService;
@@ -18,20 +21,21 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/api/comment")
-    public CommentDto register(@RequestBody CommentCreateRequest request, Authentication authentication){
-        return commentService.create(request, authentication.getName());
+    public Response<CommentResponse> register(@RequestBody CommentCreateRequest request, Authentication authentication){
+        CommentDto commentDto = commentService.create(request, authentication.getName());
+        return Response.success(CommentResponse.fromCommentDto(commentDto));
     }
 
     @GetMapping("/api/comment/{id}")
-    public CommentDto getOne(@PathVariable Long id, Authentication authentication){
+    public Response<CommentResponse> getOne(@PathVariable Long id, Authentication authentication){
         CommentDto commentDto = commentService.getOneComment(id,authentication.getName());
-        return commentDto;
+        return Response.success(CommentResponse.fromCommentDto(commentDto));
     }
 
     @PutMapping("/api/comment/{id}")
-    public CommentDto modify(@RequestBody CommentModifyRequest request, @PathVariable Long id, Authentication authentication){
+    public Response<CommentResponse> modify(@RequestBody CommentModifyRequest request, @PathVariable Long id, Authentication authentication){
         CommentDto commentDto = commentService.modifyComment(request,id,authentication.getName());
-        return commentDto;
+        return Response.success(CommentResponse.fromCommentDto(commentDto));
     }
 
     @DeleteMapping("/api/comment/{id}")

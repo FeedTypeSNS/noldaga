@@ -157,6 +157,7 @@ public class FeedService {
         //피드 확인
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
+        feed.plusViewCount();
 
         FeedDto feedDto = FeedDto.fromEntity(feed);
         return feedDto;

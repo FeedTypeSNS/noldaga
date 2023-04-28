@@ -43,6 +43,9 @@ public class Comment {
 //    @OneToMany(mappedBy = "comment_id")
 //    private List<commentLike> ???;
 
+    @Column(name="total_like")
+    private long totalLike; //default로 0들어가게 long설정
+
     private Comment(String content, Feed feed, User user) {
         this.content = content;
         this.feed = feed;
@@ -55,6 +58,14 @@ public class Comment {
 
     public void change(String newContent) {
         this.content = newContent;
+    }
+
+    public void plusLikeCount(){
+        this.totalLike+=1;
+    }
+
+    public void minusLikeCount(){
+        this.totalLike-=1;
     }
 }
 
