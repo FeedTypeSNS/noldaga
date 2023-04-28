@@ -29,6 +29,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final HashTagService hashTagService;
 
     @Transactional
     public FeedDto create(FeedCreateRequest request, String username) {
@@ -45,6 +46,9 @@ public class FeedService {
         //post feed
         Feed feed = feedRepository.save(Feed.of(title, content, groupId, range, user));
         FeedDto feedDto = FeedDto.fromEntity(feed);
+        //해시태그저장
+        hashTagService.extractHashTag(feedDto.getContent(), feedDto.getId());
+
         return feedDto;
     }
 
@@ -126,6 +130,7 @@ public class FeedService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
+        //피드 확인
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
 

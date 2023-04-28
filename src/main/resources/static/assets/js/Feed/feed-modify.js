@@ -86,9 +86,9 @@ let post = {
     });
 
     function setModifyModal(data){
-      $('#title').val(data.title);
-      $('#content').val(data.content);
-      $('#id').val(data.id);
+      $('#title').val(data.result.title);
+      $('#content').val(data.result.content);
+      $('#id').val(data.result.id);
     }
   },
 

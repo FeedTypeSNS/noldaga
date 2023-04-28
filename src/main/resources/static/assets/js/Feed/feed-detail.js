@@ -55,8 +55,12 @@ function loadmoreComments(data,comment_page,username){
 }
 
 function initDetailPage(data,comment_page,username){
+    $('#commentCount').val(data.commentList.length);
     let feedBox = document.querySelector("#FeedDetailcontent");
     let cardBox = document.createElement("div");
+
+    let feedReactBox = document.querySelector("#FeedReact");
+    let ReactBox = document.createElement("div");
 
     let replySubmitBox = document.querySelector("#replyFormBox");
     let replyBox = document.createElement("form");
@@ -64,6 +68,9 @@ function initDetailPage(data,comment_page,username){
 
     cardBox.innerHTML = getDetailPage_Feed(data);
     feedBox.append(cardBox);
+
+    ReactBox.innerHTML = getReactButtons(data);
+    feedReactBox.append(ReactBox);
 
     replyBox.innerHTML = reply_submit_form(data);
     replySubmitBox.append(replyBox);
@@ -85,6 +92,58 @@ function initDetailPage(data,comment_page,username){
     else{
         //load more버튼을 없애는게 목표
     }
+}
+
+function getReactButtons(data){
+    return `<ul class="nav nav-stack flex-wrap small mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(56)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.commentList.length})</a>
+                            </li>
+                            <!-- Card share action START -->
+                            <li class="nav-item dropdown ms-sm-auto">
+                                <a class="nav-link mb-0" href="#" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>(3)
+                                </a>
+                                <!-- Card share action dropdown menu -->
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                        href="#"
+                                        class="nav-link bg-light py-1 px-2 mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#ModifyModal"
+                                        id="modify"
+                                        onclick="show()"
+                                >
+                                    <i class="bi bi-brush pe-2"></i
+                                    >수정
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                        href="#"
+                                        class="nav-link bg-light py-1 px-2 mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#DeleteAlertModal"
+                                >
+                                    <i class="bi bi-trash3 pe-2"></i
+                                    >삭제
+                                </a>
+                            </li>
+
+                            <!-- Card share action END -->
+                        </ul>`;
 }
 
 function getDetailPage_Feed(data){
@@ -211,7 +270,7 @@ function getDetailPage_comment_mine(data){
                                         <!-- Comment react -->
                                         <ul class="nav nav-divider pt-2 small">
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#!"> Like (1)</a>
+                                                <a class="nav-link" href="#!" onclick="like()"> Like (1)</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a
@@ -289,4 +348,53 @@ function showComment(id) {
 
 function setDeleteComment(id){
     $('#deleteId').val(id);
+}
+
+function show() {
+
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed"+ queryString,
+        dataType: "json"
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        setModifyModal(resp);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+
+    function setModifyModal(data){
+        $('#title').val(data.result.title);
+        $('#content').val(data.result.content);
+        $('#id').val(data.result.id);
+    }
+}
+
+function modify(){
+    const queryString = window.location.search;
+
+    let data={
+        title: $("#title").val(),
+        content: $("#content").val(),
+        range: $("#open_range").val(),
+        groupId: $("#group_id").val()
+    };
+
+    alert(JSON.stringify(data));
+
+    $.ajax({
+        type: "PUT",
+        url: "/api/feed"+queryString,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        alert('수정 완료');
+        location.href = "/";
+    }).fail(function(error){
+        alert('수정 실패');
+        alert(JSON.stringify(error));
+    });
+
 }

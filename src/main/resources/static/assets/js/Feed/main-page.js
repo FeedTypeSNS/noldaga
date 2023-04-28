@@ -35,13 +35,28 @@ function loadmore(currentPage){
     });
 }
 
+
+//댓글 안나오는거
 function initMainPageSimpleModified(data) {
     for(let i=0; i<data.length; i++){
         let feedBox = document.querySelector("#feed");
+
+        //카드박스 body
         let cardBox = document.createElement("div"); //<div></div>
         cardBox.className = "card"; //<div class="card"></div>
-
         cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
+        //카드박스 해쉬태그
+        let tagBox = document.createElement("li");
+        tagBox.className = "list-inline-item m-0";
+        for(let j=0; j<data[i].feedTagDtoList.length; j++){
+            tagBox.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
+        }
+        //해쉬태그 밑에 공백을 만들고싶어서..
+        let blankBox = document.createElement("div");
+        blankBox.innerHTML=`&nbsp`;
+
+        cardBox.append(tagBox);
+        cardBox.append(blankBox);
         feedBox.append(cardBox); //그걸 feedBox에 붙임
     }
 }
@@ -53,11 +68,14 @@ function initMainPageOriginal(data) {
         let cardBox = document.createElement("div"); //<div></div>
         cardBox.className = "card"; //<div class="card"></div>
 
-        cardBox.innerHTML = getFeedBoxContent(data[i]); //내부에 html 넣어주기 <div class="outgoing_msg"></div>안에 넣는다.
-        feedBox.append(cardBox); //그걸 feedBox에 붙임
+        cardBox.innerHTML = getFeedBoxContent(data[i]);
+        feedBox.append(cardBox);
     }
 }
 
+function getFeedTagBoxContent(data) {
+    alert(data.length);
+}
 
 function getFeedBoxContentRemoveComment(data) {
     return `<div class="card-header border-0 pb-0">
@@ -167,7 +185,7 @@ function getFeedBoxContentRemoveComment(data) {
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
-                      <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a
+                      <i class="bi bi-chat-fill pe-1"></i>Comments (${data.commentList.length})</a
                     >
                   </li>
                   <!-- Card share action START -->

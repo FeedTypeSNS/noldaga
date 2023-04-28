@@ -24,8 +24,9 @@ public class FeedDto {
     private LocalDateTime regDate;
     private Long totalView;
     private List<CommentDto> commentList;
+    private List<FeedTagDto> feedTagDtoList;
 
-    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, Long totalView, List<CommentDto> commentList) {
+    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, Long totalView, List<CommentDto> commentList, List<FeedTagDto> feedTagDtoList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -36,6 +37,7 @@ public class FeedDto {
         this.regDate = regDate;
         this.totalView = totalView;
         this.commentList = commentList;
+        this.feedTagDtoList = feedTagDtoList;
     }
 
     public static FeedDto fromEntity(Feed feed) {
@@ -49,8 +51,10 @@ public class FeedDto {
                 feed.getModDate(),
                 feed.getRegDate(),
                 feed.getTotalView(),
-                CommentDto.listFromEntity(feed.getComment())
+                CommentDto.listFromEntity(feed.getComment()),
+                FeedTagDto.listFromEntity(feed.getFeedTags())
         );
     }
+
 
 }
