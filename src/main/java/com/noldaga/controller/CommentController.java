@@ -23,20 +23,20 @@ public class CommentController {
     }
 
     @GetMapping("/api/comment/{id}")
-    public CommentDto getOne(@PathVariable Long id){
-        CommentDto commentDto = commentService.getOneComment(id);
+    public CommentDto getOne(@PathVariable Long id, Authentication authentication){
+        CommentDto commentDto = commentService.getOneComment(id,authentication.getName());
         return commentDto;
     }
 
     @PutMapping("/api/comment/{id}")
-    public CommentDto modify(@RequestBody CommentModifyRequest request, @PathVariable Long id){
-        CommentDto commentDto = commentService.modifyComment(request,id);
+    public CommentDto modify(@RequestBody CommentModifyRequest request, @PathVariable Long id, Authentication authentication){
+        CommentDto commentDto = commentService.modifyComment(request,id,authentication.getName());
         return commentDto;
     }
 
     @DeleteMapping("/api/comment/{id}")
-    public void delete(@PathVariable Long id){
-        commentService.deleteComment(id);
+    public void delete(@PathVariable Long id, Authentication authentication){
+        commentService.deleteComment(id, authentication.getName());
     }
 
 }

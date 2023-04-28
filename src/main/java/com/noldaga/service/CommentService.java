@@ -52,9 +52,17 @@ public class CommentService{
         return savedCommentDto;
     }
 
-    public List<CommentDto> getFeedComments(Long id) {
+    public List<CommentDto> getFeedComments(Long feedId, String username) {
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //피드확인
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
+
         Pageable pageable = PageRequest.of(0,5);
-        Page<Comment> commentPageList = commentRepository.FindWithFeed(id,pageable);
+        Page<Comment> commentPageList = commentRepository.FindWithFeed(feedId,pageable);
 
         List<CommentDto> commentDtoList = new ArrayList<>();
 
@@ -65,17 +73,32 @@ public class CommentService{
         return commentDtoList;
     }
 
-    public CommentDto getOneComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
+    public CommentDto getOneComment(Long commentId, String username) {
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //답글 확인
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
+            new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
+
         return CommentDto.fromEntity(comment);
     }
 
-    public CommentDto modifyComment(CommentModifyRequest request, Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()->{
-            return new IllegalArgumentException("댓글 정보가 없습니다.");
-        });
+    public CommentDto modifyComment(CommentModifyRequest request, Long commentId, String username) {
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        //Comment modifiedComment = CommentDto.fromEntity(modifiedCommentDto);
+        //답글 확인
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
+
+        //권한있나확인
+        if (comment.getUser() != user) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
+        }
+
         comment.change(request.getContent());
         Comment changedComment = commentRepository.save(comment);
 
@@ -83,8 +106,21 @@ public class CommentService{
         return changedCommentDto;
     }
 
-    public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+    public void deleteComment(Long commentId, String username) {
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //답글 확인
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
+
+        //권한있나확인
+        if (comment.getUser() != user) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
+        }
+
+        commentRepository.deleteById(commentId);
     }
 
 }
