@@ -40,7 +40,9 @@ public class AuthenticationConfig {
                                 "/test",
                                 "/api/users/join",
                                 "/api/users/login",
-                                "/api/users/check"
+                                "/api/users/check-duplicated",
+                                "/api/users/check-code",
+                                "/api/users/email"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
