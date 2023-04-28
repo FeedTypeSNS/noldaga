@@ -25,6 +25,8 @@ public class FeedResponse {
     private String ModDate;
     private String RegDate;
     private Long totalView;
+    private Long totalLike;
+    private Long totalComment;
     private List<CommentDto> commentList;
     private List<FeedTagDto> feedTagDtoList;
 
@@ -38,6 +40,8 @@ public class FeedResponse {
                 feedDto.getModDate(),
                 feedDto.getRegDate(),
                 feedDto.getTotalView(),
+                feedDto.getTotalLike(),
+                feedDto.getTotalComment(),
                 feedDto.getCommentList(),
                 feedDto.getFeedTagDtoList()
         );

@@ -19,8 +19,10 @@ public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),//런타임 예외등(UserService 회원가입 트랜잭션 런타임예외 하면서 추가한듯.?)
 
+    //feedLike
     ALREADY_LIKED(HttpStatus.CONFLICT, "User has already liked the Feed"), //feedLike 개발하면서 추가
-
+    FEEDLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "FeedLike not founded"),
+    COMMENTLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "CommentLike not founded"),
 
     //follow
     CAN_NOT_FOLLOW_SELF(HttpStatus.CONFLICT, "User cannot follow yourself"),

@@ -72,6 +72,12 @@ public class Feed {
     @Column(name="total_view")
     private long totalView; //default로 0들어가게 long설정
 
+    @Column(name="total_comment")
+    private long commentCount; //default로 0들어가게 long설정
+
+    @Column(name="total_like")
+    private long likeCount; //default로 0들어가게 long설정
+
  //   @JsonIgnoreProperties({"feed,user"})
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     private List<Comment> comment;
@@ -96,5 +102,25 @@ public class Feed {
         this.content = content;
         this.groupId = groupId;
         this.range = range;
+    }
+
+    public void plusViewCount(){
+        this.totalView+=1;
+    }
+
+    public void plusCommentCount(){
+        this.commentCount+=1;
+    }
+
+    public void minusCommentCount(){
+        this.commentCount-=1;
+    }
+
+    public void plusLikeCount(){
+        this.likeCount+=1;
+    }
+
+    public void minusLikeCount(){
+        this.likeCount-=1;
     }
 }

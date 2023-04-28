@@ -24,14 +24,16 @@ public class CommentDto {
     private String content;
     private String regDate;
     private String modDate;
+    private Long totalLike;
 
-    private CommentDto(Long id, String content, UserDto userDto, LocalDateTime modDate, LocalDateTime regDate) {
+    private CommentDto(Long id, String content, UserDto userDto, LocalDateTime modDate, LocalDateTime regDate, Long totalLike) {
             this.id = id;
             this.content = content;
             //this.feedDto = feedDto;
             this.userDto = userDto;
             this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            this.totalLike = totalLike;
     }
 
     public static CommentDto fromEntity(Comment comment) {
@@ -40,7 +42,8 @@ public class CommentDto {
                 comment.getContent(),
                 UserDto.fromEntity(comment.getUser()),
                 comment.getModDate(),
-                comment.getRegDate()
+                comment.getRegDate(),
+                comment.getTotalLike()
         );
     }
 

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CommentService{
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public CommentDto create(CommentCreateRequest request, String username) {
         //저장정보
         String content = request.getContent();
@@ -45,13 +47,16 @@ public class CommentService{
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
 
         Comment comment = Comment.of(content,feed,user);
-        //Comment comment = CommentMapper.INSTANCE.toEntity(commentDto);
-        //comment.setUser(user);
         Comment savedComment = commentRepository.save(comment);
+
+        //피드 댓글 수+1
+        feed.plusCommentCount();
+
         CommentDto savedCommentDto = CommentDto.fromEntity(savedComment);
         return savedCommentDto;
     }
 
+    @Transactional
     public List<CommentDto> getFeedComments(Long feedId, String username) {
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -73,6 +78,7 @@ public class CommentService{
         return commentDtoList;
     }
 
+    @Transactional
     public CommentDto getOneComment(Long commentId, String username) {
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -85,6 +91,7 @@ public class CommentService{
         return CommentDto.fromEntity(comment);
     }
 
+    @Transactional
     public CommentDto modifyComment(CommentModifyRequest request, Long commentId, String username) {
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -106,6 +113,7 @@ public class CommentService{
         return changedCommentDto;
     }
 
+    @Transactional
     public void deleteComment(Long commentId, String username) {
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -121,6 +129,12 @@ public class CommentService{
         }
 
         commentRepository.deleteById(commentId);
+
+        //피드확인
+        Feed feed = feedRepository.findById(comment.getFeed().getId()).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", comment.getFeed().getId())));
+        //피드 댓글 수 -1
+        feed.minusCommentCount();
     }
 
 }

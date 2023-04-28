@@ -21,13 +21,15 @@ public class CommentResponse {
     private String content;
     private String regDate;
     private String modDate;
+    private Long totalLike;
 
     public static CommentResponse fromCommentDto(CommentDto commentDto) {
         return new CommentResponse(commentDto.getId(),
                 UserResponse.fromUserDto(commentDto.getUserDto()),
                 commentDto.getContent(),
                 commentDto.getModDate(),
-                commentDto.getRegDate()
+                commentDto.getRegDate(),
+                commentDto.getTotalLike()
         );
     }
 }

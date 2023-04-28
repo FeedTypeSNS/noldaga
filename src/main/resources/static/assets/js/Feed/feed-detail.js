@@ -97,10 +97,10 @@ function initDetailPage(data,comment_page,username){
 function getReactButtons(data){
     return `<ul class="nav nav-stack flex-wrap small mb-3">
                             <li class="nav-item">
-                                <a class="nav-link" href="#!"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(56)</a>
+                                <a class="nav-link" href="#!" onclick="feedLike(${data.id})"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(${data.totalLike})</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.commentList.length})</a>
+                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
                             </li>
                             <!-- Card share action START -->
                             <li class="nav-item dropdown ms-sm-auto">
@@ -235,7 +235,7 @@ function getDetailPage_comment_others(data){
                                                   data-bs-html="true"
                                                   data-bs-custom-class="tooltip-text-start"
                                                   data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
-                                                  onclick="like()"
+                                                  onclick="commentLike(${data.id})"
                                                 >
                                                   <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
                                                   (56)</a
@@ -270,7 +270,7 @@ function getDetailPage_comment_mine(data){
                                         <!-- Comment react -->
                                         <ul class="nav nav-divider pt-2 small">
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#!" onclick="like()"> Like (1)</a>
+                                                <a class="nav-link" href="#!" onclick="commentLike(${data.id})"> Like (${data.totalLike})</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a
@@ -324,8 +324,92 @@ function reply() {
     });
 }
 
-function like() {
-    alert('댓글 좋아요 누르면 파란색으로 바꿔주세용');
+function feedLike(data) {
+    $.ajax({
+        type: "GET",
+        url: "api/like/feed/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) feed_like_delete(data);
+        else feed_like_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function feed_like_register(data) {
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "POST",
+        url: "api/like/feed/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/feed"+ queryString;
+    });
+}
+
+function feed_like_delete(data) {
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "DELETE",
+        url: "api/like/feed/"+data
+    }).done(function(resp){
+        window.location.href = "/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/feed"+ queryString;
+    });
+}
+
+
+function commentLike(data) {
+
+    $.ajax({
+        type: "GET",
+        url: "api/like/comment/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) comment_like_delete(data);
+        else comment_like_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function comment_like_register(data) {
+    const queryString = window.location.search;
+    $.ajax({
+        type: "POST",
+        url: "api/like/comment/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/feed"+ queryString;
+    });
+}
+
+function comment_like_delete(data) {
+    const queryString = window.location.search;
+    $.ajax({
+        type: "DELETE",
+        url: "api/like/comment/"+data
+    }).done(function(resp){
+        window.location.href = "/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/feed"+ queryString;
+    });
 }
 
 function showComment(id) {
@@ -341,8 +425,8 @@ function showComment(id) {
     });
 
     function setCommentModifyModal(data){
-        $('#commentContent').val(data.content);
-        $('#commentId').val(data.id);
+        $('#commentContent').val(data.result.content);
+        $('#commentId').val(data.result.id);
     }
 }
 
