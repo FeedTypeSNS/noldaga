@@ -7,7 +7,6 @@ import com.noldaga.controller.response.FeedResponse;
 import com.noldaga.controller.response.Response;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.UploadDto;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +28,7 @@ import java.util.UUID;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-public class FeedApiController {
+public class FeedController {
 
     @Value("${com.noldaga.upload.path}")
     private String path;
