@@ -30,15 +30,15 @@ public class UserService {
 
     //회원가입의 결과를 UserDto 로 넘겨줌 ( 플로우의 결과로서 Dto를 받기 때문에 받는 쪽에서 플로우가 잘 진행됐는지 파악 하기 쉬움)
     @Transactional//예외발생시 회원가입 되지않고 롤백 되어야함 (save 다음에 예외 터지면 롤백 되어야함)
-    public UserDto join(String username, String password) {
+    public UserDto join(String username, String password,String nickname,String email) {
         //username 이 이미 회원가입 되어있는지 확인
         userRepository.findByUsername(username).ifPresent(it -> {
             throw new SnsApplicationException(ErrorCode.DUPLICATED_USERNAME, String.format("%s is duplicated", it.getUsername()));
         });
 
         //username 이 회원가입이되어있지않아 유효하면 회원으로서 저장하는 로직
-        User user = userRepository.save(User.of(username, encoder.encode(password)));
-//        User user = userRepository.save(User.of(username, password));
+        User user = userRepository.save(User.of(username, encoder.encode(password),nickname,email));
+//        User user = userRepository.save(User.of(username, password,nickname,email));
 
         return UserDto.fromEntity(user);
 

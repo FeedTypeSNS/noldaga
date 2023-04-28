@@ -70,14 +70,20 @@ public class User {
     protected User(){
     }
 
-    public User(Long id,String username, String password) {
-        this.id = id;
+
+    private User(String username, String password, String nickname, String email) {
         this.username = username;
+        this.nickname = nickname;
         this.password = password;
+        this.email = email;
     }
 
     public static User of(String username, String password) {
-        return new User(null,username, password);
+        return new User(username, password,null,null);
+    }
+
+    public static User of(String username, String password, String nickname, String email) {
+        return new User(username, password, nickname, email);
     }
 
 }

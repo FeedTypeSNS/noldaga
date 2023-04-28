@@ -21,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest userJoinRequest) {
-        UserDto userDto = userService.join(userJoinRequest.getUsername(), userJoinRequest.getPassword());
+    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest req) {
+        UserDto userDto = userService.join(req.getUsername(), req.getPassword(),req.getNickname(),req.getEmail());
         UserJoinResponse userJoinResponse = UserJoinResponse.fromUserDto(userDto);
 
         return Response.success(userJoinResponse); //프론트에서 api의 반환값을 파싱하기 쉽도록 실패하든 성공하든 획일화된 포맷팅으로 보낸다.
