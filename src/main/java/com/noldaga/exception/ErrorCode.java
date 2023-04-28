@@ -28,6 +28,9 @@ public enum ErrorCode {
     ALREADY_FOLLOW(HttpStatus.CONFLICT, "User has already follow"),
     ALREADY_UNFOLLOW(HttpStatus.CONFLICT, "User has already unfollow"),
 
+    //comment
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment not founded"),
+
     ;
 
     private HttpStatus status;
