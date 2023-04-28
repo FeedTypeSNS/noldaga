@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @NoArgsConstructor
@@ -20,8 +21,8 @@ public class FeedDto {
     private UserDto userDto;
     private Long groupId;
     private int range;
-    private LocalDateTime modDate;
-    private LocalDateTime regDate;
+    private String modDate;
+    private String regDate;
     private Long totalView;
     private List<CommentDto> commentList;
     private List<FeedTagDto> feedTagDtoList;
@@ -33,8 +34,8 @@ public class FeedDto {
         this.userDto = userDto;
         this.groupId = groupId;
         this.range = range;
-        this.modDate = modDate;
-        this.regDate = regDate;
+        this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         this.totalView = totalView;
         this.commentList = commentList;
         this.feedTagDtoList = feedTagDtoList;

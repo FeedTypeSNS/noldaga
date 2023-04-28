@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +22,16 @@ public class CommentDto {
     //private FeedDto feedDto;
     private UserDto userDto;
     private String content;
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private String regDate;
+    private String modDate;
 
     private CommentDto(Long id, String content, UserDto userDto, LocalDateTime modDate, LocalDateTime regDate) {
             this.id = id;
             this.content = content;
             //this.feedDto = feedDto;
             this.userDto = userDto;
-            this.modDate = modDate;
-            this.regDate = regDate;
+            this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public static CommentDto fromEntity(Comment comment) {
