@@ -130,6 +130,7 @@ public class FeedService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
+        //피드 확인
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
 
