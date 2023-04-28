@@ -12,7 +12,6 @@ import java.util.Properties;
 @Configuration
 public class MailAuthConfig {
 
-
     @Value("${mail.smtp-server}")
     private String smtpUrl;
     @Value("${mail.id}")
