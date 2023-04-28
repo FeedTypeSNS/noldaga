@@ -95,7 +95,7 @@ public class CommentService{
                 new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
 
         //권한있나확인
-        if (comment.getUser() != user) {
+        if (comment.getUser().getId() != user.getId()) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
         }
 
@@ -116,7 +116,7 @@ public class CommentService{
                 new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
 
         //권한있나확인
-        if (comment.getUser() != user) {
+        if (comment.getUser().getId() != user.getId()) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
         }
 
