@@ -167,7 +167,7 @@ function getFeedBoxContentRemoveComment(data) {
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
-                      <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a
+                      <i class="bi bi-chat-fill pe-1"></i>Comments (${data.commentList.length})</a
                     >
                   </li>
                   <!-- Card share action START -->
