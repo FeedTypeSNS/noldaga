@@ -76,6 +76,9 @@ public class Feed {
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     private List<Comment> comment;
 
+    @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
+    private List<FeedTag> feedTags;
+
     private Feed(String title, String content, long groupId, int range, User user) {
         this.title = title;
         this.content = content;

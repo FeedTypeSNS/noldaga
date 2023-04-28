@@ -15,22 +15,20 @@ public class FeedTag {
     @Column(name="feed_tag_id")
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name="feed_id")
-    //feed정보를 저장할 때 다시 가져오는게 효율적이지 못한 것 같아서 일단 id만 저장..변경가능
-    @Column(name="feed_id")
-    private Long feedId;
+    @ManyToOne
+    @JoinColumn(name="feed_id")
+    private Feed feed;
 
     @ManyToOne
     @JoinColumn(name="hashtag_id")
     private HashTag hashTag;
 
-    private FeedTag(Long feedId, HashTag hashTag) {
-        this.feedId = feedId;
+    private FeedTag(Feed feed, HashTag hashTag) {
+        this.feed = feed;
         this.hashTag = hashTag;
     }
 
-    public static FeedTag of(Long feedId, HashTag hashTag) {
-        return new FeedTag(feedId, hashTag);
+    public static FeedTag of(Feed feed, HashTag hashTag) {
+        return new FeedTag(feed, hashTag);
     }
 }
