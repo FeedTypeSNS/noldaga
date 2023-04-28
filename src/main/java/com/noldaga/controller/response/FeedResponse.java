@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -19,8 +20,11 @@ public class FeedResponse {
     private String title;
     private String content;
     private UserResponse userResponse;
-    private LocalDateTime ModDate;
-    private LocalDateTime RegDate;
+    private Long GroupId;
+    private int range;
+    private String ModDate;
+    private String RegDate;
+    private Long totalView;
     private List<CommentDto> commentList;
     private List<FeedTagDto> feedTagDtoList;
 
@@ -29,8 +33,11 @@ public class FeedResponse {
                 feedDto.getTitle(),
                 feedDto.getContent(),
                 UserResponse.fromUserDto(feedDto.getUserDto()),
+                feedDto.getGroupId(),
+                feedDto.getRange(),
                 feedDto.getModDate(),
                 feedDto.getRegDate(),
+                feedDto.getTotalView(),
                 feedDto.getCommentList(),
                 feedDto.getFeedTagDtoList()
         );
