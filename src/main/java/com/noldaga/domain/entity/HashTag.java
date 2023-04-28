@@ -1,11 +1,13 @@
 package com.noldaga.domain.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Table(name="hashTag")
 @Getter
+@NoArgsConstructor
 @Entity
 public class HashTag {
     @Id
@@ -15,4 +17,8 @@ public class HashTag {
 
     @Column(nullable = false, length = 20, name="tag_name")
     private String tagName;
+
+    public HashTag(String tagName){
+        this.tagName = tagName;
+    }
 }
