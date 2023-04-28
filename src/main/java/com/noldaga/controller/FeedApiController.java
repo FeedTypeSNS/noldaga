@@ -60,8 +60,44 @@ public class FeedApiController {
     }
 
     @GetMapping(value="/api/feeds/{page}")
-    public Response<List<FeedResponse>> getFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getmainFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getMainFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/group/{group_id}/{page}")
+    public Response<List<FeedResponse>> getGroupPageFeeds(@PathVariable Long group_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getGroupFeed(page,authentication.getName(),group_id);
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/mypage/{user_id}/{page}")
+    public Response<List<FeedResponse>> getMypageFeeds(@PathVariable Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getMyPageFeed(page,user_id,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/explore/{page}")
+    public Response<List<FeedResponse>> getExplorePageFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getExploreFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
         feedDtoList.forEach(feedDto->{
