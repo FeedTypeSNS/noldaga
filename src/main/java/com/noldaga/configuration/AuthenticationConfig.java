@@ -38,11 +38,7 @@ public class AuthenticationConfig {
                         .mvcMatchers(
                                 HttpMethod.POST,
                                 "/test",
-                                "/api/users/join",
-                                "/api/users/login",
-                                "/api/users/check-duplicated",
-                                "/api/users/check-code",
-                                "/api/users/email"
+                                "/api/anonymous/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
