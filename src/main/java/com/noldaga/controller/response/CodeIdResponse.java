@@ -11,8 +11,8 @@ public class CodeIdResponse {
 
     private Integer codeId;
 
-    public static CodeIdResponse fromCodeDto(CodeDto codeDto) {
-        return new CodeIdResponse(codeDto.getCodeId());
+    public static CodeIdResponse of(Integer codeId) {
+        return new CodeIdResponse(codeId);
     }
 
 }
