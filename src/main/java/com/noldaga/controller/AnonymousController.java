@@ -34,7 +34,7 @@ public class AnonymousController {
     @PostMapping("/join/send-code") //회원가입 2 : 이메일 인증 : 이메일 로 코드전송
     public Response<CodeIdResponse> email(@RequestBody MailAuthRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        Integer codeId = authService.sendCode(req.getEmailAddress());
+        Integer codeId = authService.sendCode(req.getEmail());
         return Response.success(CodeIdResponse.of(codeId));
     }
 
@@ -73,10 +73,11 @@ public class AnonymousController {
         return Response.success();
     }
 
+    //todo 한 이메일에 여러 아이디를 가입 했을때 대응해야함.
     @PostMapping("/find-username/send-username")// 아이디찾기: 가입된 이메일로 아이디전송
     public Response<Void> findUsername(@RequestBody MailAuthRequest req) throws MessagingException, UnsupportedEncodingException {
-        UserDto userDto = userService.findUsernameByEmail(req.getEmailAddress());
-        authService.sendUsername(req.getEmailAddress(), userDto.getUsername());
+        UserDto userDto = userService.findUsernameByEmail(req.getEmail());
+        authService.sendUsername(req.getEmail(), userDto.getUsername());
 
         return Response.success();
     }

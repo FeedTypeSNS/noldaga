@@ -73,7 +73,7 @@ public class UserService {
 
     public UserDto findUsernameByEmail(String emailAddress) {
         return userRepository.findByEmail(emailAddress).map(UserDto::fromEntity).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is invalid", emailAddress)));
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is invalid E-mailAddress", emailAddress)));
     }
 
     public String findEmail(String username) {

@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MailAuthRequest {
 
-    private String emailAddress;
+    private String email;
 }
