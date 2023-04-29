@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    DUPLICATED_USER_ID(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
+    INVALID_CODE(HttpStatus.UNAUTHORIZED,"Code is invalid"),
+    DUPLICATED_USERNAME(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"), //로그인시 회원가입이 안된 username
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"), //로그인시 틀린 password
 
