@@ -17,6 +17,7 @@ public class PageController {
         return "sign-up";
     }
 
+
     @GetMapping("/find-username")
     public String findUsername(){
         return "find-username";
@@ -26,4 +27,16 @@ public class PageController {
     public String findPassword(){
         return "find-password";
     }
+
+    @GetMapping("/")
+    public String home(){
+        return "index";
+    }
+
+    @GetMapping("/feed")
+    public String detail(){
+        return "post-details";
+    }
+
+
 }

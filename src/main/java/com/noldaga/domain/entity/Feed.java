@@ -1,7 +1,10 @@
 package com.noldaga.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,13 +15,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //@Builder
 //@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Getter //Dto 만들때 쓰임
 @NoArgsConstructor
-@ToString
 @Table(name="feed") //db 테이블 만들때 예약어는 피해야하는것을 염두해야함
 @Entity
 public class Feed {
@@ -49,7 +53,7 @@ public class Feed {
 //    private Group group;
 //    @Setter
     @Column(nullable = false, name="group_id")
-    private long groupId;
+    private Long groupId;
 
     //@Setter
     @Column(nullable = false, name="open_range") //전체 0 부분공개 1
@@ -66,9 +70,22 @@ public class Feed {
     private LocalDateTime modDate;
 
     @Column(name="total_view")
-    private long totalView;
+    private long totalView; //default로 0들어가게 long설정
 
-    public Feed(String title, String content, long groupId, int range, User user) {
+    @Column(name="total_comment")
+    private long commentCount; //default로 0들어가게 long설정
+
+    @Column(name="total_like")
+    private long likeCount; //default로 0들어가게 long설정
+
+ //   @JsonIgnoreProperties({"feed,user"})
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    private List<Comment> comment;
+
+    @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
+    private List<FeedTag> feedTags;
+
+    private Feed(String title, String content, long groupId, int range, User user) {
         this.title = title;
         this.content = content;
         this.groupId = groupId;
@@ -85,5 +102,25 @@ public class Feed {
         this.content = content;
         this.groupId = groupId;
         this.range = range;
+    }
+
+    public void plusViewCount(){
+        this.totalView+=1;
+    }
+
+    public void plusCommentCount(){
+        this.commentCount+=1;
+    }
+
+    public void minusCommentCount(){
+        this.commentCount-=1;
+    }
+
+    public void plusLikeCount(){
+        this.likeCount+=1;
+    }
+
+    public void minusLikeCount(){
+        this.likeCount-=1;
     }
 }
