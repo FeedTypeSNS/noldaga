@@ -86,4 +86,7 @@ public class User {
         return new User(username, password, nickname, email);
     }
 
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+    }
 }

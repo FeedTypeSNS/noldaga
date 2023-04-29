@@ -4,6 +4,7 @@ import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
+import com.noldaga.module.CodeGenerator;
 import com.noldaga.repository.UserRepository;
 import com.noldaga.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -21,6 +20,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+    private final CodeGenerator codeGenerator;
+    private final int INIT_PASSWORD_SIZE =10;
+
 
     @Value("${jwt.secret-key}")
     private String key;
@@ -62,10 +64,33 @@ public class UserService {
         return token;
     }
 
-    public Optional<UserDto> check(String username){
-        return userRepository.findByUsername(username).map(UserDto::fromEntity);
+    public void validateDuplication(String username){
+        userRepository.findByUsername(username).ifPresent(it-> {
+            throw new SnsApplicationException(ErrorCode.DUPLICATED_USERNAME, String.format("%s is duplicated", username));
+        });
     }
 
+
+    public UserDto findUsernameByEmail(String emailAddress) {
+        return userRepository.findByEmail(emailAddress).map(UserDto::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is invalid", emailAddress)));
+    }
+
+    public String findEmail(String username) {
+        UserDto userDto = userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+        return userDto.getEmail();
+    }
+
+    public String initPassword(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        String newPassword = codeGenerator.generateRandomCode(INIT_PASSWORD_SIZE);
+        user.changePassword(encoder.encode(newPassword));
+
+        return newPassword;
+    }
 
 
 //    public UserDto loadUserByUsername(String username) {
