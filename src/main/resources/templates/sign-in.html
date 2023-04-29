@@ -99,19 +99,19 @@
         <div class="card card-body text-center p-4 p-sm-5">
           <!-- Title -->
           <h1 class="mb-2">Sign in</h1>
-          <p class="mb-0">Don't have an account?<a href="sign-up.html"> Click here to sign up</a></p>
+          <p class="mb-0">Don't have an account?<a href="join-form"> Click here to sign up</a></p>
           <!-- Form START -->
           <form class="mt-sm-4">
             <!-- Email -->
             <div class="mb-3 input-group-lg">
-              <input type="type" name="username" class="form-control" placeholder="Enter email">
+              <input type="type" name="username" class="form-control" placeholder="아이디">
             </div>
             <!-- New password -->
             <div class="mb-3 position-relative">
               <!-- Password -->
               <div class="input-group input-group-lg">
                 <input class="form-control fakepassword" type="password" name="password" id="psw-input"
-                       placeholder="Enter new password">
+                       placeholder="비밀번호">
                 <span class="input-group-text p-0">
                   <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
                 </span>
@@ -123,11 +123,18 @@
                 <input type="checkbox" class="form-check-input" id="rememberCheck">
                 <label class="form-check-label" for="rememberCheck">Remember me?</label>
               </div>
-              <a href="forgot-password.html">Forgot password?</a>
+              <a href="find-username">Forgot id?</a>
+              <a href="find-password">Forgot password?</a>
             </div>
             <!-- Button -->
             <div class="d-grid">
               <button type="submit" class="btn btn-lg btn-primary">Login</button>
+            </div>
+
+            <div class="mt-3">
+              <button type="button" class="btn btn-lg btn-primary-soft">
+                카카오로 시작하기
+              </button>
             </div>
             <!-- Copyright -->
             <p class="mb-0 mt-3">©2023 <a target="_blank" href="https://www.webestica.com/">Webestica.</a> All rights
@@ -174,7 +181,7 @@ JS libraries, plugins and custom scripts -->
 
             // AJAX 요청 보내기
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/users/login', true);
+            xhr.open('POST', '/api/anonymous/login', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
 
@@ -196,7 +203,7 @@ JS libraries, plugins and custom scripts -->
                     window.location.href = '/';
                 }
                 else {//로그인실패
-
+                    alert('아이디와 비밀번호를 확인해주세요');
                 }
 
             };
