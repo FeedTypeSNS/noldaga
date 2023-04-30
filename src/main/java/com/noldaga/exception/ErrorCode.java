@@ -34,6 +34,10 @@ public enum ErrorCode {
     //comment
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment not founded"),
 
+    //Chat
+    CAN_NOT_FIND_CHATROOM(HttpStatus.NOT_FOUND, "This chat room does not exist"),
+    CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
+    ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     ;
 
     private HttpStatus status;

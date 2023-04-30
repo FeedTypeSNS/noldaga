@@ -29,7 +29,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    //websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.5.1'
+    implementation 'org.webjars:stomp-websocket:2.3.4'
+
     compileOnly 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -39,6 +46,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    //configuration 자동완성
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     //for jwt-token
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -65,6 +74,15 @@ dependencies {
 
     //이미지 썸네일
     implementation 'net.coobird:thumbnailator:0.4.16'
+
+    //json-simple
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation 'com.vladmihalcea:hibernate-types-52:2.20.0' //for jsonb
+
+    //view
+    implementation 'org.webjars.bower:vue:2.5.16'
+    implementation 'org.webjars.bower:axios:0.17.1'
+    implementation 'com.google.code.gson:gson:2.8.0'
 
 }
 

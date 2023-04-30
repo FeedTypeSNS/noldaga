@@ -23,6 +23,7 @@ bin/
 application-database.properties
 application.yaml
 
+
 ### Generated -> Q~ ###
 /src/main/generated/
 

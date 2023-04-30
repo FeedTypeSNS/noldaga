@@ -9,20 +9,29 @@ import lombok.Getter;
 public class UserSimpleDto {
     private Long id;
     private String username;
+    private String nickname;
+    private String profileImageUrl;
+    private String profileMessage;
     private UserRole role;
     //추후에 여기에 nickname, profile_img_url 등 여러가지 추가되야함
 
-    private UserSimpleDto(Long id, String username, UserRole role){
+    private UserSimpleDto(Long id, String username, UserRole role, String nickname, String img, String msg){
         this.id = id;
         this.username = username;
         this.role = role;
+        this.nickname = nickname;
+        this.profileImageUrl = img;
+        this.profileMessage = msg;
     }
 
     public static UserSimpleDto fromEntity(User entity){
         return new UserSimpleDto(
                 entity.getId(),
                 entity.getUsername(),
-                entity.getRole()
+                entity.getRole(),
+                entity.getNickname(),
+                entity.getProfileImageUrl(),
+                entity.getProfileMessage()
         );
     }
 
@@ -30,7 +39,10 @@ public class UserSimpleDto {
         return new UserSimpleDto(
                 entity.getId(),
                 entity.getUsername(),
-                entity.getRole()
+                entity.getRole(),
+                entity.getNickname(),
+                entity.getProfileImageUrl(),
+                entity.getProfileMessage()
         );
     }
 }
