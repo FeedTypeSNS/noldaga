@@ -28,6 +28,10 @@ public enum ErrorCode {
     ALREADY_FOLLOW(HttpStatus.CONFLICT, "User has already follow"),
     ALREADY_UNFOLLOW(HttpStatus.CONFLICT, "User has already unfollow"),
 
+    //Chat
+    CAN_NOT_FIND_CHATROOM(HttpStatus.NOT_FOUND, "This chat room does not exist"),
+    CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
+    ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     ;
 
     private HttpStatus status;
