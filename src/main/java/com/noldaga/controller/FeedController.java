@@ -7,18 +7,12 @@ import com.noldaga.controller.response.FeedResponse;
 import com.noldaga.controller.response.Response;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.UploadDto;
-import com.noldaga.domain.entity.Feed;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,18 +26,134 @@ import java.util.List;
 import java.util.UUID;
 
 @Log4j2
+@RestController
 @RequiredArgsConstructor
-@Controller
 public class FeedController {
 
-    @GetMapping("/")
-    public String home(){
-        return "index";
+    @Value("${com.noldaga.upload.path}")
+    private String path;
+
+    private final FeedService feedService;
+
+    @GetMapping("/api/feed/getuser")
+    public String getUserAtFeed(Authentication authentication) {
+
+        //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
+
+        return authentication.getName();
     }
 
-    @GetMapping("/feed")
-    public String detail(){
-        return "post-details";
+    @PostMapping("/api/feed")
+    public Response<FeedResponse> create(@RequestBody FeedCreateRequest request, Authentication authentication) {
+        FeedDto feedDto = feedService.create(request, authentication.getName());
+        //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
+
+        return Response.success(FeedResponse.fromFeedDto(feedDto));
+    }
+
+    @GetMapping(value="/api/feed")
+    public Response<FeedResponse> getFeed(Long id, Authentication authentication){
+        FeedDto feedDto = feedService.getDetailFeed(id,authentication.getName());
+
+        return Response.success(FeedResponse.fromFeedDto(feedDto));
+    }
+
+    @GetMapping(value="/api/feeds/{page}")
+    public Response<List<FeedResponse>> getmainFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getMainFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/group/{group_id}/{page}")
+    public Response<List<FeedResponse>> getGroupPageFeeds(@PathVariable Long group_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getGroupFeed(page,authentication.getName(),group_id);
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/mypage/{user_id}/{page}")
+    public Response<List<FeedResponse>> getMypageFeeds(@PathVariable Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getMyPageFeed(page,user_id,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @GetMapping(value="/api/feeds/explore/{page}")
+    public Response<List<FeedResponse>> getExplorePageFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getExploreFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    @PutMapping("/api/feed")
+    public Response<FeedResponse> modifyFeed(@RequestBody FeedModifyRequest request, Long id, Authentication authentication){
+        FeedDto feedDto = feedService.modify(request, id, authentication.getName());
+
+        return Response.success(FeedResponse.fromFeedDto(feedDto));
+    }
+
+    @DeleteMapping("/api/feed")
+    public Response<Void> deleteFeed(Long id, Authentication authentication){
+        feedService.delete(id, authentication.getName());
+        return Response.success();
+    }
+
+    @PostMapping("/api/upload")
+    public Response<List<UploadDto>> imageUpload(@RequestParam("images") List<MultipartFile> files) throws IOException {
+
+        log.info("업로드 시작");
+        List<UploadDto> uploadDtoList = new ArrayList<>();
+
+        files.forEach(file -> {
+            String originalName = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString();
+            Path savePath = Paths.get(path,uuid+"_"+originalName);
+            boolean img = false;
+
+            try {
+                file.transferTo(savePath);
+
+                if(Files.probeContentType(savePath).startsWith("image")){
+                    img = true;
+                    File thumbFile = new File(path,"s_"+uuid+"_"+originalName);
+                    Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            UploadDto uploadDto = UploadDto.builder()
+                    .uuid(uuid)
+                    .filename(originalName)
+                    .img(img)
+                    .build();
+
+            log.info(uploadDto);
+            log.info(uploadDto.getLink());
+            uploadDtoList.add(uploadDto);
+        });
+        log.info(uploadDtoList);
+        return Response.success(uploadDtoList);
     }
 
 }

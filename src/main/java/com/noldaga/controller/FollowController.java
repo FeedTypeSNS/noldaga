@@ -2,12 +2,9 @@ package com.noldaga.controller;
 
 import com.noldaga.controller.response.FollowResponse;
 import com.noldaga.controller.response.Response;
-import com.noldaga.domain.UserDto;
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.FollowService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

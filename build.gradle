@@ -60,6 +60,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' //for kakao login
 
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.10'// for mail
+
+
     //vaild 유효성
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     //querydsl

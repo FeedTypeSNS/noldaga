@@ -1,7 +1,7 @@
 package com.noldaga.service;
 
 import com.noldaga.controller.response.FollowResponse;
-import com.noldaga.domain.UserDto;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.entity.Follow;
 import com.noldaga.domain.entity.User;

@@ -10,15 +10,36 @@ public class PageController {
 
     @GetMapping("/login-form")
     public String login(){
-        System.out.println("PageController.login");
         return "sign-in";
     }
 
     @GetMapping("/join-form")
     public String join(){
-        System.out.println("PageController.join");
         return "sign-up";
     }
+
+
+    @GetMapping("/find-username")
+    public String findUsername(){
+        return "find-username";
+    }
+
+    @GetMapping("/find-password")
+    public String findPassword(){
+        return "find-password";
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "index";
+    }
+
+    @GetMapping("/feed")
+    public String detail(){
+        return "post-details";
+    }
+
+
 
     @GetMapping("/chat")
     public String chatMain(){

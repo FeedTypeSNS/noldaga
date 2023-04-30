@@ -1,7 +1,8 @@
 package com.noldaga.domain.entity;
 
 
-import com.noldaga.domain.UserRole;
+import com.noldaga.domain.userdto.Gender;
+import com.noldaga.domain.userdto.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -24,17 +26,28 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_at is NULL") // 조회시 이 조건이 자동 추가
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="user_id")
     private Long id;
 
     @Column(nullable=false ,updatable = false,unique = true)
     private String username;
 
-    @Setter
-    @Column(nullable = false)
+    private String nickname;
+    @Setter @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
+    private LocalDate birthday;
+
+
+    private String profileImageUrl;
+    private String profileMessage;
+    private String email;
+    private Long totalFollower=Long.valueOf(0);
+    private Long totalFollowing=Long.valueOf(0);
 
     @Setter
     @Column(name = "role")
@@ -57,14 +70,23 @@ public class User {
     protected User(){
     }
 
-    public User(Long id,String username, String password) {
-        this.id = id;
+
+    private User(String username, String password, String nickname, String email) {
         this.username = username;
+        this.nickname = nickname;
         this.password = password;
+        this.email = email;
     }
 
     public static User of(String username, String password) {
-        return new User(null,username, password);
+        return new User(username, password,null,null);
     }
 
+    public static User of(String username, String password, String nickname, String email) {
+        return new User(username, password, nickname, email);
+    }
+
+    public void changePassword(String newPassword){
+        this.password = newPassword;
+    }
 }

@@ -1,5 +1,4 @@
-package com.noldaga.domain;
-
+package com.noldaga.domain.userdto;
 
 import com.noldaga.domain.entity.User;
 import lombok.Getter;
@@ -11,11 +10,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * 엔티티 클래스는 db에 저장할때만 사용하는것이 좋음 : 엔티티 객체의 영향을 준다라는것은 db에 영향을 준다는것을 의미함
- */
+
 @Getter
-public class UserDto implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private Long id;
     private String username;
@@ -27,7 +24,7 @@ public class UserDto implements UserDetails {
 
     private LocalDateTime deletedAt;
 
-    private UserDto(Long id, String username, String password, UserRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt) {
+    private UserDetailsImpl(Long id, String username, String password, UserRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,19 +34,18 @@ public class UserDto implements UserDetails {
         this.deletedAt = deletedAt;
     }
 
-    public static UserDto fromEntity(User entity){
-        return new UserDto(
-                entity.getId(),
-                entity.getUsername(),
-                entity.getPassword(),
-                entity.getRole(),
-                entity.getCreatedAt(),
-                entity.getModifiedAt(),
-                entity.getDeletedAt());
+    public static UserDetailsImpl fromEntity(User user) {
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole(),
+                user.getCreatedAt(),
+                user.getModifiedAt(),
+                user.getDeletedAt()
+        );
     }
 
-
-    //implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.getRole().toString()));
