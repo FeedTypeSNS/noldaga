@@ -1,6 +1,6 @@
 package com.noldaga.controller.response;
 
-import com.noldaga.domain.UserDto;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.UserSimpleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

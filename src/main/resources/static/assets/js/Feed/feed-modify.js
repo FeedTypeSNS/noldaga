@@ -13,6 +13,15 @@ let post = {
     $("#modify").on("click",()=>{
       this.show();
     });
+
+    $("#comment-modify-button").on("click",()=>{
+      this.modifyComment();
+    });
+
+    $("#comment-delete-button").on("click",()=>{
+      this.deleteComment();
+    });
+
   },
 
   modify:function(){
@@ -77,10 +86,59 @@ let post = {
     });
 
     function setModifyModal(data){
-      $('#title').val(data.title);
-      $('#content').val(data.content);
-      $('#id').val(data.id);
+      $('#title').val(data.result.title);
+      $('#content').val(data.result.content);
+      $('#id').val(data.result.id);
     }
+  },
+
+  modifyComment:function(){
+
+    const queryString = window.location.search;
+    let data={
+      id: $("#commentId").val(),
+      content: $("#commentContent").val()
+    };
+
+    alert(JSON.stringify(data));
+
+    $.ajax({
+      type: "PUT",
+      url: "/api/comment/"+data.id,
+      data: JSON.stringify(data),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json"
+    }).done(function(resp){
+      alert('수정 완료');
+      location.href = "/feed"+queryString;
+    }).fail(function(error){
+      alert('수정 실패');
+      alert(JSON.stringify(error));
+    });
+
+  },
+
+  deleteComment:function(){
+
+    const queryString = window.location.search;
+
+    let data={
+      id: $("#deleteId").val()
+    };
+
+    $.ajax({
+      type: "DELETE",
+      url: "/api/comment/" + data.id,
+      contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+      alert('삭제 완료');
+      location.href = "/feed"+queryString;
+    }).fail(function(error){
+      alert('삭제 실패');
+      alert(JSON.stringify(error));
+      location.href = "/feed"+queryString;
+    });
+
   }
 
 };

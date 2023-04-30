@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    DUPLICATED_USER_ID(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
+    INVALID_CODE(HttpStatus.UNAUTHORIZED,"Code is invalid"),
+    DUPLICATED_USERNAME(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"), //로그인시 회원가입이 안된 username
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"), //로그인시 틀린 password
 
@@ -19,8 +20,10 @@ public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),//런타임 예외등(UserService 회원가입 트랜잭션 런타임예외 하면서 추가한듯.?)
 
+    //feedLike
     ALREADY_LIKED(HttpStatus.CONFLICT, "User has already liked the Feed"), //feedLike 개발하면서 추가
-
+    FEEDLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "FeedLike not founded"),
+    COMMENTLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "CommentLike not founded"),
 
     //follow
     CAN_NOT_FOLLOW_SELF(HttpStatus.CONFLICT, "User cannot follow yourself"),
@@ -28,6 +31,13 @@ public enum ErrorCode {
     ALREADY_FOLLOW(HttpStatus.CONFLICT, "User has already follow"),
     ALREADY_UNFOLLOW(HttpStatus.CONFLICT, "User has already unfollow"),
 
+    //comment
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Comment not founded"),
+
+    //Chat
+    CAN_NOT_FIND_CHATROOM(HttpStatus.NOT_FOUND, "This chat room does not exist"),
+    CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
+    ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     ;
 
     private HttpStatus status;

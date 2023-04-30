@@ -3,7 +3,6 @@ package com.noldaga.configuration;
 
 import com.noldaga.configuration.filter.JwtTokenFilter;
 import com.noldaga.exception.CustomAuthenticationEntryPoint;
-import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,7 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 public class AuthenticationConfig {
 
-    private final UserService userService; //토큰 필터에 넣어줄려고
+//    private final UserService userService; //토큰 필터에 넣어줄려고
+    private final UserDetailsService userDetailsService;
     @Value("${jwt.secret-key}")
     private String key;//토큰 필터에 넣어줄려고
 
@@ -33,20 +34,18 @@ public class AuthenticationConfig {
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(
                                 HttpMethod.GET
-//                                , "/"
                         ).permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
                                 "/test",
-                                "/api/users/join",
-                                "/api/users/login"
+                                "/api/anonymous/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class) //로그인 인증처리를 하는 Username~ 필터전에 JwtTokenFilter를 실행
+                .addFilterBefore(new JwtTokenFilter(key, userDetailsService), UsernamePasswordAuthenticationFilter.class) //로그인 인증처리를 하는 Username~ 필터전에 JwtTokenFilter를 실행
                 .exceptionHandling() //인증중 예외 터졌을때 여기로 이동
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
@@ -65,6 +64,7 @@ public class AuthenticationConfig {
         return (web) -> web.ignoring().regexMatchers("^(?!/api).*"); //  /api로 시작 하지않으면 시큐리티 무시 (토큰필터 안거침)
 
     }
+
 
 
 }
