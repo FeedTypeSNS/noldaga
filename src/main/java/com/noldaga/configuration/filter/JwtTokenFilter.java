@@ -4,6 +4,7 @@ package com.noldaga.configuration.filter;
 import com.noldaga.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,29 +39,33 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
 
 
 //        final String tokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);//헤더 필드중에서 토큰이 들어있는 부분의 헤더를 꺼냄
-//
 //        if(tokenHeader == null || ! tokenHeader.startsWith("Bearer ")){//토큰이 없는경우
 //            log.error("Error occurs while getting header. header is null or invalid {}",request.getRequestURL());
 //            filterChain.doFilter(request,response);
 //            return;
 //        }
 
+
         Cookie[] cookies = request.getCookies();
-        Optional<Cookie> tokenCookie =null;
-        if(cookies !=null){
-            tokenCookie = Arrays.stream(request.getCookies()).filter(c -> c.getName().equals("tokenCookie")).findFirst();
-            if(tokenCookie.isEmpty()){
-                log.error("Error occurs while getting token. cookie is null or invalid{}",request.getRequestURL());
-                filterChain.doFilter(request, response);
-                return;
-            }
+        if(cookies ==null){
+            log.error("Error occurs while getting token. cookie is null or invalid {}",request.getRequestURL());
+            filterChain.doFilter(request, response);
+            return;
         }
+        Optional<Cookie> tokenCookie = null;
+        tokenCookie = Arrays.stream(cookies).filter(c -> c.getName().equals("tokenCookie")).findFirst();
+        if(tokenCookie.isEmpty()){
+            log.error("Error occurs while getting token. cookie is null or invalid {}",request.getRequestURL());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
 
         try {
 //            final String token = tokenHeader.split(" ")[1].trim(); //토큰 꺼냄
             final String token = tokenCookie.get().getValue();
 
-            //토큰이 유효한지 검사 (유통기한 확인)
+            //토큰이 유효한지 검사 (토큰이 조작이 없는지확인 , 유통기한 확인)
             if (JwtTokenUtils.isExpired(token, key)) {
                 log.error("Token is expired");
                 filterChain.doFilter(request, response);
@@ -77,9 +82,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
             //모든것이 유효하면 정보를 다음으로 넘김
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities()
-                    //Principal 에 넘겨준것이 authentication.getName() 했을때 반환됨
-                    //-> UserDto implements UserDetails 처리를 안해주면 authentication.getName() 했을때 userDto.toString()이 반환되어서 뒤에서 에러남 : 임시로 여기에서 principal 에 userDto.getName() 넣어줄수있음
-                    //뒤에서 authentication.getName() 반환값이 userRepository.findByUsername() 의 파라미터로 들어가게됨.
             );
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -91,7 +93,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
             filterChain.doFilter(request, response);
             return ;
         }
-
 
         filterChain.doFilter(request, response);
     }

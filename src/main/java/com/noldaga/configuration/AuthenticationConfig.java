@@ -34,13 +34,11 @@ public class AuthenticationConfig {
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(
                                 HttpMethod.GET
-//                                , "/"
                         ).permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
                                 "/test",
-                                "/api/users/join",
-                                "/api/users/login"
+                                "/api/anonymous/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
