@@ -6,7 +6,6 @@ let post = {
     },
 
     creating:function(){
-
         let data={
             name: $("#name").val(),
             open: $("input[name='open']:checked").val(),
@@ -17,7 +16,7 @@ let post = {
 
         $.ajax({
             type: "POST",
-            url: "/api/groups",
+            url: "/api/group",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -34,7 +33,7 @@ let post = {
             },
             error: function(xhr, status, error) {
                 console.log('API Error:', error);
-                alert('그룹 삭제에 실패하였습니다.');
+                alert('그룹 생성에 실패하였습니다.');
             }
         });
 

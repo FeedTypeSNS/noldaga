@@ -17,17 +17,12 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/groups")
-    public String chatMain(){
+    public String groupList(){
         return "groups";
     }
 
     @GetMapping("/group")
-    public String groupView(Long id, Model model) {
-        GroupDto groupDto = groupService.getGroup(id);
-
-        log.info(groupDto);
-
-        model.addAttribute("group", groupDto);
+    public String groupView() {
 
         return "group-details";
     }
