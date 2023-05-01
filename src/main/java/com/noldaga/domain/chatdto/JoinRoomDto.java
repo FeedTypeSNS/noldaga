@@ -1,7 +1,7 @@
-package com.noldaga.domain.Chat;
+package com.noldaga.domain.chatdto;
 
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.Chat.JoinRoom;
+import com.noldaga.domain.entity.chat.JoinRoom;
 import lombok.Getter;
 
 @Getter

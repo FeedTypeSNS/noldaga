@@ -1,7 +1,6 @@
-package com.noldaga.domain.entity.Chat;
+package com.noldaga.domain.entity.chat;
 
 import com.noldaga.domain.entity.User;
-import com.noldaga.repository.UserRepository;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @EntityListeners(AuditingEntityListener.class) //자동으로 시간을 매핑하여 테이블에 넣어주는 jpa auditing 사용
 @Getter

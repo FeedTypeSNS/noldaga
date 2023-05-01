@@ -1,6 +1,6 @@
 package com.noldaga.controller.response;
 
-import com.noldaga.domain.Chat.ChatDto;
+import com.noldaga.domain.chatdto.ChatDto;
 import com.noldaga.domain.UserSimpleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
