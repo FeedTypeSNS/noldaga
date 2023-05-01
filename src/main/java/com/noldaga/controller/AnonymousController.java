@@ -6,13 +6,14 @@ import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserJoinResponse;
 import com.noldaga.domain.CodeUserDto;
 import com.noldaga.domain.userdto.UserDto;
-import com.noldaga.service.AuthService;
+import com.noldaga.service.MailAuthService;
 import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
 
@@ -22,9 +23,9 @@ import java.io.UnsupportedEncodingException;
 public class AnonymousController {
 
     private final UserService userService;
-    private final AuthService authService;
+    private final MailAuthService mailAuthService;
 
-
+    //todo 회원가입이라는 하나의 트랜잭션안에 여러번의 api를 통해 인증을 하는데, 서버쪽에서 상태를 유지해야함.
     @PostMapping("/join/validate-username") //회원가입 1 : 아이디중복검사
     public Response<Void> login(@RequestBody UsernameRequest req) {
         userService.validateDuplication(req.getUsername());
@@ -34,14 +35,14 @@ public class AnonymousController {
     @PostMapping("/join/send-code") //회원가입 2 : 이메일 인증 : 이메일 로 코드전송
     public Response<CodeIdResponse> email(@RequestBody MailAuthRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        Integer codeId = authService.sendCode(req.getEmail());
+        Integer codeId = mailAuthService.sendCode(req.getEmail());
         return Response.success(CodeIdResponse.of(codeId));
     }
 
     @PostMapping("/join/validate-code")//회원가입 3 : 코드 대조
     public Response<Void> validateCode(@RequestBody CodeRequest req) {
 
-        authService.validateCode(req.getCodeId(), req.getCode());
+        mailAuthService.validateCode(req.getCodeId(), req.getCode());
         return Response.success();
     }
 
@@ -56,8 +57,8 @@ public class AnonymousController {
     @PostMapping("/find-password/send-code")//비번찾기1 : 가입된 이메일로 코드전송
     public Response<CodeIdResponse> findPassword(@RequestBody UsernameRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        String emailAddress = userService.findEmail(req.getUsername());
-        Integer codeId = authService.sendCode(emailAddress, req.getUsername());
+        String emailAddress = userService.searchEmail(req.getUsername());
+        Integer codeId = mailAuthService.sendCode(emailAddress, req.getUsername());
         return Response.success(CodeIdResponse.of(codeId));
     }
 
@@ -65,10 +66,10 @@ public class AnonymousController {
     @PostMapping("/find-password/init-password") //비번찾기2 : 코드 검증후 비밀번호 초기화
     public Response<Void> initPassword(@RequestBody CodeRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        CodeUserDto codeUserDto = authService.validateCodeForPassword(req.getCodeId(), req.getCode());
+        CodeUserDto codeUserDto = mailAuthService.validateCodeForPassword(req.getCodeId(), req.getCode());
 
         String newPassword = userService.initPassword(codeUserDto.getUsername());
-        authService.sendPassword(codeUserDto.getEmail(), newPassword);
+        mailAuthService.sendPassword(codeUserDto.getEmail(), newPassword);
 
         return Response.success();
     }
@@ -76,16 +77,16 @@ public class AnonymousController {
     //todo 한 이메일에 여러 아이디를 가입 했을때 대응해야함.
     @PostMapping("/find-username/send-username")// 아이디찾기: 가입된 이메일로 아이디전송
     public Response<Void> findUsername(@RequestBody MailAuthRequest req) throws MessagingException, UnsupportedEncodingException {
-        UserDto userDto = userService.findUsernameByEmail(req.getEmail());
-        authService.sendUsername(req.getEmail(), userDto.getUsername());
+        UserDto userDto = userService.searchUsernameByEmail(req.getEmail());
+        mailAuthService.sendUsername(req.getEmail(), userDto.getUsername());
 
         return Response.success();
     }
 
 
     @PostMapping("/login")
-    public Response<String> login(@RequestBody UserLoginRequest req) {
-        String token = userService.login(req.getUsername(), req.getPassword());
+    public Response<String> login(@RequestBody UserLoginRequest req, HttpServletResponse httpServletResponse) {
+        String token = userService.login(req.getUsername(), req.getPassword(),httpServletResponse);
 
         return Response.success(token);
     }
