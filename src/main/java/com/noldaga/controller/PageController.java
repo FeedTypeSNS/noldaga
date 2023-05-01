@@ -39,6 +39,11 @@ public class PageController {
         return "post-details";
     }
 
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "my-profile";
+    }
+
 
 
     @GetMapping("/chat")
