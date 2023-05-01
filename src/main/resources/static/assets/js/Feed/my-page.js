@@ -96,7 +96,7 @@ function photoCardContent(data) {
                           </a>
                           <!-- likes -->
                           <ul class="nav nav-stack py-2 small">
-                          ${data.content}
+                          ${data.title}
                           </ul>
                           <ul class="nav nav-stack py-2 small">
                               <li class="nav-item">

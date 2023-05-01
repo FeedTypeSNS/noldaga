@@ -97,7 +97,7 @@ function getFeedBoxContentRemoveComment(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="#!">
+                      <a href="/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
                           src="assets/images/avatar/04.jpg"
