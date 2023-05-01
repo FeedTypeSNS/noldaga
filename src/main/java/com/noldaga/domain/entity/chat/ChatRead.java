@@ -1,4 +1,4 @@
-package com.noldaga.domain.entity.Chat;
+package com.noldaga.domain.entity.chat;
 
 import com.noldaga.domain.entity.User;
 import lombok.Getter;

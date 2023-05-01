@@ -1,7 +1,7 @@
 package com.noldaga.repository.Chat;
 
-import com.noldaga.domain.entity.Chat.Chat;
-import com.noldaga.domain.entity.Chat.ChatRead;
+import com.noldaga.domain.entity.chat.Chat;
+import com.noldaga.domain.entity.chat.ChatRead;
 import com.noldaga.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

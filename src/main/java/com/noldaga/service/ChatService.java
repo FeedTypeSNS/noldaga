@@ -5,17 +5,16 @@ import com.noldaga.controller.request.ChatSendRequest;
 import com.noldaga.controller.response.ChatRoomListResponse;
 import com.noldaga.controller.response.ChatRoomResponse;
 import com.noldaga.controller.response.ChatSendResponse;
-import com.noldaga.domain.Chat.ChatDto;
-import com.noldaga.domain.Chat.ChatReadDto;
-import com.noldaga.domain.Chat.ChatRoomDto;
+import com.noldaga.domain.chatdto.ChatDto;
+import com.noldaga.domain.chatdto.ChatReadDto;
+import com.noldaga.domain.chatdto.ChatRoomDto;
 import com.noldaga.domain.userdto.UserRole;
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.Chat.Chat;
-import com.noldaga.domain.entity.Chat.ChatRead;
-import com.noldaga.domain.entity.Chat.ChatRoom;
-import com.noldaga.domain.entity.Chat.JoinRoom;
+import com.noldaga.domain.entity.chat.Chat;
+import com.noldaga.domain.entity.chat.ChatRead;
+import com.noldaga.domain.entity.chat.ChatRoom;
+import com.noldaga.domain.entity.chat.JoinRoom;
 import com.noldaga.domain.entity.User;
-import com.noldaga.domain.userdto.UserRole;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.Chat.ChatReadRepository;
@@ -206,7 +205,7 @@ public class ChatService {
         userReadCheck(me, room); //삭제전 우선 모두 읽음 처리 시키기
 
         List<JoinRoom> people = joinRoomRepository.findAllByRoom(room);
-        JoinRoom meJoin = joinRoomRepository.findByUsersAndAndRoom(user, room).orElseThrow(()->
+        JoinRoom meJoin = joinRoomRepository.findByUsersAndRoom(user, room).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.ALREADY_OUT_ROOM));
 
         List<Chat> chatList = chatRepository.findAllByRoom(room); //방안의 채팅 내역
@@ -331,5 +330,32 @@ public class ChatService {
 
         }
         return viewName;
+    }//사람 기준으로 보는 viewName
+
+    public ChatRoomDto getChatRoomFromId(String me,Long id){
+        ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+
+        if (room.getViewRoomName().equals(room.getRoomName())) { //만약 따로 이름 설정을 하지 않았으면 이름은 회원별로 다르게 보여줘야함
+            String userViewName = getViewName(room.getRoomName(), me);
+            room.setViewRoomName(userViewName);
+        }
+
+        return ChatRoomDto.fromEntity(room);
+    }//ChatRoom정보 반환해주는 메소드..
+
+
+    public Boolean confirmInvitation(String me, Long id){
+        User user = userRepository.findByUsername(me).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
+        ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+        Optional<JoinRoom> invite = joinRoomRepository.findByUsersAndRoom(user, room);
+        if (invite.isPresent()){
+            return true; //존재한다면 초대되어 있음..
+        }else {
+            return false;
+        }
     }
+    //chatRoom에 초대되어 있는 사람인지 확인하기..
 }

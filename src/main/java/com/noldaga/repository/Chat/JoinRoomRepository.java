@@ -1,7 +1,7 @@
 package com.noldaga.repository.Chat;
 
-import com.noldaga.domain.entity.Chat.ChatRoom;
-import com.noldaga.domain.entity.Chat.JoinRoom;
+import com.noldaga.domain.entity.chat.ChatRoom;
+import com.noldaga.domain.entity.chat.JoinRoom;
 import com.noldaga.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,5 +16,5 @@ public interface JoinRoomRepository extends JpaRepository<JoinRoom, Long> {
 
     Optional<JoinRoom> findByUsers(User user);
 
-    Optional<JoinRoom> findByUsersAndAndRoom(User user, ChatRoom room);
+    Optional<JoinRoom> findByUsersAndRoom(User user, ChatRoom room);
 }
