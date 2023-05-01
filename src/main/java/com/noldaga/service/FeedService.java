@@ -180,8 +180,14 @@ public class FeedService {
         }
 
         feed.change(request.getTitle(), request.getContent(), request.getGroupId(), request.getRange());
+
         feedRepository.save(feed);
         FeedDto feedDto = FeedDto.fromEntity(feed);
+
+        //해시태그 지우기
+        hashTagService.deleteHashTag(feedId);
+        //다시저장하기
+        hashTagService.extractHashTag(request.getContent(), feedId);
         return feedDto;
     }
 
@@ -200,6 +206,8 @@ public class FeedService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
         }
 
+        //해시태그 지우기
+        hashTagService.deleteHashTag(feedId);
         //delete
         feedRepository.deleteById(feedId);
     }
