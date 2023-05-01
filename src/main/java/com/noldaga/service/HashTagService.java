@@ -44,6 +44,7 @@ public class HashTagService {
         }
         saveHashTag(hashTagArray, feedId);
     }
+
     @Transactional
     public void saveHashTag(List<String> hashTagArray, Long feedId){
         //피드확인
@@ -54,7 +55,20 @@ public class HashTagService {
                 .map(hashTagName->
                     hashTagRepository.findByHashTagName(hashTagName).orElseGet(()->
                         hashTagRepository.save(new HashTag(hashTagName))))
-                .forEach(hashTag ->
-                    feedTagRepository.save(FeedTag.of(feed,hashTag)));
+                .forEach(hashTag ->{
+                    hashTag.plusTotalUse();
+                    feedTagRepository.save(FeedTag.of(feed,hashTag));
+                });
+    }
+
+    @Transactional
+    public void deleteHashTag(Long feedId){
+        //피드확인
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s is not founded", feedId)));
+
+        List<FeedTag> feedTagList = feedTagRepository.findByFeedId(feedId);
+        feedTagList.forEach(feedTag->feedTag.getHashTag().minusTotalUse());
+        feedTagRepository.deleteByFeedId(feedId);
     }
 }
