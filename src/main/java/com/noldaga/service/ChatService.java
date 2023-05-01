@@ -5,16 +5,16 @@ import com.noldaga.controller.request.ChatSendRequest;
 import com.noldaga.controller.response.ChatRoomListResponse;
 import com.noldaga.controller.response.ChatRoomResponse;
 import com.noldaga.controller.response.ChatSendResponse;
+import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.chatdto.ChatDto;
 import com.noldaga.domain.chatdto.ChatReadDto;
 import com.noldaga.domain.chatdto.ChatRoomDto;
-import com.noldaga.domain.userdto.UserRole;
-import com.noldaga.domain.UserSimpleDto;
+import com.noldaga.domain.entity.User;
 import com.noldaga.domain.entity.chat.Chat;
 import com.noldaga.domain.entity.chat.ChatRead;
 import com.noldaga.domain.entity.chat.ChatRoom;
 import com.noldaga.domain.entity.chat.JoinRoom;
-import com.noldaga.domain.entity.User;
+import com.noldaga.domain.userdto.UserRole;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.Chat.ChatReadRepository;
@@ -73,7 +73,7 @@ public class ChatService {
                 if (chatRoom != null) {
                     joinPeoples = getJpeoples(chatRoom);
                     recentChat = getRChat(chatRoom, joinPeoples.size());
-                    roomInfoList.add(ChatRoomListResponse.returnResponse(ChatRoomDto.fromEntity(chatRoom), joinPeoples, recentChat));
+                    roomInfoList.add(ChatRoomListResponse.returnResponse(ChatRoomDto.fromEntity(chatRoom), joinPeoples, recentChat, joinPeoples.size()));
                 } else {
                     //채팅방이 존재한다고 찾아졌는데 방정보가 없는건 중간에 실수로 제거된거거나, 연결된 부분들이 제거가 안된것
                     //joinRoom(me)에서나, chatRoom(roomId)에서 사라진 것이니.. 이걸찾아서 제거하는 로직이 필요할듯
