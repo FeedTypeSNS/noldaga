@@ -1,7 +1,7 @@
-package com.noldaga.domain.Chat;
+package com.noldaga.domain.chatdto;
 
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.Chat.ChatRead;
+import com.noldaga.domain.entity.chat.ChatRead;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

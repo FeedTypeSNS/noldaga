@@ -12,7 +12,9 @@ import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +54,15 @@ public class GroupService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        return groupRepository.findAllByUser(user);
+        return groupRepository.findAllByUser(user, Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Transactional
-    public GroupDto getGroup(Long id) {
+    public GroupDto getGroup(Long id, String username) {
+        //유저확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
         Group group = groupRepository.findById(id).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
 

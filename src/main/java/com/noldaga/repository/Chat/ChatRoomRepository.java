@@ -1,6 +1,6 @@
 package com.noldaga.repository.Chat;
 
-import com.noldaga.domain.entity.Chat.ChatRoom;
+import com.noldaga.domain.entity.chat.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
