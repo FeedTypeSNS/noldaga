@@ -44,10 +44,16 @@ public class PageController {
         return "my-profile";
     }
 
-
-
     @GetMapping("/chat")
     public String chatMain(){
         return "messaging";
     }
+
+    @GetMapping("/groups")
+    public String groupList(){
+        return "groups";
+    }
+
+    @GetMapping("/group")
+    public String groupView() { return "group-details"; }
 }
