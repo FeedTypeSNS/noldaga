@@ -1,31 +1,46 @@
-function init() {
+function getUser() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/group/getuser",
+        async: false
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        init(resp);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+getUser();
+
+function init(user) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const groupId = urlParams.get('id');
-    console.log(groupId);
+
     $.ajax({
         type: "GET",
         url: "/api/group/"+ groupId,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initDetailPage(resp.result);
+        initDetailPage(resp.result, user);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-init();
 
-function initDetailPage(group) {
+function initDetailPage(group, user) {
     let feedBox = document.querySelector("#group-info");
     let cardBox = document.createElement("div");
     console.log(group);
-    cardBox.innerHTML = getDetailPage_Feed(group);
+    cardBox.innerHTML = getDetailPage_Feed(group, user);
     feedBox.append(cardBox);
 }
 
-function getDetailPage_Feed(group) {
+function getDetailPage_Feed(group, user) {
     const groupType = group.open === 0 ? "<i class=\"bi bi-lock pe-1\"></i> 비밀 그룹" : "<i class='bi bi-globe pe-1'></i> 공개 그룹";
+    const userType = user.id === group.userDto.id ? "<a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#modalCreateGroup\"><i class=\"bi bi-gear-fill fs-6\"> </i></a>" : "";
+
     return `<div class="d-md-flex flex-wrap align-items-start text-center text-md-start">
     <div class="mb-2">
         <!-- Avatar -->
@@ -42,16 +57,13 @@ function getDetailPage_Feed(group) {
     </div>
     <!-- Button -->
     <div class="d-flex justify-content-center justify-content-md-start align-items-center mt-3 ms-lg-auto">
-        <button class="btn btn-sm btn-primary-soft me-2" type="button"><i
-            class="bi bi-person-check-fill pe-1"></i> Joined
+        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button"><i
+            class="bi bi-person-plus-fill pe-1"></i> Join
         </button>
         <button class="btn btn-sm btn-success me-2" type="button"><i class="fa-solid fa-plus pe-1"></i> Invite
         </button>
-        <div class="dropdown">
-            <!-- Group share action menu -->
-            <a class="btn btn-primary-soft ms-auto w-80" href="#" data-bs-toggle="modal"
-               data-bs-target="#modalCreateGroup"> Modify</a>
-        </div>
+        
+        ${userType}        
     </div>
 </div>
 
