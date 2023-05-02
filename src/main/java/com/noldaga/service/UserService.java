@@ -1,5 +1,6 @@
 package com.noldaga.service;
 
+import com.noldaga.controller.request.UserProfileModifyRequest;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
@@ -12,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -33,6 +37,8 @@ public class UserService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
 
+    @Value("${com.noldaga.upload.path}")
+    private String directoryPath;
 
     //회원가입의 결과를 UserDto 로 넘겨줌 ( 플로우의 결과로서 Dto를 받기 때문에 받는 쪽에서 플로우가 잘 진행됐는지 파악 하기 쉬움)
     @Transactional//예외발생시 회원가입 되지않고 롤백 되어야함 (save 다음에 예외 터지면 롤백 되어야함)
@@ -99,11 +105,49 @@ public class UserService {
         return newPassword;
     }
 
-    //OAuth2UserService 에서 사용되는 메서드
-    public Optional<UserDto> loadUserByUsername(String username){
-        return userRepository.findByUsername(username).map(UserDto::fromEntity);
+
+
+    public UserDto searchUserById(Long id){
+        return userRepository.findById(id).map(UserDto::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%No user with %d UserId", id)));
     }
 
+    public UserDto searchUserByUsername(String username){
+        return userRepository.findByUsername(username).map(UserDto::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
+    }
+
+    @Transactional
+    public UserDto modifyMyProfile(MultipartFile multipartFile,String nickname,String message,String beforeUrl, String username) throws IOException {
+
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
+
+
+        //todo 네이버 클라우드
+        String afterUrl = beforeUrl;
+        if(multipartFile!=null && !multipartFile.isEmpty()) {
+
+            //todo beforeUrl 파일 삭제
+
+            String originFileName = multipartFile.getOriginalFilename();
+            String extension = originFileName.substring(originFileName.lastIndexOf("."));
+            String newFileName = originFileName.replace(extension, "") + "_" + System.currentTimeMillis() + extension;
+
+            String path = directoryPath + "\\" + newFileName;
+            File file = new File(path);
+            multipartFile.transferTo(file);
+            afterUrl = file.getAbsolutePath();
+        }
+
+        user.modifyProfile(nickname,message,afterUrl);
+
+        return UserDto.fromEntity(user);
+    }
+
+    public Optional<UserDto> loadUserByUsername(String username){
+        return userRepository.findByUsername(username).map(UserDto::fromEntity);
+    }//OAuth2UserService 에서 사용되는 메서드
 
     private void generateTokenCookie(HttpServletResponse response, String token) {
         final int A_MONTH = 60 * 60 * 24 * 30;
