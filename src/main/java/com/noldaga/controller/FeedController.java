@@ -36,11 +36,11 @@ public class FeedController {
     private final FeedService feedService;
 
     @GetMapping("/api/feed/getuser")
-    public String getUserAtFeed(Authentication authentication) {
+    public Object getUserAtFeed(Authentication authentication) {
 
         //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
 
-        return authentication.getName();
+        return authentication.getPrincipal();
     }
 
     @PostMapping("/api/feed")
@@ -82,8 +82,8 @@ public class FeedController {
         return Response.success(feedResponseList);
     }
 
-    @GetMapping(value="/api/feeds/mypage/{user_id}/{page}")
-    public Response<List<FeedResponse>> getMypageFeeds(@PathVariable Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+    @GetMapping(value="/api/feeds/mypage/{page}")
+    public Response<List<FeedResponse>> getMypageFeeds(Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getMyPageFeed(page,user_id,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();

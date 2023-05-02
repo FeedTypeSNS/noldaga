@@ -7,7 +7,6 @@ function iinit() {
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         init(resp);
     }).fail(function(error){
-        alert("오류인듯");
         alert(JSON.stringify(error));
     });
 }

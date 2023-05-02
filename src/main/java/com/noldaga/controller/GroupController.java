@@ -1,33 +1,23 @@
 package com.noldaga.controller;
 
 
-import com.noldaga.controller.response.FeedResponse;
 import com.noldaga.controller.response.Response;
-import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.entity.Group;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class GroupApiController {
+public class GroupController {
 
     private final GroupService groupService;
 
-    @PostMapping("/groups")
+    @PostMapping("/group")
     public Response<GroupDto> createGroup(@RequestBody GroupDto groupDto, Authentication authentication) {
         GroupDto registeredGroup = groupService.createGroup(groupDto, authentication.getName());
         return Response.success(registeredGroup);
@@ -39,13 +29,14 @@ public class GroupApiController {
         return Response.success(groupList);
     }
 
-    @GetMapping("/groups/{group_id}") // 그룹 상세보기, 그룹장이 아니더라도 볼 수 있음
-    public Response<GroupDto> getGroup(@PathVariable Long group_id) {
-        GroupDto groupDto = groupService.getGroup(group_id);
+    @GetMapping("/group/{group_id}") // 그룹 상세보기
+    public Response<GroupDto> getGroup(@PathVariable Long group_id, Authentication authentication) {
+        GroupDto groupDto = groupService.getGroup(group_id, authentication.getName());
+
         return Response.success(groupDto);
     }
 
-    @PutMapping("/groups/{group_id}")
+    @PutMapping("/group/{group_id}")
     public Response<GroupDto> updateGroup(@PathVariable Long group_id, @RequestBody GroupDto groupDto, Authentication authentication) {
         GroupDto updatedGroup = groupService.updateGroup(group_id, groupDto, authentication.getName());
 
@@ -53,7 +44,7 @@ public class GroupApiController {
     }
 
 
-    @DeleteMapping("/groups/{group_id}")
+    @DeleteMapping("/group/{group_id}")
     public Response<Void> deleteGroup(@PathVariable Long group_id,  Authentication authentication) {
         groupService.deleteGroup(group_id, authentication.getName());
 

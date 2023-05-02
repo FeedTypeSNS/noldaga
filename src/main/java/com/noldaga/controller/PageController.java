@@ -4,6 +4,7 @@ package com.noldaga.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 public class PageController {
 
@@ -38,5 +39,21 @@ public class PageController {
         return "post-details";
     }
 
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "my-profile";
+    }
 
+    @GetMapping("/chat")
+    public String chatMain(){
+        return "messaging";
+    }
+
+    @GetMapping("/groups")
+    public String groupList(){
+        return "groups";
+    }
+
+    @GetMapping("/group")
+    public String groupView() { return "group-details"; }
 }

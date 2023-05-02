@@ -1,3 +1,18 @@
+function iinit() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/getuser",
+        async: false
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        initProfile(resp);
+        init();
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+iinit();
+
 function init() {
 
     var page = 0;
@@ -35,6 +50,21 @@ function loadmore(currentPage){
     });
 }
 
+function initProfile(data){
+    let profileDiv = document.querySelector("#profileDiv");
+    let profileBox = document.createElement("a");
+    profileBox.href = "/mypage?user_id="+data.id;
+    profileBox.innerHTML = profileContent(data);
+    profileDiv.append(profileBox);
+}
+
+function profileContent(data) {
+    return `<img
+                        class="avatar-img rounded-circle"
+                        src="assets/images/albums/07.jpg"
+                        alt=""
+                />`;
+}
 
 //댓글 안나오는거
 function initMainPageSimpleModified(data) {
@@ -67,7 +97,7 @@ function getFeedBoxContentRemoveComment(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="#!">
+                      <a href="/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
                           src="assets/images/avatar/04.jpg"
