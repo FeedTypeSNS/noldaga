@@ -3,12 +3,9 @@ package com.noldaga.controller.response;
 import com.noldaga.domain.CommentDto;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.FeedTagDto;
-import com.noldaga.domain.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -19,7 +16,7 @@ public class FeedResponse {
     private Long id;
     private String title;
     private String content;
-    private UserResponse userResponse;
+    private UserProfileResponse userProfileResponse;
     private Long GroupId;
     private int range;
     private String ModDate;
@@ -34,7 +31,7 @@ public class FeedResponse {
         return new FeedResponse(feedDto.getId(),
                 feedDto.getTitle(),
                 feedDto.getContent(),
-                UserResponse.fromUserDto(feedDto.getUserDto()),
+                UserProfileResponse.fromUserDto(feedDto.getUserDto()),
                 feedDto.getGroupId(),
                 feedDto.getRange(),
                 feedDto.getModDate(),

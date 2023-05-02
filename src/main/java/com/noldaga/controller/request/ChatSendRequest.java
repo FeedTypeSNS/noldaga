@@ -7,8 +7,8 @@ import lombok.Setter;
 
 @Setter
 @AllArgsConstructor//test 에서 사용
-@Getter //serialize 에 사용
-@NoArgsConstructor //@RequestBody 매커니즘 의 Json 데이터 -> 자바객체   과정에서 사용됨 by jackson
+@Getter
+@NoArgsConstructor
 public class ChatSendRequest {
     public enum MessageType{
         ENTER, TALK
