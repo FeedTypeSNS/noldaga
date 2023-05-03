@@ -16,7 +16,7 @@ public class FeedResponse {
     private Long id;
     private String title;
     private String content;
-    private UserProfileResponse userProfileResponse;
+    private UserResponse userResponse;
     private Long GroupId;
     private int range;
     private String ModDate;
@@ -31,7 +31,7 @@ public class FeedResponse {
         return new FeedResponse(feedDto.getId(),
                 feedDto.getTitle(),
                 feedDto.getContent(),
-                UserProfileResponse.fromUserDto(feedDto.getUserDto()),
+                UserResponse.fromUserDto(feedDto.getUserDto()),
                 feedDto.getGroupId(),
                 feedDto.getRange(),
                 feedDto.getModDate(),

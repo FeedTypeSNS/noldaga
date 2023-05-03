@@ -10,7 +10,7 @@ import lombok.Getter;
 public class CommentResponse {
 
     private Long id;
-    private UserProfileResponse userProfileResponse;
+    private UserResponse userResponse;
     private String content;
     private String regDate;
     private String modDate;
@@ -18,7 +18,7 @@ public class CommentResponse {
 
     public static CommentResponse fromCommentDto(CommentDto commentDto) {
         return new CommentResponse(commentDto.getId(),
-                UserProfileResponse.fromUserDto(commentDto.getUserDto()),
+                UserResponse.fromUserDto(commentDto.getUserDto()),
                 commentDto.getContent(),
                 commentDto.getModDate(),
                 commentDto.getRegDate(),
