@@ -62,4 +62,14 @@ public class PageController {
 
     @GetMapping("/group")
     public String groupView() { return "group-details"; }
+
+    @GetMapping("/settings")
+    public String settings(){
+        return "settings";
+    }
+
+    @GetMapping("/editProfile")
+    public String editProfile(){
+        return "test";
+    }
 }

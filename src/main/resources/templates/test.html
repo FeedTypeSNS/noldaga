@@ -1,17 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Social - Network, Community and Event Theme</title>
+
+  <!-- Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Webestica.com">
+  <meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
+
+  <!-- Dark mode -->
+  <script>
+      const storedTheme = localStorage.getItem('theme')
+
+      const getPreferredTheme = () => {
+          if (storedTheme) {
+              return storedTheme
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+
+      const setTheme = function (theme) {
+          if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              document.documentElement.setAttribute('data-bs-theme', 'dark')
+          } else {
+              document.documentElement.setAttribute('data-bs-theme', theme)
+          }
+      }
+
+      setTheme(getPreferredTheme())
+
+      window.addEventListener('DOMContentLoaded', () => {
+          var el = document.querySelector('.theme-icon-active');
+          if (el != 'undefined' && el != null) {
+              const showActiveTheme = theme => {
+                  const activeThemeIcon = document.querySelector('.theme-icon-active use')
+                  const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                  const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+                  document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                      element.classList.remove('active')
+                  })
+
+                  btnToActive.classList.add('active')
+                  activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+              }
+
+              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                  if (storedTheme !== 'light' || storedTheme !== 'dark') {
+                      setTheme(getPreferredTheme())
+                  }
+              })
+
+              showActiveTheme(getPreferredTheme())
+
+              document.querySelectorAll('[data-bs-theme-value]')
+                  .forEach(toggle => {
+                      toggle.addEventListener('click', () => {
+                          const theme = toggle.getAttribute('data-bs-theme-value')
+                          localStorage.setItem('theme', theme)
+                          setTheme(theme)
+                          showActiveTheme(theme)
+                      })
+                  })
+
+          }
+      })
+
+  </script>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Plugins CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
 </head>
+
 <body>
-<form enctype="multipart/form-data">
-  <input type="file" name="file" id="fileInput">
-  <button type="submit">Upload</button>
-</form>
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+
+  <!-- Container START -->
+  <div class="container">
+    <div class="row justify-content-center align-items-center vh-100 py-5">
+      <!-- Main content START -->
+      <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+        <!-- Sign in START -->
+        <div class="card card-body text-center p-4 p-sm-5">
+          <!-- Title -->
+          <h1 class="mb-2">프로필 수정</h1>
+          <!-- Form START -->
+          <form class="mt-sm-4" enctype="multipart/form-date">
+
+            <div class="mb-3">
+              <img alt="Kakao Login" src="/img/tomtom.png" class="rounded-circle">
+              <input type="file" name="file" id="fileInput">
+            </div>
+            <!-- Email -->
+            <div class="mb-3 input-group-lg">
+              <input type="type" name="username" class="form-control" placeholder="닉네임">
+            </div>
+            <!-- New password -->
+            <div class="mb-3 position-relative">
+              <!-- Password -->
+              <div class="input-group input-group-lg">
+                <input class="form-control fakepassword" type="password" name="password" id="psw-input"
+                       placeholder="상태메세지">
+                <span class="input-group-text p-0">
+                </span>
+              </div>
+            </div>
+
+
+            <!-- Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-lg btn-primary">수정</button>
+            </div>
+
+
+            <!-- Copyright -->
+            <p class="mb-0 mt-3">©2023 <a target="_blank" href="https://www.webestica.com/">Webestica.</a> All rights
+              reserved</p>
+          </form>
+          <!-- Form END -->
+        </div>
+        <!-- Sign in START -->
+      </div>
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+
+<!-- =======================
+JS libraries, plugins and custom scripts -->
+
+<!-- Bootstrap JS -->
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendors -->
+<script src="assets/vendor/pswmeter/pswmeter.min.js"></script>
+
+<!-- Theme Functions -->
+<script src="assets/js/functions.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    $('form').submit(function(event) {
+    document.addEventListener('DOMContentLoaded', function () {
+        // 폼 전송 이벤트 핸들러 등록
+        document.querySelector('form').addEventListener('submit', function (e) {
+            // 폼 전송 막기
+            e.preventDefault();
+
+            // 폼 데이터를 JSON 형태로 직렬화
+            let formData = new FormData(document.querySelector('form'));
+            let jsonData = {};
+            formData.forEach(function (value, key) {
+                jsonData[key] = value;
+            });
+
+            // AJAX 요청 보내기
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/anonymous/login', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+
+                let response = JSON.parse(xhr.responseText);
+
+                console.log(response);
+
+                if (response.resultCode === 'SUCCESS') {//로그인성공
+
+
+                    window.location.href = '/';
+                } else {//로그인실패
+                    alert('아이디와 비밀번호를 확인해주세요');
+                }
+
+            };
+            xhr.onerror = function () {
+                // 요청 실패시 처리
+            };
+            xhr.send(JSON.stringify(jsonData));
+        });
+    })
+    ;
+
+
+    $('form').submit(function (event) {
         event.preventDefault();
         let formData = new FormData($(this)[0]);
         $.ajax({
@@ -20,7 +208,7 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
                 let imageUrl = data; // 이미지 경로
                 let img = $('<img />').attr({
@@ -31,6 +219,8 @@
             }
         });
     });
+
 </script>
+
 </body>
 </html>
