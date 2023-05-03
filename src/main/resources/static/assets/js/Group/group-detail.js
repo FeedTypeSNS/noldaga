@@ -61,6 +61,8 @@ function getDetailPage_Feed(group, user, groupMember) {
     const userType = user.id === group.userDto.id ? "<a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#modalCreateGroup\"><i class=\"bi bi-gear-fill fs-6\"> </i></a>" : "";
     let hiddenType = "";
     let hiddenType2 = "hidden";
+    const hiddenType3 = user.id === group.userDto.id ? "hidden" : "";
+
     if(groupMember != null) {
         hiddenType = groupMember.userDto.id === user.id ? "hidden" : "";
         hiddenType2 = groupMember.userDto.id === user.id ? "" : "hidden";
@@ -82,16 +84,16 @@ function getDetailPage_Feed(group, user, groupMember) {
     </div>
     <!-- Button -->
     <div class="d-flex justify-content-center justify-content-md-start align-items-center mt-3 ms-lg-auto">
-        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType}><i
+        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType} ${hiddenType3}><i
             class="bi bi-person-plus-fill pe-1"></i> Join
         </button>
-        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2}><i
+        <button onclick="unregisterGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType3}><i
             class="bi bi-person-check-fill pe-1"></i> Joined
         </button>
-        <button class="btn btn-sm btn-success me-2" type="button"><i class="fa-solid fa-plus pe-1"></i> Invite
-        </button>
+        ${userType} 
+        <!--<button class="btn btn-sm btn-success me-2" type="button"><i class="fa-solid fa-plus pe-1"></i> Invite
+        </button>-->
         
-        ${userType}        
     </div>
 </div>
 

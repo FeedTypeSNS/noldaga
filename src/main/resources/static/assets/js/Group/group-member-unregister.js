@@ -10,7 +10,7 @@ function unregisterGroup(groupId) {
                 if (response.resultCode === 'SUCCESS') {
                     // 삭제 성공 시 화면에서 그룹 삭제
                     alert('탈퇴 완료');
-                    location.href = "/groups";
+                    location.reload();
                 } else {
                     alert('탈퇴 실패');
                 }
