@@ -3,12 +3,9 @@ package com.noldaga.controller.response;
 import com.noldaga.domain.CommentDto;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.FeedTagDto;
-import com.noldaga.domain.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 

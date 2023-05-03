@@ -3,11 +3,9 @@ package com.noldaga.controller.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor //test 코드에서 사용
-@Getter//ObjectMapper 에서 자바객체를 json객체로 바꿀때 사용 , 컨트롤러에서 파라미터값 넘겨줄때 사용
-@NoArgsConstructor //Json -> 자바객체 할때 사용됨 by jackson
+@Getter // @PostMapping 에서 json -> 자바객체로 바인딩 될때 getter 없어도 됨,  All생성자 or No생성자 둘중 하나 있으면됨 (ObjectMapper기반)
 public class UserJoinRequest {
 
     private String username;
