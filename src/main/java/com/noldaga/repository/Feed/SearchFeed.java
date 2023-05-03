@@ -1,6 +1,7 @@
 package com.noldaga.repository.Feed;
 
 import com.noldaga.domain.entity.Feed;
+import com.noldaga.domain.entity.StoreFeed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,5 @@ public interface SearchFeed {
     Page<Feed> MyPageFeedOnlyPublic(long userId, Pageable pageable);
     Page<Feed> GroupPageFeed(long id, Pageable pageable);
     Page<Feed> ExplorePageFeed(Pageable pageable);
+    Page<Feed> MyStoredFeed(Long userId, Pageable pageable);
 }

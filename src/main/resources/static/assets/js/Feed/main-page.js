@@ -193,13 +193,17 @@ function getFeedBoxContentRemoveComment(data) {
                       data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
                       onclick="like(${data.id})"
                     >
-                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
-                      (${data.totalLike})</a
+                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a
                     >
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
-                      <i class="bi bi-chat-fill pe-1"></i>Comments (${data.totalComment})</a
+                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!" onclick="save(${data.id})">
+                      <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a
                     >
                   </li>
                   <!-- Card share action START -->
@@ -211,8 +215,7 @@ function getFeedBoxContentRemoveComment(data) {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
-                      (3)
+                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>공유하기(##)
                     </a>
                     <!-- Card share action dropdown menu -->
                     <ul
@@ -326,6 +329,49 @@ function like_delete(data) {
     $.ajax({
         type: "DELETE",
         url: "api/like/feed/"+data
+    }).done(function(resp){
+        window.location.href = "/";
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/";
+    });
+}
+
+function save(data) {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/store/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) save_delete(data);
+        else save_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function save_register(data) {
+
+    $.ajax({
+        type: "POST",
+        url: "api/feed/store/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/";
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/";
+    });
+}
+
+function save_delete(data) {
+
+    $.ajax({
+        type: "DELETE",
+        url: "api/feed/store/"+data
     }).done(function(resp){
         window.location.href = "/";
     }).fail(function(error){

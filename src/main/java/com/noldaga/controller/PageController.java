@@ -44,6 +44,11 @@ public class PageController {
         return "my-profile";
     }
 
+    @GetMapping("/save")
+    public String mypageSave(){
+        return "my-profile-save";
+    }
+
     @GetMapping("/chat")
     public String chatMain(){
         return "messaging";

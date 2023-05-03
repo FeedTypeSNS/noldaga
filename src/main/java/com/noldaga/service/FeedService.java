@@ -11,6 +11,7 @@ import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.entity.Feed;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.Feed.FeedRepository;
+import com.noldaga.repository.StoreFeedRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +33,7 @@ public class FeedService {
     private final UserRepository userRepository;
     private final HashTagService hashTagService;
     private final FollowService followService;
+
 
     @Transactional
     public FeedDto create(FeedCreateRequest request, String username) {
@@ -163,6 +165,23 @@ public class FeedService {
         return feedDto;
     }
 
+    @Transactional
+    public List<FeedDto> getMySavedFeed(int page,String username){
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        Pageable pageable = PageRequest.of(page,100);
+        Page<Feed> feedListPagination = feedRepository.MyStoredFeed(user.getId(),pageable);
+
+        List<FeedDto> feedDtoList = new ArrayList<>();
+
+        feedListPagination.getContent().forEach(feed -> {
+            FeedDto feedDto = FeedDto.fromEntity(feed);
+            feedDtoList.add(feedDto);
+        });
+        return feedDtoList;
+    }
 
     @Transactional
     public FeedDto modify(FeedModifyRequest request, Long feedId, String username) {
