@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import java.util.UUID;
 
@@ -66,6 +67,12 @@ public class SecurityConfig {
 
             //카카오 정보로 db 에서 유저를 load 하고, db에 가입되어있지않으면 가입시킴 : 인증을 카카오에서 대신 해주고 이후 내부 로직들은 db정보들을 이용함
         };
+    }
+
+
+//    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return ((request, response, exception) -> response.sendRedirect(""));
     }
 
 

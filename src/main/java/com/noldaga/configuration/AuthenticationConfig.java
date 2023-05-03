@@ -35,13 +35,13 @@ public class AuthenticationConfig {
     //ignore 안된 애들이 토큰필터를 거쳐서 여기로 오게됨.
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http ,
+            HttpSecurity http,
             UserDetailsService userDetailsService,
             OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService,
             AuthenticationSuccessHandler successHandler,
             AuthenticationFailureHandler failureHandler
 
-    ) throws Exception{
+    ) throws Exception {
         return http.csrf().disable()//csrf disable 안해주면 get만 가능함...
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(
@@ -79,7 +79,7 @@ public class AuthenticationConfig {
 
 
     @Bean//단순 페이지 불러오는 요청에서는 토큰이 있든없든 토큰필터를 거치지 않아도 되는데 무조건 토큰 필터를 거치게 되어있음.
-    public WebSecurityCustomizer webSecurityCustomizer(){ //스프링 시큐리티에서 제외하겠다 ( api 이외의것들인 static resource 등: 페이지 불러오기, favicon 요청등)
+    public WebSecurityCustomizer webSecurityCustomizer() { //스프링 시큐리티에서 제외하겠다 ( api 이외의것들인 static resource 등: 페이지 불러오기, favicon 요청등)
 
         return (web) -> web.ignoring().regexMatchers("^(?!/api|/oauth2|/login/oauth2/code/kakao).*")// api로 시작하지않으면 시큐리티 무시인데, oauth2는 시큐리티적용
                 ; //  /api로 시작 하지않으면 시큐리티 무시 (토큰필터 안거침)
