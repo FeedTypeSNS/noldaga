@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<form enctype="multipart/form-data">
+  <input type="file" name="file" id="fileInput">
+  <button type="submit">Upload</button>
+</form>
+<script>
+    $('form').submit(function(event) {
+        event.preventDefault();
+        let formData = new FormData($(this)[0]);
+        $.ajax({
+            url: '/test',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                console.log(data);
+                let imageUrl = data; // 이미지 경로
+                let img = $('<img />').attr({
+                    'src': imageUrl,
+                    'alt': 'image'
+                });
+                $('body').append(img); // 이미지를 body에 추가
+            }
+        });
+    });
+</script>
+</body>
+</html>
