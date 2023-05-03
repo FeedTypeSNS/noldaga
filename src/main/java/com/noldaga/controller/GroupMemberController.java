@@ -37,4 +37,11 @@ public class GroupMemberController {
 
         return Response.success();
     }
+
+    @GetMapping("/group/member/{group_id}") // 그룹 join여부
+    public Response<GroupMemberDto> getGroupMember(@PathVariable Long group_id, Authentication authentication) {
+        GroupMemberDto groupMemberDto = groupMemberService.getGroupMember(group_id, authentication.getName());
+
+        return Response.success(groupMemberDto);
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,11 +63,30 @@ public class GroupMemberService {
         Group group = groupRepository.findById(id).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
 
-        //권한있나확인
+        //가입여부확인
         GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
 
         groupMemberRepository.deleteById(groupMember.getId());
+    }
+
+    @Transactional
+    public GroupMemberDto getGroupMember(Long id, String username) {
+        //유저확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //그룹확인
+        Group group = groupRepository.findById(id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+
+        //가입여부확인
+        GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+
+        GroupMemberDto groupMemberDto = GroupMemberDto.fromEntity(groupMember);
+
+        return groupMemberDto;
     }
 
 }
