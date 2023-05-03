@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 @Getter
-public class UserProfileResponse {
+public class UserResponse {
 
     private Long id;
     private String username;
@@ -16,7 +16,7 @@ public class UserProfileResponse {
     private Long totalFollower;
     private Long totalFollowing;
 
-    private UserProfileResponse(Long id, String username, String nickname, String profileImageUrl, String profileMessage, Long totalFollower, Long totalFollowing) {
+    private UserResponse(Long id, String username, String nickname, String profileImageUrl, String profileMessage, Long totalFollower, Long totalFollowing) {
         this.id = id;
         this.username = username;
         this.nickname = nickname;
@@ -26,8 +26,8 @@ public class UserProfileResponse {
         this.totalFollowing = totalFollowing;
     }
 
-    public static UserProfileResponse fromUserDto(UserDto userDto){
-        return new UserProfileResponse(
+    public static UserResponse fromUserDto(UserDto userDto){
+        return new UserResponse(
                 userDto.getId(),
                 userDto.getUsername(),
                 userDto.getNickname(),
