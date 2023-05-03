@@ -39,12 +39,15 @@ public class UserController {
 
 
     //내 프로필 수정
-    @PostMapping("/me/profile")
+    @PostMapping(value="/me/profile"/*, consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}*/)
     public Response<UserResponse> modifyMyUserProfile(
             @RequestPart(value="file", required = false)MultipartFile multipartFile,
             @RequestPart(value="json")UserProfileModifyRequest req,
             Authentication authentication
             ) throws IOException {
+
+        System.out.println("multipartFile = " + multipartFile);
+        System.out.println("req = " + req);
 
         UserDto userDto = userService.modifyMyProfile(multipartFile,
                 req.getNickname(),req.getProfileMessage(),req.getProfileImageUrl(),
