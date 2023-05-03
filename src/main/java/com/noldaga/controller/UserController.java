@@ -3,7 +3,7 @@ package com.noldaga.controller;
 
 import com.noldaga.controller.request.UserProfileModifyRequest;
 import com.noldaga.controller.response.Response;
-import com.noldaga.controller.response.UserProfileResponse;
+import com.noldaga.controller.response.UserResponse;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +23,24 @@ public class UserController {
 
     //유저 프로필 조회
     @GetMapping("/{userId}/profile")
-    public Response<UserProfileResponse> getUserProfile(@PathVariable Long userId){
+    public Response<UserResponse> getUserProfile(@PathVariable Long userId){
         UserDto userDto = userService.searchUserById(userId);
-        return Response.success(UserProfileResponse.fromUserDto(userDto));
+        return Response.success(UserResponse.fromUserDto(userDto));
     }
 
 
     //내 프로필 조회
     @GetMapping("/me/profile")
-    public Response<UserProfileResponse> getMyUserProfile(Authentication authentication) {
+    public Response<UserResponse> getMyUserProfile(Authentication authentication) {
         UserDto userDto = userService.searchUserByUsername(authentication.getName());
-        return Response.success(UserProfileResponse.fromUserDto(userDto));
+        return Response.success(UserResponse.fromUserDto(userDto));
     }
 
 
 
     //내 프로필 수정
     @PostMapping("/me/profile")
-    public Response<UserProfileResponse> modifyMyUserProfile(
+    public Response<UserResponse> modifyMyUserProfile(
             @RequestPart(value="file", required = false)MultipartFile multipartFile,
             @RequestPart(value="json")UserProfileModifyRequest req,
             Authentication authentication
@@ -51,7 +51,7 @@ public class UserController {
                 authentication.getName());
 
 
-        return Response.success(UserProfileResponse.fromUserDto(userDto));
+        return Response.success(UserResponse.fromUserDto(userDto));
     }
 
 

@@ -11,12 +11,12 @@ public class CommentLikeResponse {
 
     private Long id;
     private CommentResponse commentResponse;
-    private UserProfileResponse userProfileResponse;
+    private UserResponse userResponse;
 
     public static CommentLikeResponse fromCommentLikeDto(CommentLikeDto commentLikeDto) {
         return new CommentLikeResponse(commentLikeDto.getId(),
                 CommentResponse.fromCommentDto(commentLikeDto.getCommentDto()),
-                UserProfileResponse.fromUserDto(commentLikeDto.getUserDto())
+                UserResponse.fromUserDto(commentLikeDto.getUserDto())
         );
     }
 }
