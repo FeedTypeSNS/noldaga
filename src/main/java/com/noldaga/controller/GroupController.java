@@ -51,4 +51,12 @@ public class GroupController {
         return Response.success();
     }
 
+    @GetMapping("/group/getuser")
+    public Object getUserAtGroup(Authentication authentication) {
+
+        //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
+
+        return authentication.getPrincipal();
+    }
+
 }
