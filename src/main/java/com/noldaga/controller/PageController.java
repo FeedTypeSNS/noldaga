@@ -31,6 +31,7 @@ public class PageController {
 
     @GetMapping("/")
     public String home(){
+        //return "index_removeHeader";
         return "index";
     }
 
