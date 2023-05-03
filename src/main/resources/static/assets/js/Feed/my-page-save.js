@@ -5,23 +5,23 @@ function iinit() {
         url: "/api/feed/getuser",
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        init(resp);
+        initProfile(resp);
+        init();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 iinit();
 
-function init(data) {
-    const queryString = window.location.search; //마이페이지 소유자
+
+function init() {
     var page = 0;
 
     $.ajax({
         type: "GET",
-        url: "/api/feeds/mypage/"+page+queryString,
+        url: "/api/feeds/save/"+page,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initProfile(resp.result[0].userResponse,data);
         insertPhotoCards(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -34,15 +34,12 @@ function init(data) {
 }
 
 
-function initProfile(myPageOwner,loginUser){
+function initProfile(data){
     let profileCard = document.querySelector("#profileCard");
-    if(myPageOwner.id == loginUser.id)
-        profileCard.innerHTML = profileContentMine(myPageOwner);
-    else
-        profileCard.innerHTML = profileContentOther(myPageOwner);
+    profileCard.innerHTML = profileContent(data);
 }
 
-function profileContentMine(data) {
+function profileContent(data) {
     return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
@@ -88,61 +85,8 @@ function profileContentMine(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/save" > 저장됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
-              </ul>
-            </div>`;
-}
-
-function profileContentOther(data) {
-    return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
-            <!-- Card body START -->
-            <div class="card-body py-0">
-              <div class="d-sm-flex align-items-start text-center text-sm-start">
-                <div>
-                  <!-- Avatar -->
-                  <div class="avatar avatar-xxl mt-n5 mb-3">
-                    <img class="avatar-img rounded-circle border border-white border-3" src="assets/images/avatar/07.jpg" alt="">
-                  </div>
-                </div>
-                <div class="ms-sm-4 mt-sm-3">
-                  <!-- Info -->
-                  <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>250 connections</p>
-                </div>
-                <!-- Button -->
-                <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                  <button class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </button>
-                  <div class="dropdown">
-                    <!-- Card share action menu -->
-                    <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="bi bi-three-dots"></i>
-                    </button>
-                    <!-- Card share action dropdown menu -->
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileAction2">
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Share profile in a message</a></li>
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-file-earmark-pdf fa-fw pe-2"></i>Save your profile to PDF</a></li>
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-lock fa-fw pe-2"></i>Lock profile</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-gear fa-fw pe-2"></i>Profile settings</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- List profile -->
-              <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
-                <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
-                <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on Nov 26, 2019</li>
-              </ul>
-            </div>
-            <!-- Card body END -->
-            <div class="card-footer mt-3 pt-2 pb-0">
-              <!-- Nav profile pages -->
-              <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/save" > 저장됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
               </ul>
