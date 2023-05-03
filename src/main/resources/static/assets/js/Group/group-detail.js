@@ -5,41 +5,66 @@ function getUser() {
         url: "/api/group/getuser",
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        init(resp);
+        getGroupMember(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 getUser();
 
-function init(user) {
+function getGroupMember(user) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const groupId = urlParams.get('id');
+    $.ajax({
+        type: "GET",
+        url: "/api/group/member/"+ groupId,
+        dataType: "json"
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        init(user, resp.result);
+    }).fail(function(error){
+        init(user, null);
+    });
+}
 
+
+
+
+function init(user, groupMember) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const groupId = urlParams.get('id');
     $.ajax({
         type: "GET",
         url: "/api/group/"+ groupId,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initDetailPage(resp.result, user);
+        initDetailPage(resp.result, user, groupMember);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
 
-function initDetailPage(group, user) {
+function initDetailPage(group, user, groupMember) {
     let feedBox = document.querySelector("#group-info");
     let cardBox = document.createElement("div");
     console.log(group);
-    cardBox.innerHTML = getDetailPage_Feed(group, user);
+    cardBox.innerHTML = getDetailPage_Feed(group, user, groupMember);
     feedBox.append(cardBox);
 }
 
-function getDetailPage_Feed(group, user) {
+function getDetailPage_Feed(group, user, groupMember) {
+    console.log(groupMember);
+
     const groupType = group.open === 0 ? "<i class=\"bi bi-lock pe-1\"></i> 비밀 그룹" : "<i class='bi bi-globe pe-1'></i> 공개 그룹";
     const userType = user.id === group.userDto.id ? "<a href=\"#\" data-bs-toggle=\"modal\" data-bs-target=\"#modalCreateGroup\"><i class=\"bi bi-gear-fill fs-6\"> </i></a>" : "";
+    let hiddenType = "";
+    let hiddenType2 = "hidden";
+    if(groupMember != null) {
+        hiddenType = groupMember.userDto.id === user.id ? "hidden" : "";
+        hiddenType2 = groupMember.userDto.id === user.id ? "" : "hidden";
+    }
 
     return `<div class="d-md-flex flex-wrap align-items-start text-center text-md-start">
     <div class="mb-2">
@@ -57,8 +82,11 @@ function getDetailPage_Feed(group, user) {
     </div>
     <!-- Button -->
     <div class="d-flex justify-content-center justify-content-md-start align-items-center mt-3 ms-lg-auto">
-        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button"><i
+        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType}><i
             class="bi bi-person-plus-fill pe-1"></i> Join
+        </button>
+        <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2}><i
+            class="bi bi-person-check-fill pe-1"></i> Joined
         </button>
         <button class="btn btn-sm btn-success me-2" type="button"><i class="fa-solid fa-plus pe-1"></i> Invite
         </button>

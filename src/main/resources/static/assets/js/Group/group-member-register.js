@@ -27,7 +27,7 @@ function register() {
             if (response.resultCode === 'SUCCESS') {
                 // 삭제 성공 시 화면에서 그룹 삭제
                 alert('가입 완료');
-                location.href = "/groups";
+                location.href = "/group?id=" + groupId;
             } else {
                 alert('가입 실패');
             }
