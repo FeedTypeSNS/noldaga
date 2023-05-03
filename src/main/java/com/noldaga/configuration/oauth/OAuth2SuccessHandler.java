@@ -28,12 +28,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String token = JwtTokenUtils.generateToken(authentication.getName(), key, expiredTimeMs);
 
-        generateTokenCookie(response, token);
+        insertTokenCookie(response, token);
 
         response.sendRedirect("/");
     }
 
-    private void generateTokenCookie(HttpServletResponse response, String token) {
+    private void insertTokenCookie(HttpServletResponse response, String token) {
         Cookie tokenCookie = new Cookie("tokenCookie", token);
         tokenCookie.setMaxAge(A_MONTH);
         response.addCookie(tokenCookie);

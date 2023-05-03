@@ -11,7 +11,7 @@ public class RootTestController {
 
     @GetMapping("/test")
     public String test(){
-        return "test";
+        return "edit-profile-picture";
     }
 
 }

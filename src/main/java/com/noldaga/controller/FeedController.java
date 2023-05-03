@@ -46,9 +46,9 @@ public class FeedController {
     //피드 조회시 로그인한 사용자 정보 가져옴
     @GetMapping("/api/feed/getuser")
     public UserSimpleDto getUserAtFeed(Authentication authentication) {
-        UserDto userDto = userService.loadUserByUsername(authentication.getName()).orElseThrow();
-//        UserDto userDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(),UserDto.class).orElseThrow(()->
-//                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,"Casting to UserDto class failed"));
+//        UserDto userDto = userService.loadUserByUsername(authentication.getName()).orElseThrow();
+        UserDto userDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(),UserDto.class).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,"Casting to UserDto class failed"));
         return UserSimpleDto.fromUserDto(userDto);
     }
 

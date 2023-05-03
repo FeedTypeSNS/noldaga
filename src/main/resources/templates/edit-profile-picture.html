@@ -98,23 +98,26 @@
         <!-- Sign in START -->
         <div class="card card-body text-center p-4 p-sm-5">
           <!-- Title -->
-          <h1 class="mb-2">프로필 수정</h1>
+          <div class="position-absolute top-0 start-0 m-3">
+            <button class="btn btn-primary" onclick="history.back()">뒤로 가기</button>
+          </div>
+          <h1 class="mt-3">프로필 수정</h1>
           <!-- Form START -->
-          <form class="mt-sm-4" enctype="multipart/form-date">
+          <form class="mt-sm-4" method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-              <img alt="Kakao Login" src="/img/tomtom.png" class="rounded-circle">
-              <input type="file" name="file" id="fileInput">
+              <img alt="Kakao Login" src="/img/tomtom.png" class="rounded-circle" style="width: 250px; height: 250px;">
+              <input type="file" accept="image/*" name="file" id="fileInput">
             </div>
             <!-- Email -->
             <div class="mb-3 input-group-lg">
-              <input type="type" name="username" class="form-control" placeholder="닉네임">
+              <input type="text" name="nickname" class="form-control" placeholder="닉네임">
             </div>
             <!-- New password -->
             <div class="mb-3 position-relative">
               <!-- Password -->
               <div class="input-group input-group-lg">
-                <input class="form-control fakepassword" type="password" name="password" id="psw-input"
+                <input class="form-control " type="text" name="profileMessage" id="message"
                        placeholder="상태메세지">
                 <span class="input-group-text p-0">
                 </span>
@@ -124,7 +127,7 @@
 
             <!-- Button -->
             <div class="d-grid">
-              <button type="submit" class="btn btn-lg btn-primary">수정</button>
+              <button type="button" class="btn btn-lg btn-primary" onclick="updateProfile()">수정</button>
             </div>
 
 
@@ -157,68 +160,111 @@ JS libraries, plugins and custom scripts -->
 <script src="assets/js/functions.js"></script>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // 폼 전송 이벤트 핸들러 등록
-        document.querySelector('form').addEventListener('submit', function (e) {
-            // 폼 전송 막기
-            e.preventDefault();
 
-            // 폼 데이터를 JSON 형태로 직렬화
-            let formData = new FormData(document.querySelector('form'));
-            let jsonData = {};
-            formData.forEach(function (value, key) {
-                jsonData[key] = value;
-            });
-
-            // AJAX 요청 보내기
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/anonymous/login', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = function () {
-
-                let response = JSON.parse(xhr.responseText);
-
-                console.log(response);
-
-                if (response.resultCode === 'SUCCESS') {//로그인성공
+    //html 로딩 되면 함수 시작
+    window.onload = function () {
+        myProfile();
+    };
 
 
-                    window.location.href = '/';
-                } else {//로그인실패
-                    alert('아이디와 비밀번호를 확인해주세요');
-                }
+    function myProfile() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/users/me/profile');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            if (xhr.status === 200) {
+                const nicknameInput = document.querySelector('input[name="nickname"]');
+                nicknameInput.placeholder = response.result.nickname;
 
-            };
-            xhr.onerror = function () {
-                // 요청 실패시 처리
-            };
-            xhr.send(JSON.stringify(jsonData));
-        });
-    })
-    ;
+                const messageInput = document.querySelector('input[name="profileMessage"]');
+                messageInput.placeholder = response.result.profileMessage;
+            } else {
 
-
-    $('form').submit(function (event) {
-        event.preventDefault();
-        let formData = new FormData($(this)[0]);
-        $.ajax({
-            url: '/test',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                console.log(data);
-                let imageUrl = data; // 이미지 경로
-                let img = $('<img />').attr({
-                    'src': imageUrl,
-                    'alt': 'image'
-                });
-                $('body').append(img); // 이미지를 body에 추가
             }
-        });
+        };
+        xhr.send();
+    }
+
+
+    //이미지 미리 보기
+    const fileInput = document.getElementById('fileInput');
+    const imgPreview = document.querySelector('img');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            imgPreview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
     });
+
+
+    function updateProfile() {
+        if (!validateFileUpload()) {
+            return;
+        }
+        // 이미지 파일, 닉네임, 상태 메시지 값을 읽어옴
+        const imageFile = document.getElementById('fileInput').files[0];
+        const nickname = document.getElementsByName('nickname')[0].value;
+        const profileMessage = document.getElementById('message').value;
+        const profileImageUrl = 'asdfasdf';
+
+        // 이미지 파일을 FormData 객체에 담음
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        const json = JSON.stringify({
+            nickname: nickname,
+            profileMessage: profileMessage,
+            profileImageUrl: profileImageUrl
+        })
+        const blob = new Blob([json], {type: 'application/json'})
+        formData.append('json', blob);
+
+        // AJAX를 사용하여 서버로 전송
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/users/me/profile');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            if (xhr.status === 200) {
+                alert('프로필 수정이 완료 되었습니다')
+                const nicknameInput = document.querySelector('input[name="nickname"]');
+                nicknameInput.placeholder = response.result.nickname;
+
+                const messageInput = document.querySelector('input[name="profileMessage"]');
+                messageInput.placeholder = response.result.profileMessage;
+            } else {
+                alert('프로필 수정이 실패 하였습니다')
+            }
+        };
+        xhr.send(formData);
+    }
+
+    //이미지 검증
+    function validateFileUpload() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        // if (!file) {
+        //     alert('파일을 선택해주세요.');
+        //     return false;
+        // }
+
+        if (file && !fileTypes.includes(file.type)) {
+            alert('이미지 파일만 업로드 가능합니다.');
+            return false;
+        }
+
+        return true;
+    }
 
 </script>
 

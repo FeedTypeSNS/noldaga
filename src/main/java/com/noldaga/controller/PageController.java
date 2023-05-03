@@ -70,6 +70,6 @@ public class PageController {
 
     @GetMapping("/editProfile")
     public String editProfile(){
-        return "test";
+        return "edit-profile-picture";
     }
 }
