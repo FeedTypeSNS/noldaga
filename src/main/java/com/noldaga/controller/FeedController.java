@@ -9,8 +9,11 @@ import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.UploadDto;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.userdto.UserDto;
+import com.noldaga.exception.ErrorCode;
+import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.FeedService;
 import com.noldaga.service.UserService;
+import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -26,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -43,6 +47,8 @@ public class FeedController {
     @GetMapping("/api/feed/getuser")
     public UserSimpleDto getUserAtFeed(Authentication authentication) {
         UserDto userDto = userService.loadUserByUsername(authentication.getName()).orElseThrow();
+//        UserDto userDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(),UserDto.class).orElseThrow(()->
+//                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,"Casting to UserDto class failed"));
         return UserSimpleDto.fromUserDto(userDto);
     }
 

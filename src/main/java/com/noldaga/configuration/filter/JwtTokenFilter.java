@@ -1,6 +1,7 @@
 package com.noldaga.configuration.filter;
 
 
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +77,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {//각요청에서 1번
             String username = JwtTokenUtils.extractUsername(token, key);
 
             //유저정보가 유효한지 확인(유저가 실제로 존재하는지)
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDto userDetails = (UserDto) userDetailsService.loadUserByUsername(username);
 
 
             //모든것이 유효하면 정보를 다음으로 넘김

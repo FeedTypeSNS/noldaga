@@ -66,4 +66,9 @@ public class PageController {
     public String settings(){
         return "settings";
     }
+
+    @GetMapping("/editProfile")
+    public String editProfile(){
+        return "test";
+    }
 }
