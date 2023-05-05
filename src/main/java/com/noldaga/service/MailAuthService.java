@@ -20,7 +20,7 @@ public class MailAuthService {
 
     public Integer sendCode(String emailAddress) throws MessagingException, UnsupportedEncodingException {
 
-        CodeDto codeDto = codeValidator.generateCode();
+        CodeDto codeDto = codeValidator.generateCode(emailAddress);
         String message = "인증코드를 입력해주세요 " + codeDto.getCode();
         mailSender.sendEmail(emailAddress,message);
         return codeDto.getCodeId();
@@ -45,6 +45,10 @@ public class MailAuthService {
     }
     public CodeUserDto validateCodeForPassword(Integer codeId, String code) {
         return codeValidator.validateCodeForPassword(codeId, code);
+    }
+
+    public void validateAuthenticatedEmail(Integer codeId,String email){
+        codeValidator.validateAuthenticatedEmail(codeId,email);
     }
 
     public void sendPassword(String emailAddress, String newPassword) throws MessagingException, UnsupportedEncodingException {

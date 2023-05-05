@@ -29,6 +29,7 @@ public class UserJoinRequest {
     @Email
     private String email;
 
+    @NotNull
+    @NotBlank
     private Integer codeId;
-    private String code;
 }

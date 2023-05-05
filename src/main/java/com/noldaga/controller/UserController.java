@@ -1,16 +1,14 @@
 package com.noldaga.controller;
 
 
-import com.noldaga.controller.request.MailRequest;
-import com.noldaga.controller.request.UserInfoModifyRequest;
-import com.noldaga.controller.request.UserPasswordModifyRequest;
-import com.noldaga.controller.request.UserProfileModifyRequest;
+import com.noldaga.controller.request.*;
 import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserInfoResponse;
 import com.noldaga.controller.response.UserResponse;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.service.MailAuthService;
 import com.noldaga.service.UserService;
 import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ import java.time.LocalDate;
 public class UserController {
 
     private final UserService userService;
+    private final MailAuthService mailAuthService;
 
     //유저 프로필 조회(약력 정보)
     @GetMapping("/{userId}/profile")
@@ -85,8 +84,9 @@ public class UserController {
     }
 
     @PostMapping("/me/email")
-    public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody MailRequest req,Authentication authentication) {
-        //인증된 이메일인지 확인 해야함
+    public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody MailModifyRequest req, Authentication authentication) {
+        //todo 이메일 인증 안해도 포스트맨으로 바로 가능하도록 주석처리
+//        mailAuthService.validateAuthenticatedEmail(req.getCodeId(), req.getEmail());
         UserDto userDto = userService.modifyMyEmail(req.getEmail(), authentication.getName());
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }

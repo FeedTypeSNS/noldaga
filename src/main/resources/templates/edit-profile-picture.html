@@ -110,15 +110,17 @@
               <input type="file" accept="image/*" name="file" id="fileInput">
             </div>
             <!-- Email -->
+
             <div class="mb-3 input-group-lg">
-              <input type="text" name="nickname" class="form-control" placeholder="닉네임">
+              <div class="mt-4" style="text-align: left;"><h5>닉네임</h5></div>
+              <input type="text" name="nickname" class="form-control" value="">
             </div>
             <!-- New password -->
             <div class="mb-3 position-relative">
               <!-- Password -->
+              <div class="mt-4" style="text-align: left;"><h5>상태메시지</h5></div>
               <div class="input-group input-group-lg">
-                <input class="form-control " type="text" name="profileMessage" id="message"
-                       placeholder="상태메세지">
+                <input class="form-control " type="text" name="profileMessage" id="message" value="" placeholder="상태메시지를 입력해주세요">
                 <span class="input-group-text p-0">
                 </span>
               </div>
@@ -169,12 +171,12 @@ JS libraries, plugins and custom scripts -->
     // };
 
 
-    myProfile();
+    initMyProfile();
     imageViewer();
 
 
 
-    function myProfile() {
+    function initMyProfile() {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/api/users/me/profile');
         xhr.onload = function () {
@@ -182,10 +184,17 @@ JS libraries, plugins and custom scripts -->
             console.log(response);
             if (xhr.status === 200) {
                 const nicknameInput = document.querySelector('input[name="nickname"]');
-                nicknameInput.placeholder = response.result.nickname;
+                nicknameInput.value = response.result.nickname;
 
-                const messageInput = document.querySelector('input[name="profileMessage"]');
-                messageInput.placeholder = response.result.profileMessage;
+                const messageView = document.querySelector('input[name="profileMessage"]');
+                const profileMessage = response.result.profileMessage;
+
+
+                if(profileMessage !== null && profileMessage!==''){
+                    messageView.value=profileMessage;
+                }
+                messageView.placeHolder='상태메시지를 입력해주세요';
+
             } else {
 
             }
@@ -245,8 +254,13 @@ JS libraries, plugins and custom scripts -->
                 const nicknameInput = document.querySelector('input[name="nickname"]');
                 nicknameInput.placeholder = response.result.nickname;
 
-                const messageInput = document.querySelector('input[name="profileMessage"]');
-                messageInput.placeholder = response.result.profileMessage;
+                const messageView = document.querySelector('input[name="profileMessage"]');
+                const profileMessage= response.result.profileMessage;
+                if(profileMessage!==null && profileMessage!==''){
+                    messageView.value=profileMessage;
+                }
+                messageView.placeholder='상태메시지를 입력해주세요'
+
             } else {
                 alert('프로필 수정이 실패 하였습니다')
             }

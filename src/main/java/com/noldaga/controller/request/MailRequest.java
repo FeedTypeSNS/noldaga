@@ -19,4 +19,6 @@ public class MailRequest {
     @NotBlank
     @Email
     private String email;
+
+
 }
