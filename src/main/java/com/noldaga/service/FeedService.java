@@ -5,12 +5,14 @@ import com.noldaga.controller.request.FeedCreateRequest;
 import com.noldaga.controller.request.FeedModifyRequest;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.entity.Comment;
+import com.noldaga.domain.entity.Follow;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.entity.Feed;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.Feed.FeedRepository;
+import com.noldaga.repository.FollowRepository;
 import com.noldaga.repository.StoreFeedRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -31,8 +34,8 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final HashTagService hashTagService;
-    private final FollowService followService;
 
 
     @Transactional
@@ -68,7 +71,7 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
             feedDtoList.add(feedDto);
         });
         return feedDtoList;
@@ -93,35 +96,24 @@ public class FeedService {
     }
 
     @Transactional
-    public List<FeedDto> getMyPageFeed(int page, Long userId, String username){
+    public List<FeedDto> getMyPageFeed(int page, Long pageOwnerId, String username){
         //회원가입된 user인지 확인
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
+        User loginUser = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         //lmit은 변경예정
         Pageable pageable = PageRequest.of(page,5);
         Page<Feed> feedListPagination = null;
 
-        //내가 내 페이지 확인 -> 공개범위 1(부분공개),0(전체) -> feedRepository.MyFeed
-        if(user.getId() == userId) {
-            feedListPagination = feedRepository.MyPageFeed(userId, pageable);
+        //공개범위 1(부분공개),0(전체)
+        if(loginUser.getId() == pageOwnerId) {
+            feedListPagination = feedRepository.MyPageFeed(pageOwnerId, pageable);
         }
         //다른 사람의 마이페이지 방문이라면
         else {
-            //로그인된 사용자의 팔로우 리스트를 가져와서
-            List<UserSimpleDto> followList = followService.getFollowerList(user.getUsername());
-            boolean isFollowed = false;
-            for(UserSimpleDto follower : followList){
-                if(follower.getId() == userId) isFollowed = true;
-            }
-            //팔로우 한 회원의 페이지 확인 -> 공개범위 1(부분공개),0(전체) -> feedRepository.MyFeed
-            if (isFollowed) {
-                feedListPagination = feedRepository.MyPageFeed(userId, pageable);
-            }
-            //팔로우 안 한 회원의 페이지 확인 -> 공개범위 0(전체) -> feedRepository.MyFeed
-            else{
-                feedListPagination = feedRepository.MyPageFeedOnlyPublic(userId, pageable);
-            }
+            Optional<Follow> follow = followRepository.findByFollowerAndFollowing(pageOwnerId,loginUser.getId());
+            if(follow.isPresent()) feedListPagination = feedRepository.MyPageFeed(pageOwnerId, pageable);
+            else feedListPagination = feedRepository.MyPageFeedOnlyPublic(pageOwnerId, pageable);
         }
         List<FeedDto> feedDtoList = new ArrayList<>();
 

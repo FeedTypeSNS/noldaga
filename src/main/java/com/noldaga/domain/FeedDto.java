@@ -13,7 +13,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Setter
-@Getter //response 로 변환해줄때 필요 등
+@Getter
 public class FeedDto {
     private Long id;
     private String title;
@@ -45,12 +45,27 @@ public class FeedDto {
         this.feedTagDtoList = feedTagDtoList;
     }
 
+    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, Long totalView, Long totalLike, Long totalComment, List<FeedTagDto> feedTagDtoList) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.userDto = userDto;
+        this.groupId = groupId;
+        this.range = range;
+        this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.totalView = totalView;
+        this.totalLike = totalLike;
+        this.totalComment = totalComment;
+        this.feedTagDtoList = feedTagDtoList;
+    }
+
     public static FeedDto fromEntity(Feed feed) {
         return new FeedDto(
                 feed.getId(),
                 feed.getTitle(),
                 feed.getContent(),
-                UserDto.fromEntity(feed.getUser()), //user 엔티티가 아니라 userDto 이어야함
+                UserDto.fromEntity(feed.getUser()),
                 feed.getGroupId(),
                 feed.getRange(),
                 feed.getModDate(),
@@ -63,5 +78,22 @@ public class FeedDto {
         );
     }
 
+    //지연로딩 반영을 위해 댓글이 없는 dto생성
+    public static FeedDto fromEntityWithoutComment(Feed feed) {
+        return new FeedDto(
+                feed.getId(),
+                feed.getTitle(),
+                feed.getContent(),
+                UserDto.fromEntity(feed.getUser()),
+                feed.getGroupId(),
+                feed.getRange(),
+                feed.getModDate(),
+                feed.getRegDate(),
+                feed.getTotalView(),
+                feed.getLikeCount(),
+                feed.getCommentCount(),
+                FeedTagDto.listFromEntity(feed.getFeedTags())
+        );
+    }
 
 }
