@@ -9,13 +9,15 @@ public class ChatRoomDto {
     private String uuid; //실제 통신은 이걸로..
     private String roomName;
     private String viewRoomName;
+    private int userNum;
 
 
-    private ChatRoomDto(Long id, String uuid, String roomName, String viewRoomName){
+    private ChatRoomDto(Long id, String uuid, String roomName, String viewRoomName, int userNum){
         this.id = id;
         this.uuid = uuid;
         this.roomName = roomName;
         this.viewRoomName = viewRoomName;
+        this.userNum = userNum;
     }
 
     public static ChatRoomDto fromEntity(ChatRoom chatRoom){
@@ -23,7 +25,8 @@ public class ChatRoomDto {
                 chatRoom.getId(),
                 chatRoom.getUuid(),
                 chatRoom.getRoomName(),
-                chatRoom.getViewRoomName()
+                chatRoom.getViewRoomName(),
+                chatRoom.getUserNum()
         );
     }
 }
