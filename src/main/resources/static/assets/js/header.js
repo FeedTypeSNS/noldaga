@@ -10,6 +10,15 @@ function init() {
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
+
+    $("#search-content").on("keydown",(e)=>{
+        if (e.keyCode === 13) {
+            let data={
+                content: $("#search-content").val(),
+            };
+            search(data.content);
+        }
+    })
 }
 init();
 
@@ -66,10 +75,11 @@ function headerContent(data) {
                       type="search"
                       placeholder="Search..."
                       aria-label="Search"
+                      id="search-content"
               />
               <button
                       class="btn bg-transparent px-2 py-0 position-absolute top-50 start-0 translate-middle-y"
-                      type="submit"
+                      type="button"
               >
                 <i class="bi bi-search fs-5"> </i>
               </button>
@@ -509,4 +519,8 @@ function sidebarToggleEnd() {
             mode.classList.toggle("sidebar-end-enabled");
         });
     }
+}
+
+function search(data){
+    window.location.assign("http://localhost:8800/search?query");
 }
