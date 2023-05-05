@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     INVALID_CODE(HttpStatus.UNAUTHORIZED,"Code is invalid"),
+    INVALID_CODE_ID(HttpStatus.UNAUTHORIZED, "CodeId is invalid"),
+    INVALID_EMAIL(HttpStatus.UNAUTHORIZED, "Email is not authenticated"),
     DUPLICATED_USERNAME(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"), //로그인시 회원가입이 안된 username
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"), //로그인시 틀린 password

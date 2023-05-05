@@ -324,10 +324,12 @@ JS libraries, plugins and custom scripts -->
 
             // 폼 데이터를 JSON 형태로 직렬화
             let formData = new FormData(document.querySelector('form'));
+            formData.append('codeId', codeId);
             let jsonData = {};
             formData.forEach(function (value, key) {
                 jsonData[key] = value;
             });
+
 
             // AJAX 요청 보내기
             let xhr = new XMLHttpRequest();
@@ -338,6 +340,7 @@ JS libraries, plugins and custom scripts -->
                 let response = JSON.parse(xhr.responseText);
                 if (response.resultCode === 'SUCCESS') {
                     console.log(response);
+                    alert('회원가입에 성공하였습니다')
                     window.location.href = "/login-form";
                 } else {
                     //todo 실패시
