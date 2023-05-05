@@ -140,7 +140,7 @@ Header END -->
                 <!-- Advanced filter responsive toggler END -->
                 <div class="card card-body border-end-0 border-bottom-0 rounded-bottom-0">
                     <div class=" d-flex justify-content-between align-items-center">
-                        <h1 class="h5 mb-0">Active chats <span class="badge bg-success bg-opacity-10 text-success">6</span></h1>
+                        <h1 class="h5 mb-0">Active chats <span class="badge bg-success bg-opacity-10 text-success" id="active-chat-count"></span></h1>
                         <!-- Chat new create message item START -->
                         <div class="dropend position-relative">
                             <div class="nav">
@@ -187,44 +187,12 @@ Header END -->
             <!-- Sidebar START -->
 
             <!-- Chat conversation START -->
+            <!--<input type="hidden" id="sessionId" value="">-->
+            <input type="hidden" id="ws-romeUuid" value="">
+            <input type="hidden" id="ws-romeId" value="">
+            <input type="hidden" id="ws-username" value="">
             <div class="col-lg-8 col-xxl-9">
-                <div class="card card-chat rounded-start-lg-0 border-start-lg-0">
-                    <div id="chatting-tool" class="card-body h-100">
-
-
-                        <div class="position-absolute top-50 start-50 translate-middle">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <svg aria-label="Direct" class="msgImg" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="96"
-                                 role="img" viewBox="0 0 96 96" width="96"><title>Direct</title>
-                                <circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2"></circle>
-                                <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="69.286" x2="41.447"
-                                      y1="33.21" y2="48.804"></line>
-                                <polygon fill="none" points="47.254 73.123 71.376 31.998 24.546 32.002 41.448 48.805 47.254 73.123"
-                                         stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
-                            </svg>
-                            <p/>
-                            <h1 class="h5 mb-0">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                내 메시지</h1><p/>
-                            <div class="small text-secondary">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                친구나 그룹에 <br>
-                                &nbsp;&nbsp;메시지를 보내보세요.
-                            </div>
-                            <p/>
-                            <div class="dropend position-relative">
-                                <div class="nav">
-                                    <a id="myFollowList2"  class="btn btn-primary toast-btn" data-target="chatToast" href="#" > <i class="bi bi-pencil-square">&nbsp;메시지 보내기</i> </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="size-fix-box" style=" padding-bottom: 78%; width: 100%">
-
-                        </div>
-                        <!-- Conversation item END -->
-                    </div>
+                <div class="card card-chat rounded-start-lg-0 border-start-lg-0" id="chat-tool-body">
                 </div>
             </div>
         </div>
@@ -260,7 +228,6 @@ Header END -->
       </form>         
       <!-- Chat conversation END -->
       <!-- Extra space -->
-        <form>
       <div class="container h-200px" style="padding-left: 3px;" >
                   <div style="overflow: auto; height:200px; width: 330px" id="sendCheckList" >
                      <!-- <ul class="nav flex-column nav-pills nav-pills-soft" >-->
@@ -271,18 +238,16 @@ Header END -->
                                        <li>이미지    아이디(그 밑에 이름)     체크박스</li>
                                    </ul>-->
                       <!--</ul>-->
-          </div>
+                </div>
       </div>
-        </form>
       <!-- Button  -->
       <div class="d-sm-flex align-items-end">
         <textarea class="form-control mb-sm-0 mb-3" placeholder="메시지를 입력하세요" rows="1" spellcheck="false"></textarea>
         <button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>
         <button class="btn btn-sm btn-secondary-soft ms-2"><i class="fa-solid fa-paperclip fs-6"></i></button>
-        <button class="btn btn-sm btn-primary ms-2"><i class="fa-solid fa-paper-plane fs-6"></i></button>
+        <button class="btn btn-sm btn-primary ms-2" id="new-chatting-submit" type="button"><i class="fa-solid fa-paper-plane fs-6"></i></button>
       </div>
     </div>
-
   </div>
   <!-- Chat toast END -->
 
@@ -299,15 +264,29 @@ JS libraries, plugins and custom scripts -->
 <!-- Vendors -->
 <script src="assets/vendor/OverlayScrollbars-master/js/OverlayScrollbars.min.js"></script>
 
+<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>-->
+<!--<script type="importmap">
+  {
+    "imports": {
+      "@stomp/stompjs": "https://ga.jspm.io/npm:@stomp/stompjs@7.0.0/esm6/index.js"
+    }
+  }
+</script>-->
+<!--<script type="module" src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script type="module" src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/dist/stomp.min.js"></script>-->
+
 <!-- Theme Functions -->
 <script src="assets/js/functions.js"></script>
-<script src="assets/js/Chat/chating.js"></script>
+<script src="assets/js/Chat/chatting.js"></script>
 <script src="assets/js/Chat/chat-page.js"></script>
 <script src="assets/js/Chat/chat-side.js"></script>
 <script src="assets/js/header.js"></script>
 
+
+
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
 </html>

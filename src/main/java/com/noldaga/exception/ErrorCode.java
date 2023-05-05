@@ -39,6 +39,7 @@ public enum ErrorCode {
     CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
     ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     NOT_ALLOW_IN_ROOM(HttpStatus.UNAUTHORIZED, "User do not have permission to enter the room"),
+    ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close")
     ;
 
     private HttpStatus status;
