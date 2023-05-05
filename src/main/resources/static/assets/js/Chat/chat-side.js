@@ -25,8 +25,11 @@ let side = {
 
 }
 
+
+
 function followlist(data){
     $(".followlist *").remove(); //기존 내용 삭제 후 append
+    $(".followlist").remove();
     for(let i=0; i<data.result.length; i++) {
         let followlistBox = document.querySelector('#sendCheckList');
         let databox = document.createElement("div");
@@ -42,16 +45,14 @@ function getFollowlistContent(data) {
                                             <img class="avatar-img rounded-circle" src="assets/images/avatar/11.jpg" alt=""> <!--사용자 프로필이미지 열기-->
                                         </div>
                                         <div class="flex-grow-1 d-block">
-                                            <input style="margin: 0.4rem;zoom: 1.5; float: right" id="sendUserCheck" type="checkbox" name="joinUserList" value="${data.username}"/>
+                                            <input style="margin: 0.4rem;zoom: 1.5; float: right" class="sendUserCheck" type="checkbox" name="joinUserList" value="${data.username}" onclick="getJoinName()"/>
 
                                             <h6 style="padding-left: 5px" class="mb-0 mt-1">${data.id} 번째  ${data.username} 회원</h6>
                                             <div class="small text-secondary">&nbsp;회원 닉네임 추가</div>
                                             <br>
                                         </div>
                                     </div>
-                            </li>
-
-`
+                            </li>`;
 
     /*`<li style="list-style: none; padding-left: 0px">${data.id} 번째  ${data.username} 회원
     <input style="margin: 0.4rem;" id="sendUserCheck" type="checkbox" name="joinUserList" value="${data.username}"/></li>`;*/

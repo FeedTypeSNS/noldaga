@@ -16,6 +16,8 @@ public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //채팅방 번호 - 서버에서 관리
+    //uuid로 사용해도 되나, 사용자에게 보여질 방 번호를 uuid로 할 경우
+    //가시적으로도 좋지 않고, 탈취당할 확률이 있어서 임시 번호 개념으로 넣어둠..
 
     @Column(updatable = false)
     private String uuid;
@@ -23,7 +25,8 @@ public class ChatRoom {
     //따라서 네트워크 상에서 중복되지 않는 id를 가지려면
     //중복되는 확률이 0에가까운 id 필요 -> 소켓의 경우 네트워크를 통해 하니 추가..
 
-    @Column(updatable = false)
+    @Setter
+    @Column
     private String roomName; //생성될때 채팅방 이름
 
 
@@ -31,18 +34,43 @@ public class ChatRoom {
     @Column
     private String viewRoomName; //채팅방 이름 (변경가능한..)
 
+    @Column
+    @Setter
+    private int userNum; //방에 참가한 회원 수
+
+
     protected ChatRoom(){}
 
-    public ChatRoom(Long id, String name, String uname){
+    public ChatRoom(Long id, String name, String uname, int userNum){
         this.id = id;
         this.uuid = UUID.randomUUID().toString();
         this.roomName = name;
         this.viewRoomName = uname;
+        this.userNum = userNum;
     }
 
-    public static ChatRoom of(String name, String viewName){
-        return new ChatRoom(null, name, viewName);
+    public static ChatRoom of(String name, String viewName, int userNum){
+        return new ChatRoom(null, name, viewName, userNum);
     }
+
+    public void alterRoomName(String roomName, String viewRoomName){
+        this.roomName = roomName;
+        this.viewRoomName = viewRoomName;
+    }
+
+    public static String getViewName(String roomName, String name){
+        String[] names = roomName.split(", ");
+        String viewRoomName = "";
+
+        if (names[names.length - 1].equals(name)) {
+            viewRoomName = roomName.replaceAll(", " + name, ""); //이름이 마지막인 경우 앞의 , 와 함께 제거
+        } else {
+            viewRoomName = roomName.replaceAll(name + ", ", ""); //이름이 마지막이 아닌 경우 뒤에 , 와 함께 제거
+
+        }
+        return viewRoomName;
+    }
+
 }
 
 /* 다대다 연결 관계를 없애기 위해서 아래와 같이 설정

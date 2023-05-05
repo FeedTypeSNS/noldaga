@@ -1,3 +1,4 @@
+/*
 package com.noldaga.controller;
 
 import com.noldaga.controller.request.ChatSendRequest;
@@ -26,30 +27,33 @@ public class MessageController {
     private final SimpMessageSendingOperations sendingOperations;
     private final ChatService chatService;
 
-    /*@MessageMapping("chat/{roomId}/message") //실제 프론트는 /app/chat/1/message
+    */
+/*@MessageMapping("chat/{roomId}/message") //실제 프론트는 /app/chat/1/message
     public void enter(Authentication authentication, @RequestBody ChatSendRequest request, @PathVariable Long roomId){
         sendingOperations.convertAndSendToUser("/topic/chat/room/"+message.getSender());
-    }*/
+    }*//*
+
 
     @Transactional
-    @MessageMapping("chat/{roomId}/message")
-    public void enter(Principal principal, Authentication authentication, @RequestBody ChatSendRequest request, @PathVariable Long roomId){
-        Boolean invite = chatService.confirmInvitation(authentication.getName(), roomId);
+    @MessageMapping("chat/{uuid}/message")
+    public void enter(Principal principal, Authentication authentication, @RequestBody ChatSendRequest request, @PathVariable String uuid){
+        Boolean invite = chatService.confirmInvitation(authentication.getName(), request.getRoomId());
 
         if(invite){ //초대되어 있다면 메시지 보내기 및 접속 모두 가능
-            ChatRoomDto room = chatService.getChatRoomFromId(authentication.getName(), roomId);
+            //ChatRoomDto room = chatService.getChatRoomFromId(authentication.getName(), request.getRoomId());
 
             if (request.getType().equals(ChatSendRequest.MessageType.ENTER)) { //처음 입장하면
                 log.info(authentication.getName() + "님이 입장했습니다.");
-                ChatRoomResponse enter = chatService.findOneChatRoom(authentication.getName(), roomId);
-                sendingOperations.convertAndSend("/user/" + authentication.getName() + "/topic/chat/room/" + room.getUuid(), enter);
+                ChatRoomResponse enter = chatService.findOneChatRoom(authentication.getName(), request.getRoomId());
+                sendingOperations.convertAndSend("/user/" + authentication.getName() + "/topic/chat/room/" + uuid, enter);
                 log.info("지난 기록 전송 완료:{}", enter);
             } else {
-                ChatSendResponse msg = chatService.saveChat(authentication.getName(), request, roomId); //메시지 보내기전 저장하고
-                sendingOperations.convertAndSend("/topic/chat/room/" + room.getUuid(), msg); //모두에게 저장
+                ChatSendResponse msg = chatService.saveChat(authentication.getName(), request, request.getRoomId()); //메시지 보내기전 저장하고
+                sendingOperations.convertAndSend("/topic/chat/room/" + uuid, msg); //모두에게 저장
             }
         }else {
             throw new SnsApplicationException(ErrorCode.NOT_ALLOW_IN_ROOM); //초대 안되어있으면 오류 발생
         }
     }
 }
+*/
