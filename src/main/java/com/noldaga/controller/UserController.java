@@ -86,6 +86,7 @@ public class UserController {
 
     @PostMapping("/me/email")
     public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody MailRequest req,Authentication authentication) {
+        //인증된 이메일인지 확인 해야함
         UserDto userDto = userService.modifyMyEmail(req.getEmail(), authentication.getName());
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }

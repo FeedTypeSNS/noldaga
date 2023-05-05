@@ -26,9 +26,9 @@ public class MailAuthService {
         return codeDto.getCodeId();
     }
 
-    public Integer sendCode(String emailAddress, String username) throws MessagingException, UnsupportedEncodingException {
+    public Integer sendCodeForPassword(String emailAddress, String username) throws MessagingException, UnsupportedEncodingException {
 
-        CodeDto codeDto = codeValidator.generateCode(emailAddress,username);
+        CodeDto codeDto = codeValidator.generateCodeForPassword(emailAddress,username);
         String message = "인증코드를 입력해주세요 " + codeDto.getCode();
         mailSender.sendEmail(emailAddress,message);
         return codeDto.getCodeId();

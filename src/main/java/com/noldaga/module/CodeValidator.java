@@ -54,7 +54,7 @@ public class CodeValidator {
         return CodeDto.of(key, code);
     }
 
-    public CodeDto generateCode(String emailAddress, String username) {
+    public CodeDto generateCodeForPassword(String emailAddress, String username) {
         String code = generateRandomCode();
         int key = keyGenerator.incrementAndGet();
         storage.put(key, code + "_" + emailAddress + "_" + username);

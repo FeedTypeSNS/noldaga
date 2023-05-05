@@ -58,7 +58,7 @@ public class AnonymousController {
     public Response<CodeIdResponse> findPassword(@RequestBody UsernameRequest req) throws MessagingException, UnsupportedEncodingException {
 
         String emailAddress = userService.searchEmail(req.getUsername());
-        Integer codeId = mailAuthService.sendCode(emailAddress, req.getUsername());
+        Integer codeId = mailAuthService.sendCodeForPassword(emailAddress, req.getUsername());
         return Response.success(CodeIdResponse.of(codeId));
     }
 
