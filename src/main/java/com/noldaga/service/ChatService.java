@@ -48,6 +48,12 @@ public class ChatService {
         chatRooms = new LinkedHashMap<>();
     } //의존관계가 주입되면 실행되는 코드
 
+    public UserSimpleDto getMyData(String me){
+        User user = userRepository.findByUsername(me).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
+
+        return UserSimpleDto.fromEntity(user);
+    }
 
     //내 채팅방들 불러오기(왼쪽) -> 즉 회원이 chat에 들어오면 반환해줄 정보
     public List<ChatRoomListResponse> findAllMyChatRoom(String me) {
@@ -63,7 +69,7 @@ public class ChatService {
             for (int i = 0; i < myRoom.size(); i++) {
                 ChatRoom chatRoom = myRoom.get(i).getRoom();    //자기가 참가된 i번째 방의
                 if (chatRoom.getViewRoomName().equals(chatRoom.getRoomName())) {
-                    String userViewName = getViewName(chatRoom.getRoomName(), me);
+                    String userViewName = ChatRoom.getViewName(chatRoom.getRoomName(), me);
                     chatRoom.setViewRoomName(userViewName);
                 }//만약 따로 이름 설정을 하지 않았으면 이름은 회원별로 다르게 보여줘야함
                  //영수, 영희, 사랑 -> 영수가 볼땐 "영희, 사랑" & 영희가 볼땐 "영수, 사랑"으로 반환..
@@ -92,16 +98,18 @@ public class ChatService {
     //선택한 채팅방 하나 불러오기(채팅방 리스트에서 하나 클릭시 반환해줄 정보)
     @SuppressWarnings("unchecked")
     public ChatRoomResponse findOneChatRoom(String me, Long id) {
+        User user = userRepository.findByUsername(me).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
-        userReadCheck(me, room); //불러와지니 즉 읽혀져야함
+        userReadCheck(user, room); //불러와지니 즉 읽혀져야함
         List<UserSimpleDto> joinList = getJpeoples(room);
         Object[] result = getPastChatAndReader(room);
         List<ChatDto> pastChat = (List<ChatDto>) result[0];
         List<ChatReadDto> reader = (List<ChatReadDto>) result[1];
 
         if (room.getViewRoomName().equals(room.getRoomName())) { //만약 따로 이름 설정을 하지 않았으면 이름은 회원별로 다르게 보여줘야함
-            String userViewName = getViewName(room.getRoomName(), me);
+            String userViewName = ChatRoom.getViewName(room.getRoomName(), me);
             room.setViewRoomName(userViewName);
         }
 
@@ -113,9 +121,13 @@ public class ChatService {
     @SuppressWarnings("unchecked")
     @Transactional
     public ChatRoomResponse createChatRoom(String me, ChatRoomCreateRequest request) {
+        User user = userRepository.findByUsername(me).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
+
         List<String> nameList = request.getJoinUserList(); //사용자들..
         nameList.add(me); //나도 넣어줘야함
         Collections.sort(nameList); //정렬해서 저장해줘야 중복 값 없을 수 있음..(순서가 달라질 수도 선택에 따라)
+        log.info("채팅방 이름 생성..\n"+ nameList);
         StringBuilder rn = new StringBuilder(); //초기 채팅방 이름 생성을 위한..
         for (int i = 0; i < nameList.size(); i++) {
             rn.append(nameList.get(i)).append(", ");
@@ -132,7 +144,10 @@ public class ChatService {
 
         if (chatRoom.isPresent()) { //기존에 존재하는 채팅방을 불러올 경우
             newRoom = chatRoom.get(); //채팅방 정보
-            userReadCheck(me, newRoom); //바로 들어가지니 나는 모두 읽었다 체크함
+            String userViewName = ChatRoom.getViewName(roomName, me); //사람마다 보여주는 이름 달라져야함..
+            log.info("기존에 존재하는 방: "+userViewName);
+            newRoom.setViewRoomName(userViewName);
+            userReadCheck(user, newRoom); //바로 들어가지니 나는 모두 읽었다 체크함
             joinPeople = getJpeoples(newRoom); //참가한 사람리스트 반환
             Object[] result = getPastChatAndReader(newRoom);
             pastChat = (List<ChatDto>) result[0];
@@ -141,18 +156,16 @@ public class ChatService {
         } else { //처음 채팅방을 생성할 경우
             String[] names = roomName.split(", ");
 
-            newRoom = chatRoomRepository.save(ChatRoom.of(roomName, roomName)); //채팅방 저장
+            newRoom = chatRoomRepository.save(ChatRoom.of(roomName, roomName, nameList.size())); //채팅방 저장
 
             for (int i = 0; i < names.length; i++) {
-                User user = userRepository.findByUsername(names[i]).orElseThrow(() ->
-                        new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
-                //만약 초대한 회원이 존재 하지 않는다면 이것도 에러 반환해줘야함
                 joinRoomRepository.save(JoinRoom.of(newRoom, user)); //초대된 회원 joinRoom에 저장
                 UserSimpleDto u = UserSimpleDto.fromEntity(user);
                 joinPeople.add(u);
             } //채팅방 참가 회원 저장
             if (newRoom.getViewRoomName().equals(roomName)) { //만약 따로 이름 설정을 하지 않았으면 이름은 회원별로 다르게 보여줘야함
-                String userViewName = getViewName(roomName, me);
+                String userViewName = ChatRoom.getViewName(roomName, me);
+                log.info("새로저장된 방: "+userViewName);
                 newRoom.setViewRoomName(userViewName);
             }
             chatRoomInfo = ChatRoomDto.fromEntity(newRoom);
@@ -170,12 +183,11 @@ public class ChatService {
 
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
-        List<UserSimpleDto> receivers = getJpeoples(room);
 
-        Chat chat = chatRepository.save(Chat.of(room, user, request.getMsg(), receivers.size()-1)); //채팅 저장
+        Chat chat = chatRepository.save(Chat.of(room, user, request.getMsg(), room.getUserNum()-1)); //채팅 저장(자신은 읽은 거니 -1)
         //chatReadRepository.save(ChatRead.of(user, chat)); //보낸 사람은 읽음 처리 해줘야함
 
-        return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat), receivers);
+        return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat)/*, receivers*/);
     }
 
     //메시지 삭제
@@ -202,7 +214,7 @@ public class ChatService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
-        userReadCheck(me, room); //삭제전 우선 모두 읽음 처리 시키기
+        userReadCheck(user, room); //삭제전 우선 모두 읽음 처리 시키기
 
         List<JoinRoom> people = joinRoomRepository.findAllByRoom(room);
         JoinRoom meJoin = joinRoomRepository.findByUsersAndRoom(user, room).orElseThrow(()->
@@ -210,22 +222,40 @@ public class ChatService {
 
         List<Chat> chatList = chatRepository.findAllByRoom(room); //방안의 채팅 내역
 
-        if(people.size()==1){ //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
-            for(int i=0; i<chatList.size(); i++){
-                List<ChatRead> pRead = chatReadRepository.findAllByChat(chatList.get(i));
-                chatReadRepository.deleteAllInBatch(pRead);
-                //그냥 deleteAll은  delete 쿼리가 하나씩 날아감,
-                //deleteAllInBatch 한번에 실행되서 성능이 훨 좋음
-            } //읽음 정보 모두 삭제
-            chatRepository.deleteAllInBatch(chatList);
-            joinRoomRepository.deleteAllInBatch(people);
-            chatRoomRepository.delete(room);
-        }else { //아니라면 내 join 정보와 읽음 여부 정보 삭제 해줌 됨!
-            for(int i=0; i<chatList.size(); i++) {
-                List<ChatRead> meRead = chatReadRepository.findAllByChatAndReadUser(chatList.get(i), user);
-                chatReadRepository.deleteAllInBatch(meRead);
-            }//읽음 여부  내 부분 삭제
-            joinRoomRepository.delete(meJoin);
+        if (room.getUserNum()==0) { throw new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM, "This room id already delete");
+        }else {
+            if (people.size() == 1) { //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
+                for (int i = 0; i < chatList.size(); i++) {
+                    List<ChatRead> pRead = chatReadRepository.findAllByChat(chatList.get(i));
+                    chatReadRepository.deleteAllInBatch(pRead);
+                    //그냥 deleteAll은  delete 쿼리가 하나씩 날아감,
+                    //deleteAllInBatch 한번에 실행되서 성능이 훨 좋음
+                } //읽음 정보 모두 삭제
+                chatRepository.deleteAllInBatch(chatList);
+                joinRoomRepository.deleteAllInBatch(people);
+                chatRoomRepository.delete(room);
+            } else { //아니라면 내 join 정보와 읽음 여부 정보 삭제 해줌 됨!, 이름 변경..
+                for (int i = 0; i < chatList.size(); i++) {
+                    List<ChatRead> meRead = chatReadRepository.findAllByChatAndReadUser(chatList.get(i), user);
+                    chatReadRepository.deleteAllInBatch(meRead);
+                }//읽음 여부  내 부분 삭제
+                joinRoomRepository.delete(meJoin);
+
+                //방이름을 통해 찾으니 함께 변경해줘야함
+                String orgviewName = room.getViewRoomName();
+                String roomName = ChatRoom.getViewName(room.getRoomName(), me);
+                String viewName = roomName;
+                if (!roomName.contains(",")) {
+                    if (!orgviewName.equals("(알 수 없음)")) {
+                        viewName = orgviewName;
+                    } //회원이 탈퇴해서 사라졌을때
+                    else {
+                        viewName = "대화상대 없음";
+                    }//회원이 방을 모두 나가서 나만 남았을 떄
+                }
+                room.alterRoomName(roomName, viewName);
+                chatRoomRepository.save(room);
+            }
         }
 
         return "";
@@ -234,14 +264,13 @@ public class ChatService {
 
     //읽었는지 체크
     @Transactional
-    public void userReadCheck(String name, ChatRoom room) {
-        User me = userRepository.findByUsername(name).get();
+    public void userReadCheck(User user, ChatRoom room) {
         List<Chat> chatlist = chatRepository.findAllByRoom(room);
 
         for (int i = 0; i < chatlist.size(); i++) {
             Chat chat = chatlist.get(i);
-                if(!(chat.getSender().getId().equals(me.getId()))){
-                    Optional<ChatRead> readCheck = chatReadRepository.findByChatAndReadUser(chat, me); //내가 읽었는지 체크
+                if(!(chat.getSender().getId().equals(user.getId()))){ //내가 쓴글은 애초에 읽음 체크 안함..
+                    Optional<ChatRead> readCheck = chatReadRepository.findByChatAndReadUser(chat, user); //내가 읽었는지 체크
                     int count = chat.getUnread_count();
                     if (readCheck.isEmpty()) { //내이름과, 채팅정보로 읽은 존재가 없다 = 나는 읽은적 없다
                         if (count > 0) {
@@ -249,13 +278,10 @@ public class ChatService {
                             count = chatRepository.save(chat).getUnread_count();    //채팅방에 존재하는 메시지들의 읽음 수 -1
 
                             if (count > 0) { //만약 모두 읽지 않았다면, 내가 읽은 정보 저장해야함..
-                                chatReadRepository.save(ChatRead.of(me, chat));
+                                chatReadRepository.save(ChatRead.of(user, chat));
                             } else {//만약 모두 읽은 거라면 읽음 정보 모두 삭제, 내가 읽은게 마지막으로 읽음..
                                 List<ChatRead> deleteData = chatReadRepository.findAllByChat(chat);
-                                for (int j = 0; j < deleteData.size(); j++) {
-                                    ChatRead dd = deleteData.get(i);
-                                    chatReadRepository.delete(dd);
-                                } //삭제
+                                chatReadRepository.deleteAllInBatch(deleteData);
                             }
                         }
                     }
@@ -320,24 +346,25 @@ public class ChatService {
         return result;
     }
 
-    private String getViewName(String roomName, String me){
+    /*private String getViewName(String roomName, String name){
         String[] names = roomName.split(", ");
         String viewName = "";
-        if (names[names.length - 1].equals(me)) {
-            viewName = roomName.replaceAll(", " + me, ""); //내 이름이 마지막인 경우 앞의 , 와 함께 제거
+
+        if (names[names.length - 1].equals(name)) {
+            viewName = roomName.replaceAll(", " + name, ""); //이름이 마지막인 경우 앞의 , 와 함께 제거
         } else {
-            viewName = roomName.replaceAll(me + ", ", ""); //내 이름이 마지막이 아닌 경우 뒤에 , 와 함께 제거
+            viewName = roomName.replaceAll(name + ", ", ""); //이름이 마지막이 아닌 경우 뒤에 , 와 함께 제거
 
         }
         return viewName;
-    }//사람 기준으로 보는 viewName
+    }//me로 들어오*/
 
     public ChatRoomDto getChatRoomFromId(String me,Long id){
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
 
         if (room.getViewRoomName().equals(room.getRoomName())) { //만약 따로 이름 설정을 하지 않았으면 이름은 회원별로 다르게 보여줘야함
-            String userViewName = getViewName(room.getRoomName(), me);
+            String userViewName = ChatRoom.getViewName(room.getRoomName(), me);
             room.setViewRoomName(userViewName);
         }
 
@@ -345,7 +372,7 @@ public class ChatService {
     }//ChatRoom정보 반환해주는 메소드..
 
 
-    public Boolean confirmInvitation(String me, Long id){
+    /*public Boolean confirmInvitation(String me, Long id){
         User user = userRepository.findByUsername(me).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
@@ -356,6 +383,6 @@ public class ChatService {
         }else {
             return false;
         }
-    }
+    }*/
     //chatRoom에 초대되어 있는 사람인지 확인하기..
 }
