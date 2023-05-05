@@ -43,10 +43,10 @@ public enum ErrorCode {
 
     UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
 
-    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value") //@Validated 실패시
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value"), //@Validated 실패시
 
 
-    ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close")
+    ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
 
     ;
 
