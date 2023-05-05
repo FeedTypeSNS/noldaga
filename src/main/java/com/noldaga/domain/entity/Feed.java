@@ -32,17 +32,14 @@ public class Feed {
     @Column(name="feed_id")
     private Long id;
 
-    //@Setter
     @NotEmpty
     @Column(nullable = false, length = 100, name="title")
     private String title;
 
-    //@Setter
     @NotEmpty
     @Column(nullable=false, columnDefinition = "TEXT")//TEXT 타입으로 컬럼이 생성됨(그냥 String 디폴트보다 더 길게 저장가능)
     private String content;
 
-    //@Setter
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
@@ -51,11 +48,10 @@ public class Feed {
 //    @OneToOne
 //    @JoinColumn(name="group_id")
 //    private Group group;
-//    @Setter
+
     @Column(nullable = false, name="group_id")
     private Long groupId;
 
-    //@Setter
     @Column(nullable = false, name="open_range") //전체 0 부분공개 1
     private int range;
 
@@ -79,10 +75,10 @@ public class Feed {
     private long likeCount; //default로 0들어가게 long설정
 
  //   @JsonIgnoreProperties({"feed,user"})
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comment;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<FeedTag> feedTags;
 
     private Feed(String title, String content, long groupId, int range, User user) {
