@@ -39,6 +39,11 @@ public enum ErrorCode {
     CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
     ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     NOT_ALLOW_IN_ROOM(HttpStatus.UNAUTHORIZED, "User do not have permission to enter the room"),
+
+    UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
+
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value") //@Validated 실패시
+
     ;
 
     private HttpStatus status;
