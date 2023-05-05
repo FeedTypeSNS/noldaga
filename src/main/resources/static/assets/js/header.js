@@ -99,7 +99,7 @@ function headerContent(data) {
         <li class="nav-item ms-2">
           <a
                   class="nav-link icon-md btn btn-light p-0"
-                  href="settings.html"
+                  href="settings"
           >
             <i class="bi bi-gear-fill fs-6"> </i>
           </a>
@@ -475,12 +475,7 @@ function leftNavContent(data) {
                 <span class="nav-text">MyPage </span></a
               >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="settings.html">
-                <i class="bi bi-gear-wide-connected nav-icon"></i>
-                <span class="nav-text">Settings </span></a
-              >
-            </li>
+            
           </ul>
           <!-- Side Nav END -->
           <!-- Card body END -->
