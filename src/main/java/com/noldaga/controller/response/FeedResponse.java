@@ -17,8 +17,6 @@ public class FeedResponse {
     private String title;
     private String content;
     private UserResponse userResponse;
-    private Long GroupId;
-    private int range;
     private String ModDate;
     private String RegDate;
     private Long totalView;
@@ -32,8 +30,6 @@ public class FeedResponse {
                 feedDto.getTitle(),
                 feedDto.getContent(),
                 UserResponse.fromUserDto(feedDto.getUserDto()),
-                feedDto.getGroupId(),
-                feedDto.getRange(),
                 feedDto.getModDate(),
                 feedDto.getRegDate(),
                 feedDto.getTotalView(),
@@ -43,4 +39,5 @@ public class FeedResponse {
                 feedDto.getFeedTagDtoList()
         );
     }
+
 }
