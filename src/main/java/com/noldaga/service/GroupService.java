@@ -64,7 +64,7 @@ public class GroupService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         Group group = groupRepository.findById(id).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
 
         GroupDto groupDto = GroupDto.fromEntity(group);
@@ -81,7 +81,7 @@ public class GroupService {
 
         //그룹확인
         Group group = groupRepository.findById(id).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
         //권한있나확인
         if (group.getUser() != user) {
@@ -107,7 +107,7 @@ public class GroupService {
         Group group = groupRepository.findById(id).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
 
-        //권한있나확인
+        //그룹장 여부 확인
         if (group.getUser() != user) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
         }

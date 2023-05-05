@@ -10,7 +10,7 @@ function deleteGroup(groupId) {
                 if (response.resultCode === 'SUCCESS') {
                     // 삭제 성공 시 화면에서 그룹 삭제
                     alert('삭제 완료');
-                    location.href = "/groups";
+                    location.reload();
                 } else {
                     alert('삭제 실패');
                 }

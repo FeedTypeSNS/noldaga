@@ -18,7 +18,7 @@ function updateGroup(groupId) {
             if (response.resultCode === 'SUCCESS') {
                 // 삭제 성공 시 화면에서 그룹 삭제
                 alert('수정 완료');
-                location.href = "/groups";
+                location.reload();
             } else {
                 alert('수정 실패');
             }

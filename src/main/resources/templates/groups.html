@@ -195,7 +195,7 @@ Header END -->
       </div>
       <div class="modal-body">
         <!-- Form START -->
-        <form>
+        <form enctype="multipart/form-data">
           <!-- Group name -->
           <div class="mb-3">
             <label class="form-label">그룹 이름</label>
@@ -248,7 +248,7 @@ Header END -->
           </div>
 
           <div class="modal-footer">
-              <button id="create-button" class="btn btn-success-soft">그룹생성</button>
+              <button onclick="createGroup()" class="btn btn-success-soft">그룹생성</button>
           </div>
         </form>
         <!-- Form END -->

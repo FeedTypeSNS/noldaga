@@ -21,16 +21,16 @@ function getGroupMember(user) {
         url: "/api/group/member/"+ groupId,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        init(user, resp.result);
+        init2(user, resp.result);
     }).fail(function(error){
-        init(user, null);
+        init2(user, null);
     });
 }
 
 
 
 
-function init(user, groupMember) {
+function init2(user, groupMember) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const groupId = urlParams.get('id');
@@ -39,22 +39,22 @@ function init(user, groupMember) {
         url: "/api/group/"+ groupId,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initDetailPage(resp.result, user, groupMember);
+        initDetailGroupPage(resp.result, user, groupMember);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
 
-function initDetailPage(group, user, groupMember) {
+function initDetailGroupPage(group, user, groupMember) {
     let feedBox = document.querySelector("#group-info");
     let cardBox = document.createElement("div");
     console.log(group);
-    cardBox.innerHTML = getDetailPage_Feed(group, user, groupMember);
+    cardBox.innerHTML = getDetailGroupPage(group, user, groupMember);
     feedBox.append(cardBox);
 }
 
-function getDetailPage_Feed(group, user, groupMember) {
+function getDetailGroupPage(group, user, groupMember) {
     console.log(groupMember);
 
     const groupType = group.open === 0 ? "<i class=\"bi bi-lock pe-1\"></i> 비밀 그룹" : "<i class='bi bi-globe pe-1'></i> 공개 그룹";
