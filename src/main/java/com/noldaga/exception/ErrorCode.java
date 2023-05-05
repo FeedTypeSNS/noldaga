@@ -48,6 +48,9 @@ public enum ErrorCode {
 
     ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
 
+    //Group
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),//피드수정개발할때 추가됨
+
     ;
 
     private HttpStatus status;

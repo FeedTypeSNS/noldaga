@@ -34,7 +34,7 @@ public class GroupMemberService {
 
         // 그룹 정보
         Group group = groupRepository.findById(groupId).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", groupId)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", groupId)));
 
         //그룹 가입
         GroupMember groupMember = groupMemberRepository.save(GroupMember.of(group, user));
@@ -61,11 +61,11 @@ public class GroupMemberService {
 
         //그룹확인
         Group group = groupRepository.findById(id).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
         //가입여부확인
         GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
         groupMemberRepository.deleteById(groupMember.getId());
     }
@@ -78,11 +78,11 @@ public class GroupMemberService {
 
         //그룹확인
         Group group = groupRepository.findById(id).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
         //가입여부확인
         GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", id)));
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
 
         GroupMemberDto groupMemberDto = GroupMemberDto.fromEntity(groupMember);
 
