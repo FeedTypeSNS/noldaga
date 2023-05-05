@@ -1,6 +1,6 @@
 package com.noldaga.service;
 
-import com.noldaga.controller.request.UserProfileModifyRequest;
+import com.noldaga.domain.userdto.Gender;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
@@ -19,6 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -159,4 +160,35 @@ public class UserService {
         response.addCookie(tokenCookie);
     }
 
+    @Transactional
+    public UserDto modifyMyUserinfo(String nickname, Gender gender, LocalDate birthday, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
+
+        user.modifyInfo(nickname,gender,birthday);
+        return UserDto.fromEntity(user);
+    }
+
+
+    @Transactional
+    public UserDto modifyMyEmail(String email,String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
+
+        user.modifyEmail(email);
+        return UserDto.fromEntity(user);
+    }
+
+    @Transactional
+    public UserDto modifyPassword(String currentPassword,String newPassword, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
+
+        if (!encoder.matches(currentPassword, user.getPassword())) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        user.modifyPassword(encoder.encode(newPassword));
+        return UserDto.fromEntity(user);
+    }
 }

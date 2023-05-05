@@ -1,7 +1,6 @@
 package com.noldaga.domain.entity;
 
 
-import com.noldaga.controller.request.UserProfileModifyRequest;
 import com.noldaga.domain.userdto.Gender;
 import com.noldaga.domain.userdto.UserRole;
 import lombok.Getter;
@@ -98,5 +97,19 @@ public class User {
         this.nickname = nickname;
         this.profileMessage = message;
         this.profileImageUrl = imageUrl;
+    }
+
+    public void modifyInfo(String nickname, Gender gender, LocalDate birthday) {
+        this.nickname = nickname;
+        this.gender = gender;
+        this.birthday = birthday;
+    }
+
+    public void modifyEmail(String email){
+        this.email = email;
+    }
+
+    public void modifyPassword(String newPassword) {
+        this.password = newPassword;
     }
 }
