@@ -10,11 +10,10 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class ChatSendRequest {
-    public enum MessageType{
-        ENTER, TALK
-    }
-    private MessageType type;
+
+    //private MessageType type;
     //private Long roomId;
     private String msg;
+
     //private String sender;
 }

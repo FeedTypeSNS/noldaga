@@ -1,4 +1,36 @@
+/*import {forAgoChatTimestamp} from './chatting';*/
+/*let socket = new SockJS("/ws/chat");
+let ws = Stomp.over(socket);
+let reconnect = 0;*/
 function init(){
+    setMyinfo();
+
+    getChatBody();
+
+    getChatListFunc();
+
+    //outPage();
+}
+
+function setMyinfo(){
+    $.ajax({
+        type:"GET",
+        url:"/api/chat/me",
+        dataType: "json"
+    }).done(function (resp){
+        $("#ws-username").val(resp.result.username);
+    }).fail(function (error){
+        alert(JSON.stringify(error));
+    });
+
+}
+
+/*function outPage(){
+    if (!(window.location.pathname.startsWith('/chat'))) {
+        localStorage.removeItem('username');
+    }
+}*/
+function getChatListFunc(){
     $.ajax({
         type:"GET",
         url:"/api/chat/list",
@@ -6,7 +38,6 @@ function init(){
         dataType: "json"
     }).done(function (resp){ //dataType을 통해 이미 json 파일만 가져오게됨. -> 즉 응답만 가져옴
         alert(JSON.stringify(resp));
-        alert("성공");
         //console.log(resp.result);
         initChatPageSimpleModified(resp.result);
     }).fail(function (error){
@@ -17,16 +48,32 @@ function init(){
     });
 }
 
-init();
+
+function getChatBody(){
+    $("#chat-tool *").remove();
+    $("#chat-tool").remove();
+    let chatBody = document.querySelector("#chat-tool-body");
+    let body = document.createElement("div");
+    body.id = "chatting-tool";
+    body.className="card-body h-100";
+    body.innerHTML = getBody();
+    chatBody.append(body);
+}
 
 function initChatPageSimpleModified(result){
+    $(".myChatList *").remove();
+    $(".myChatList").remove();
+
+    let active = document.querySelector("#active-chat-count");
+    active.textContent = '';
+    active.append(result.length);
     for(let i=0; i<result.length; i++){
         let data = result[i];
         let chatList = document.querySelector("#chatList");
 
         let myList = document.createElement("div");
         myList.className = "myChatList";
-
+        myList.id = "room-"+data.roomInfo.id;
         myList.innerHTML = getMyChatList(data);
         chatList.append(myList); //mylist 밑에 붙이기 = 왼쪽 채팅방 리스트
         //내 치팅방 리스트 반환 해줌..
@@ -52,24 +99,64 @@ function initChatPageSimpleModified(result){
 }
 
 function getMyChatList(data){
+    let ago;
+    if (data.recentChat.sender.role==="ADMIN"){
+        ago = "";
+    }else {
+        ago = forAgoChatTimestamp(data.recentChat.createAt);
+    }
     return`<li data-bs-dismiss="offcanvas">
             <!-- Chat user tab item -->
+            <form class="chat-open" id="chatInfo-${data.roomInfo.id}">
             <input type="hidden" name="chat-uuid" value="${data.roomInfo.uuid}">
+            <input type="hidden" name="chat-roomId" value="${data.roomInfo.id}">
             <input type="hidden" name="chat-romeName" value="${data.roomInfo.roomName}">
-            <a href="#chat-${data.roomInfo.id}" class="nav-link" id="chat-${data.roomInfo.id}-tab" data-bs-toggle="pill" role="tab">
+            </form>
+            <a class="nav-link" id="chat-${data.roomInfo.id}-tap" data-bs-toggle="pill" role="tab" onclick="getChatDetailRoom(this)">
                 <div class="d-flex">
-                    <div style="display: inline-block" class="flex-shrink-0 avatar me-2" id="joinListImg${data.roomInfo.id}">
+                    <div  class="flex-shrink-0 avatar me-2" id="joinListImg${data.roomInfo.id}">
                         <!--<img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt="">--><!--img url 넣어줘야함 회원의-->
-                    </div>
-                    </div>        
-                    <div style="display: inline-block" class="flex-grow-1 d-block" >
+                    </div>    
+                    <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
-                        <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg}</div>
+                        <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg} · ${ago}</div>
                     </div>
                 </div>
-            </a>
+               </a>
         </li>
 `;
+}
+
+function getBody(){
+    return `<div class="position-absolute top-50 start-50 translate-middle">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <svg aria-label="Direct" class="msgImg" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="96"
+                                 role="img" viewBox="0 0 96 96" width="96"><title>Direct</title>
+                                <circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2"></circle>
+                                <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="69.286" x2="41.447"
+                                      y1="33.21" y2="48.804"></line>
+                                <polygon fill="none" points="47.254 73.123 71.376 31.998 24.546 32.002 41.448 48.805 47.254 73.123"
+                                         stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
+                            </svg>
+                            <p/>
+                            <h1 class="h5 mb-0">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                내 메시지</h1><p/>
+                            <div class="small text-secondary">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                친구나 그룹에 <br>
+                                &nbsp;&nbsp;메시지를 보내보세요.
+                            </div>
+                            <p/>
+                            <div class="dropend position-relative">
+                                <div class="nav">
+                                    <a id="myFollowList2"  class="btn btn-primary toast-btn" data-target="chatToast"> <i class="bi bi-pencil-square">&nbsp;메시지 보내기</i> </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="size-fix-box" style=" padding-bottom: 78%; width: 100%"></div>`;
 }
 
 function getOneImg(data){
@@ -131,7 +218,31 @@ function getFourImg(data){
                     </ul>`;
 }//src에 이미지 태그 변경 필요..
 
+function forAgoChatTimestamp(timestamp){
+    let date = new Date(timestamp);
+    let diffMs = new Date() - date;
 
+// Calculate the time difference in minutes
+    let diffMins = Math.floor(diffMs / (1000 * 60));
+
+    if (diffMins < 60) {
+        // Less than an hour ago
+        return diffMins === 1 ? '1분 전' : `${diffMins}분 전`;
+    } else if (diffMins < 1440) {
+        // Within a day
+        const diffHours = Math.floor(diffMins / 60);
+        return diffHours === 1 ? '1시간 전' : `${diffHours}시간 전`;
+    } else if (diffMins < 10080) {
+        // Within a week
+        const diffDays = Math.floor(diffMins / 1440);
+        return diffDays === 1 ? '1일 전' : `${diffDays}일 전`;
+    } else {
+        // More than a week ago
+        const diffWeeks = Math.floor(diffMins / 10080);
+        return diffWeeks === 1 ? '1주 전' : `${diffWeeks}주 전`;
+    }
+
+} //날짜 포맷, 온지 얼마나 됬는지
 
 
 /*
@@ -170,3 +281,4 @@ function getPeopleListImg(joinCount, data, myList) {
     thisJoinImg.append(myList);
     return thisJoinImg;
 } //회원 참가 채팅 리스트 반환에서 이미지 부분 너무 길어서 밖에 배치*/
+init();
