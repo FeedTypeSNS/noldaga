@@ -1,29 +1,27 @@
-function iinit() {
-
+function getUser() {
     $.ajax({
         type: "GET",
         url: "/api/feed/getuser",
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initProfile(resp);
-        init();
+        setProfile(resp);
+        getFeeds();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
-iinit();
 
-function init() {
+getUser();
 
+function getFeeds() {
     var page = 0;
 
     $.ajax({
         type: "GET",
         url: "/api/feeds/"+page,
         dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initMainPageSimpleModified(resp.result);
-        //initLoadMoreButton();
+    }).done(function(resp){
+        setFeedsContent(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -38,24 +36,25 @@ init();
 
 
 function loadmore(currentPage){
-
     $.ajax({
         type: "GET",
         url: "/api/feeds/"+currentPage,
         dataType: "json"
     }).done(function(resp){
-        initMainPageSimpleModified(resp);
+        setFeedsContent(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function initProfile(data){
-    let profileDiv = document.querySelector("#profileDiv");
-    let profileBox = document.createElement("a");
-    profileBox.href = "/mypage?user_id="+data.id;
-    profileBox.innerHTML = profileContent(data);
-    profileDiv.append(profileBox);
+function setProfile(data){
+    let profileBox = document.querySelector("#profileDiv");
+
+    let profileCard = document.createElement("a");
+    profileCard.href = "/mypage?user_id="+data.id;
+    profileCard.innerHTML = profileContent(data);
+
+    profileBox.append(profileCard);
 }
 
 function profileContent(data) {
@@ -66,32 +65,33 @@ function profileContent(data) {
                 />`;
 }
 
-//댓글 안나오는거
-function initMainPageSimpleModified(data) {
+function setFeedsContent(data) {
     for(let i=0; i<data.length; i++){
-        let feedBox = document.querySelector("#feed");
+        let feedsBox = document.querySelector("#feed");
 
-        //카드박스 body
-        let cardBox = document.createElement("div"); //<div></div>
-        cardBox.className = "card"; //<div class="card"></div>
-        cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
-        //카드박스 해쉬태그
-        let tagBox = document.createElement("li");
-        tagBox.className = "list-inline-item m-0";
+        //카드 형식의 피드
+        let feedCard = document.createElement("div"); //<div></div>
+        feedCard.className = "card"; //<div class="card"></div>
+        feedCard.innerHTML = feedContent(data[i]);
+
+        //내용 밑에 들어가는 해시태그
+        let tagCard = document.createElement("li");
+        tagCard.className = "list-inline-item m-0";
         for(let j=0; j<data[i].feedTagDtoList.length; j++){
-            tagBox.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
+            tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
         }
+
         //해쉬태그 밑에 공백을 만들고싶어서..
         let blankBox = document.createElement("div");
         blankBox.innerHTML=`&nbsp`;
 
-        cardBox.append(tagBox);
-        cardBox.append(blankBox);
-        feedBox.append(cardBox); //그걸 feedBox에 붙임
+        feedCard.append(tagCard);
+        feedCard.append(blankBox);
+        feedsBox.append(feedCard); //그걸 feedBox에 붙임
     }
 }
 
-function getFeedBoxContentRemoveComment(data) {
+function feedContent(data) {
     return `<div class="card-header border-0 pb-0">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
@@ -271,28 +271,6 @@ function getFeedBoxContentRemoveComment(data) {
                </div>`;
 }
 
-
-function reply() {
-    let content={
-        content: $("#replyContent").val(),
-        feedId: $("#feedId").val()
-    };
-    alert(content.content+'  '+content.feedId);
-    $.ajax({
-        type: "POST",
-        url: "/api/comment",
-        data: JSON.stringify(content),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
-    }).done(function(resp){
-        alert('댓글 등록 완료');
-        window.location.href = "/test";
-    }).fail(function(error){
-        alert('댓글 등록 실패');
-        alert(JSON.stringify(error));
-        window.location.href = "/test";
-    });
-}
 
 function like(data) {
 

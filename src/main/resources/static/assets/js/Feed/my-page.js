@@ -1,28 +1,11 @@
-function iinit() {
+function getUser() {
 
     $.ajax({
         type: "GET",
         url: "/api/feed/getuser",
         async: false
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        init(resp);
-    }).fail(function(error){
-        alert(JSON.stringify(error));
-    });
-}
-iinit();
-
-function init(data) {
-    const queryString = window.location.search; //마이페이지 소유자
-    var page = 0;
-
-    $.ajax({
-        type: "GET",
-        url: "/api/feeds/mypage/"+page+queryString,
-        dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initProfile(resp.result[0].userResponse,data);
-        insertPhotoCards(resp.result);
+    }).done(function(loginUser){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        getMyPageOwnerData(loginUser);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -32,14 +15,47 @@ function init(data) {
         this.loadmore(++page);
     });
 }
+getUser();
+
+function getMyPageOwnerData(loginUser) {
+    const queryString = window.location.search; //마이페이지 소유자 아이디
+    const urlParams = new URLSearchParams(queryString);
+    const myPageOwnerId = urlParams.get('user_id');
+
+    $.ajax({
+        type: "GET",
+        url: "/api/users/"+myPageOwnerId+"/profile",
+        dataType: "json"
+    }).done(function(myPageOwner){
+        setProfile(myPageOwner.result,loginUser);
+        getFeeds();
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function getFeeds() {
+    const queryString = window.location.search; //마이페이지 소유자
+    var page = 0;
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feeds/mypage/"+page+queryString,
+        dataType: "json"
+    }).done(function(resp){
+        insertPhotoCards(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
 
 
-function initProfile(myPageOwner,loginUser){
+function setProfile(myPageOwner,loginUser){
     let profileCard = document.querySelector("#profileCard");
     if(myPageOwner.id == loginUser.id)
-        profileCard.innerHTML = profileContentMine(myPageOwner);
+        profileCard.innerHTML = profileContentMine(myPageOwner); //저장됨 버튼이 보임
     else
-        profileCard.innerHTML = profileContentOther(myPageOwner);
+        profileCard.innerHTML = profileContentOther(myPageOwner);//저장됨 버튼이 안보임
 }
 
 function profileContentMine(data) {
@@ -56,7 +72,7 @@ function profileContentMine(data) {
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>250 connections</p>
+                  <p>${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
@@ -91,7 +107,7 @@ function profileContentMine(data) {
                   <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link" href="/save" > 저장됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
@@ -110,11 +126,10 @@ function profileContentOther(data) {
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>250 connections</p>
+                  <p>${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </a>
                   <div class="dropdown">
                     <!-- Card share action menu -->
                     <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -144,7 +159,7 @@ function profileContentOther(data) {
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
                   <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
@@ -300,56 +315,6 @@ function loadmore(currentPage){
         initMainPageSimpleModified(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
-    });
-}
-
-
-//댓글 안나오는거
-function initProfileCard(data) {
-    for(let i=0; i<data.length; i++){
-        let feedBox = document.querySelector("#feed");
-
-        //카드박스 body
-        let cardBox = document.createElement("div"); //<div></div>
-        cardBox.className = "card"; //<div class="card"></div>
-        cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
-        //카드박스 해쉬태그
-        let tagBox = document.createElement("li");
-        tagBox.className = "list-inline-item m-0";
-        for(let j=0; j<data[i].feedTagDtoList.length; j++){
-            tagBox.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
-        }
-        //해쉬태그 밑에 공백을 만들고싶어서..
-        let blankBox = document.createElement("div");
-        blankBox.innerHTML=`&nbsp`;
-
-        cardBox.append(tagBox);
-        cardBox.append(blankBox);
-        feedBox.append(cardBox); //그걸 feedBox에 붙임
-    }
-}
-
-
-
-function reply() {
-    let content={
-        content: $("#replyContent").val(),
-        feedId: $("#feedId").val()
-    };
-    alert(content.content+'  '+content.feedId);
-    $.ajax({
-        type: "POST",
-        url: "/api/comment",
-        data: JSON.stringify(content),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
-    }).done(function(resp){
-        alert('댓글 등록 완료');
-        window.location.href = "/test";
-    }).fail(function(error){
-        alert('댓글 등록 실패');
-        alert(JSON.stringify(error));
-        window.location.href = "/test";
     });
 }
 

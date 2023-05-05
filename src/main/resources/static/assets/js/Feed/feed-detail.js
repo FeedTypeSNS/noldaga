@@ -1,18 +1,18 @@
-function iinit() {
+function getUser() {
 
     $.ajax({
         type: "GET",
         url: "/api/feed/getuser",
         async: false
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        init(resp);
+    }).done(function(loginUser){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        getFeedData(loginUser);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
-iinit();
+getUser();
 
-function init(username) {
+function getFeedData(loginUser) {
     const queryString = window.location.search;
     var comment_page = 0;
     let responseData;
@@ -21,31 +21,34 @@ function init(username) {
         type: "GET",
         url: "/api/feed"+ queryString,
         dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        responseData = resp.result;
-        initDetailPage(resp.result,comment_page,username);//여기서 넘길 때 로그인한 회원도 받아서 올 수 있다면
+    }).done(function(feedData){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        responseData = feedData.result;
+        setDetailPage(feedData.result,comment_page,loginUser);//여기서 넘길 때 로그인한 회원도 받아서 올 수 있다면
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 
     $("#comment-loadmore-button").on("click",()=>{
-        this.loadmoreComments(responseData,++comment_page,username);
+        this.loadmoreComments(responseData,++comment_page,loginUser);
     });
 }
 
 
-function loadmoreComments(data,comment_page,username){
+function loadmoreComments(feedData,comment_page,loginUser){
 
-    let page = Math.ceil(data.commentList.length/10);
+    let page = Math.ceil(feedData.totalComment/10);
+
     if(comment_page < page) { //아직 보여줄 댓글이 남음
+
         for (let i = comment_page*10; i < comment_page*10+10; i++) {
-            let ReplyBox = document.querySelector("#FeedReplycontent");
-            let cardBox2 = document.createElement("div");
-            if(data.commentList[i].userDto.username == username)
-              cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            let replyBox = document.querySelector("#FeedReplycontent");
+
+            let replyCard = document.createElement("div");
+            if(data.commentList[i].userDto.username == loginUser.username)
+                replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
-              cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
-            ReplyBox.append(cardBox2);
+                replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
+            replyBox.append(replyCard);
         }
     }
     else{
@@ -53,39 +56,48 @@ function loadmoreComments(data,comment_page,username){
     }
 }
 
-function initDetailPage(data,comment_page,username){
-    $('#commentCount').val(data.commentList.length);
+function setDetailPage(feedData,comment_page,loginUser){
+
+    //$('#commentCount').val(data.totalComment);
+
+    //피드 내용 들어가는 부분
     let feedBox = document.querySelector("#FeedDetailcontent");
-    let cardBox = document.createElement("div");
+    let feedCard = document.createElement("div");
 
+    //좋아요 버튼, 댓글, 수정, 삭제 버튼 라인
     let feedReactBox = document.querySelector("#FeedReact");
-    let ReactBox = document.createElement("div");
+    let feedReactCard = document.createElement("div");
 
+    //댓글 입력창
     let replySubmitBox = document.querySelector("#replyFormBox");
-    let replyBox = document.createElement("form");
-    replyBox.className = "nav nav-item w-100 position-relative";
+    let replySubmitForm = document.createElement("form");
+    replySubmitForm.className = "nav nav-item w-100 position-relative";
 
-    cardBox.innerHTML = getDetailPage_Feed(data);
-    feedBox.append(cardBox);
+    feedCard.innerHTML = getDetailPage_Feed(feedData);
+    feedBox.append(feedCard);
 
-    ReactBox.innerHTML = getReactButtons(data);
-    feedReactBox.append(ReactBox);
+    if(feedData.userResponse.id == loginUser.id)
+        feedReactCard.innerHTML = getReactButtonsMine(feedData); //남이 쓴 댓글은 안보임
+    else
+        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 댓글은 안보임
+    feedReactBox.append(feedReactCard);
 
-    replyBox.innerHTML = reply_submit_form(data);
-    replySubmitBox.append(replyBox);
+    replySubmitForm.innerHTML = reply_submit_form(feedData);
+    replySubmitBox.append(replySubmitForm);
 
-    let page = Math.ceil(data.commentList.length/5);
+    let page = Math.ceil(feedData.totalComment/10);
+
     if(comment_page < page) { //아직 보여줄 댓글이 남음
+
         for (let i = comment_page*10; i < comment_page*10+10; i++) {
-            let ReplyBox = document.querySelector("#FeedReplycontent");
-            let cardBox2 = document.createElement("div");
-            if(data.commentList[i].userDto.username == username)
-                cardBox2.innerHTML = getDetailPage_comment_mine(data.commentList[i]);
+            let replyBox = document.querySelector("#FeedReplycontent");
+
+            let replyCard = document.createElement("div");
+            if(feedData.commentList[i].userDto.username == loginUser.username)
+                replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
-                cardBox2.innerHTML = getDetailPage_comment_others(data.commentList[i]);
-
-            ReplyBox.append(cardBox2);
-
+                replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
+            replyBox.append(replyCard);
         }
     }
     else{
@@ -93,7 +105,7 @@ function initDetailPage(data,comment_page,username){
     }
 }
 
-function getReactButtons(data){
+function getReactButtonsMine(data){
     return `<ul class="nav nav-stack flex-wrap small mb-3">
                             <li class="nav-item">
                                 <a class="nav-link" href="#!" onclick="feedLike(${data.id})"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(${data.totalLike})</a>
@@ -139,6 +151,34 @@ function getReactButtons(data){
                                     <i class="bi bi-trash3 pe-2"></i
                                     >삭제
                                 </a>
+                            </li>
+
+                            <!-- Card share action END -->
+                        </ul>`;
+}
+
+function getReactButtonsOthers(data){
+    return `<ul class="nav nav-stack flex-wrap small mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" onclick="feedLike(${data.id})"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(${data.totalLike})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
+                            </li>
+                            <!-- Card share action START -->
+                            <li class="nav-item dropdown ms-sm-auto">
+                                <a class="nav-link mb-0" href="#" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>(3)
+                                </a>
+                                <!-- Card share action dropdown menu -->
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
+                                </ul>
                             </li>
 
                             <!-- Card share action END -->
@@ -237,7 +277,7 @@ function getDetailPage_comment_others(data){
                                                   onclick="commentLike(${data.id})"
                                                 >
                                                   <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
-                                                  (56)</a
+                                                  (${data.totalLike})</a
                                                 >
                                              </li>
                                         </ul>
