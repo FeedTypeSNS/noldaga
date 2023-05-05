@@ -39,7 +39,18 @@ public enum ErrorCode {
     CHAT_NOT_FIND(HttpStatus.NOT_FOUND, "This chat des not exist"),
     ALREADY_OUT_ROOM(HttpStatus.CONFLICT, "User has already out this room"),
     NOT_ALLOW_IN_ROOM(HttpStatus.UNAUTHORIZED, "User do not have permission to enter the room"),
-    ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close")
+
+
+    UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
+
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value"), //@Validated 실패시
+
+
+    ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
+
+    //Group
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),//피드수정개발할때 추가됨
+
     ;
 
     private HttpStatus status;
