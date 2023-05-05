@@ -1,6 +1,6 @@
 package com.noldaga.service;
 
-import com.noldaga.domain.userdto.UserDetailsImpl;
+import com.noldaga.domain.userdto.security.UserDetailsImpl;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.UserRepository;
@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-@Service
+//todo 나중에 삭제 예정
+//@Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 

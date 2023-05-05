@@ -132,9 +132,9 @@
             </div>
 
             <div class="mt-3">
-              <button type="button" class="btn btn-lg btn-primary-soft">
-                카카오로 시작하기
-              </button>
+              <a role="button" id="kakao-login" href="/oauth2/authorization/kakao">
+                <img alt="Kakao Login" src="/img/kakao_login_medium.png" >
+              </a>
             </div>
             <!-- Copyright -->
             <p class="mb-0 mt-3">©2023 <a target="_blank" href="https://www.webestica.com/">Webestica.</a> All rights
@@ -191,14 +191,14 @@ JS libraries, plugins and custom scripts -->
 
                 if (response.resultCode === 'SUCCESS') {//로그인성공
 
-                    console.log('asdfasdfasdfasdfasdf');
-                    const aToken = response.result
-                    localStorage.setItem('accessToken', aToken);
-
-                    const accessToken = localStorage.getItem('accessToken');
-                    console.log("please " + accessToken);
-
-                    document.cookie = "tokenCookie=" + accessToken + "; path=/";
+                    // console.log('asdfasdfasdfasdfasdf');
+                    // const aToken = response.result
+                    // localStorage.setItem('accessToken', aToken);
+                    //
+                    // const accessToken = localStorage.getItem('accessToken');
+                    // console.log("please " + accessToken);
+                    //
+                    // document.cookie = "tokenCookie=" + accessToken + "; path=/";
 
                     window.location.href = '/';
                 }

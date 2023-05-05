@@ -1,8 +1,6 @@
 package com.noldaga.repository.Feed;
 
-import com.noldaga.domain.entity.Feed;
-import com.noldaga.domain.entity.QFeed;
-import com.noldaga.domain.entity.QFollow;
+import com.noldaga.domain.entity.*;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
 
     QFeed feed = QFeed.feed;
     QFollow follow = QFollow.follow;
+    QStoreFeed storeFeed = QStoreFeed.storeFeed;
 
     public SearchFeedImpl() {
         super(Feed.class);
@@ -96,5 +95,18 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
         return new PageImpl<>(feedList,pageable,count);
     }
 
+    @Override
+    public Page<Feed> MyStoredFeed(Long userId, Pageable pageable) {
+        JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
+                .join(storeFeed).on(feed.id.eq(storeFeed.feed.id))
+                .where(storeFeed.user.id.eq(userId))
+                .orderBy(storeFeed.regDate.desc());
+
+        this.getQuerydsl().applyPagination(pageable,query);
+        List<Feed> feedList = query.fetch();
+        long count = query.fetchCount();
+
+        return new PageImpl<>(feedList,pageable,count);
+    }
 
 }

@@ -3,7 +3,6 @@ package com.noldaga.service;
 
 import com.noldaga.domain.CodeDto;
 import com.noldaga.domain.CodeUserDto;
-import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.module.CodeValidator;
 import com.noldaga.module.MailSender;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import java.io.UnsupportedEncodingException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class MailAuthService {
 
     private final MailSender mailSender;
     private final CodeValidator codeValidator;

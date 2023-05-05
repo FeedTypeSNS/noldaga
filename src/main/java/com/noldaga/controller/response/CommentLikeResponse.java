@@ -1,7 +1,6 @@
 package com.noldaga.controller.response;
 
 import com.noldaga.domain.CommentLikeDto;
-import com.noldaga.domain.FeedLikeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

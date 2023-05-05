@@ -3,15 +3,22 @@ package com.noldaga.domain.userdto;
 
 import com.noldaga.domain.entity.User;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 엔티티 클래스는 db에 저장할때만 사용하는것이 좋음 : 엔티티 객체의 영향을 준다라는것은 db에 영향을 준다는것을 의미함
  */
 @Getter
-public class UserDto {
+public class UserDto implements UserDetails, OAuth2User {
 
     private Long id;
     private String username;
@@ -26,6 +33,8 @@ public class UserDto {
     private Long totalFollower;
     private Long totalFollowing;
     private UserRole role = UserRole.USER;
+
+    Map<String, Object> oAuth2Attributes;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -79,4 +88,44 @@ public class UserDto {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.getRole().toString()));
+    }
+
+    //todo 하드 딜리트를 하게되면 true로 바꿔줘야함
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.deletedAt == null;
+//        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.deletedAt == null;
+//        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.deletedAt == null;
+//        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.deletedAt == null;
+//        return true;
+    }
+
+    //Oauth
+    @Override
+    public Map<String, Object> getAttributes() {
+        return oAuth2Attributes;
+    }
+
+    @Override
+    public String getName() {
+        return this.username;
+    }
 }

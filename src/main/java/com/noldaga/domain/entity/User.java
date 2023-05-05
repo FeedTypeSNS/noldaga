@@ -1,6 +1,7 @@
 package com.noldaga.domain.entity;
 
 
+import com.noldaga.controller.request.UserProfileModifyRequest;
 import com.noldaga.domain.userdto.Gender;
 import com.noldaga.domain.userdto.UserRole;
 import lombok.Getter;
@@ -26,12 +27,13 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_at is NULL") // 조회시 이 조건이 자동 추가
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="user_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="user_id", length = 50)
     private Long id;
 
     @Column(nullable=false ,updatable = false,unique = true)
     private String username;
 
+    @Column(nullable = false,length = 100)
     private String nickname;
     @Setter @Column(nullable = false)
     private String password;
@@ -45,6 +47,8 @@ public class User {
 
     private String profileImageUrl;
     private String profileMessage;
+
+    @Column(length = 100,nullable = false)
     private String email;
     private Long totalFollower=Long.valueOf(0);
     private Long totalFollowing=Long.valueOf(0);
@@ -88,5 +92,11 @@ public class User {
 
     public void changePassword(String newPassword){
         this.password = newPassword;
+    }
+
+    public void modifyProfile(String nickname,String message, String imageUrl){
+        this.nickname = nickname;
+        this.profileMessage = message;
+        this.profileImageUrl = imageUrl;
     }
 }

@@ -31,6 +31,7 @@ public class PageController {
 
     @GetMapping("/")
     public String home(){
+        //return "index_removeHeader";
         return "index";
     }
 
@@ -39,10 +40,36 @@ public class PageController {
         return "post-details";
     }
 
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "my-profile";
+    }
 
+    @GetMapping("/save")
+    public String mypageSave(){
+        return "my-profile-save";
+    }
 
     @GetMapping("/chat")
     public String chatMain(){
         return "messaging";
+    }
+
+    @GetMapping("/groups")
+    public String groupList(){
+        return "groups";
+    }
+
+    @GetMapping("/group")
+    public String groupView() { return "group-details"; }
+
+    @GetMapping("/settings")
+    public String settings(){
+        return "settings";
+    }
+
+    @GetMapping("/editProfile")
+    public String editProfile(){
+        return "edit-profile-picture";
     }
 }

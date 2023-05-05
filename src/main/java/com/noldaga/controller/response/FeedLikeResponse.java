@@ -1,13 +1,8 @@
 package com.noldaga.controller.response;
 
-import com.noldaga.domain.CommentDto;
-import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.FeedLikeDto;
-import com.noldaga.domain.FeedTagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 
 
 @Getter

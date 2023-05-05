@@ -7,7 +7,13 @@ import com.noldaga.controller.response.FeedResponse;
 import com.noldaga.controller.response.Response;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.UploadDto;
+import com.noldaga.domain.UserSimpleDto;
+import com.noldaga.domain.userdto.UserDto;
+import com.noldaga.exception.ErrorCode;
+import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.FeedService;
+import com.noldaga.service.UserService;
+import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -23,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -34,15 +41,18 @@ public class FeedController {
     private String path;
 
     private final FeedService feedService;
+    private final UserService userService;
 
+    //피드 조회시 로그인한 사용자 정보 가져옴
     @GetMapping("/api/feed/getuser")
-    public String getUserAtFeed(Authentication authentication) {
-
-        //authentication.getName()을 까보면 principal.getName() -> AbstractAuthenticationToken.getName() 참고하면 UserDetails 구현해주어야함
-
-        return authentication.getName();
+    public UserSimpleDto getUserAtFeed(Authentication authentication) {
+//        UserDto userDto = userService.loadUserByUsername(authentication.getName()).orElseThrow();
+        UserDto userDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(),UserDto.class).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,"Casting to UserDto class failed"));
+        return UserSimpleDto.fromUserDto(userDto);
     }
 
+    //피드 작성
     @PostMapping("/api/feed")
     public Response<FeedResponse> create(@RequestBody FeedCreateRequest request, Authentication authentication) {
         FeedDto feedDto = feedService.create(request, authentication.getName());
@@ -51,6 +61,7 @@ public class FeedController {
         return Response.success(FeedResponse.fromFeedDto(feedDto));
     }
 
+    //상세 페이지 피드 가져오기
     @GetMapping(value="/api/feed")
     public Response<FeedResponse> getFeed(Long id, Authentication authentication){
         FeedDto feedDto = feedService.getDetailFeed(id,authentication.getName());
@@ -58,6 +69,7 @@ public class FeedController {
         return Response.success(FeedResponse.fromFeedDto(feedDto));
     }
 
+    //메인 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/{page}")
     public Response<List<FeedResponse>> getmainFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getMainFeed(page,authentication.getName());
@@ -70,6 +82,7 @@ public class FeedController {
         return Response.success(feedResponseList);
     }
 
+    //그룹 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/group/{group_id}/{page}")
     public Response<List<FeedResponse>> getGroupPageFeeds(@PathVariable Long group_id,@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getGroupFeed(page,authentication.getName(),group_id);
@@ -82,8 +95,9 @@ public class FeedController {
         return Response.success(feedResponseList);
     }
 
-    @GetMapping(value="/api/feeds/mypage/{user_id}/{page}")
-    public Response<List<FeedResponse>> getMypageFeeds(@PathVariable Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+    //마이 페이지 피드 가져오기
+    @GetMapping(value="/api/feeds/mypage/{page}")
+    public Response<List<FeedResponse>> getMypageFeeds(Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getMyPageFeed(page,user_id,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -94,9 +108,23 @@ public class FeedController {
         return Response.success(feedResponseList);
     }
 
+    //탐색 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/explore/{page}")
     public Response<List<FeedResponse>> getExplorePageFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
         List<FeedDto> feedDtoList = feedService.getExploreFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    //저장한 피드 가져오기 - 본인만 볼 수 있음
+    @GetMapping("/api/feeds/save/{page}")
+    public Response<List<FeedResponse>> getMySavedFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+        List<FeedDto> feedDtoList = feedService.getMySavedFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
         feedDtoList.forEach(feedDto->{

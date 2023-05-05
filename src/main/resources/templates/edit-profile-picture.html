@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Social - Network, Community and Event Theme</title>
+
+  <!-- Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Webestica.com">
+  <meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
+
+  <!-- Dark mode -->
+  <script>
+      const storedTheme = localStorage.getItem('theme')
+
+      const getPreferredTheme = () => {
+          if (storedTheme) {
+              return storedTheme
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+
+      const setTheme = function (theme) {
+          if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              document.documentElement.setAttribute('data-bs-theme', 'dark')
+          } else {
+              document.documentElement.setAttribute('data-bs-theme', theme)
+          }
+      }
+
+      setTheme(getPreferredTheme())
+
+      window.addEventListener('DOMContentLoaded', () => {
+          var el = document.querySelector('.theme-icon-active');
+          if (el != 'undefined' && el != null) {
+              const showActiveTheme = theme => {
+                  const activeThemeIcon = document.querySelector('.theme-icon-active use')
+                  const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                  const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+                  document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                      element.classList.remove('active')
+                  })
+
+                  btnToActive.classList.add('active')
+                  activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+              }
+
+              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                  if (storedTheme !== 'light' || storedTheme !== 'dark') {
+                      setTheme(getPreferredTheme())
+                  }
+              })
+
+              showActiveTheme(getPreferredTheme())
+
+              document.querySelectorAll('[data-bs-theme-value]')
+                  .forEach(toggle => {
+                      toggle.addEventListener('click', () => {
+                          const theme = toggle.getAttribute('data-bs-theme-value')
+                          localStorage.setItem('theme', theme)
+                          setTheme(theme)
+                          showActiveTheme(theme)
+                      })
+                  })
+
+          }
+      })
+
+  </script>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Plugins CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+</head>
+
+<body>
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+
+  <!-- Container START -->
+  <div class="container">
+    <div class="row justify-content-center align-items-center vh-100 py-5">
+      <!-- Main content START -->
+      <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+        <!-- Sign in START -->
+        <div class="card card-body text-center p-4 p-sm-5">
+          <!-- Title -->
+          <div class="position-absolute top-0 start-0 m-3">
+            <button class="btn btn-primary" onclick="history.back()">뒤로 가기</button>
+          </div>
+          <h1 class="mt-3">프로필 수정</h1>
+          <!-- Form START -->
+          <form class="mt-sm-4" method="POST" enctype="multipart/form-data">
+
+            <div class="mb-3">
+              <img alt="Kakao Login" src="/img/tomtom.png" class="rounded-circle" style="width: 250px; height: 250px;">
+              <input type="file" accept="image/*" name="file" id="fileInput">
+            </div>
+            <!-- Email -->
+            <div class="mb-3 input-group-lg">
+              <input type="text" name="nickname" class="form-control" placeholder="닉네임">
+            </div>
+            <!-- New password -->
+            <div class="mb-3 position-relative">
+              <!-- Password -->
+              <div class="input-group input-group-lg">
+                <input class="form-control " type="text" name="profileMessage" id="message"
+                       placeholder="상태메세지">
+                <span class="input-group-text p-0">
+                </span>
+              </div>
+            </div>
+
+
+            <!-- Button -->
+            <div class="d-grid">
+              <button type="button" class="btn btn-lg btn-primary" onclick="updateProfile()">수정</button>
+            </div>
+
+
+            <!-- Copyright -->
+            <p class="mb-0 mt-3">©2023 <a target="_blank" href="https://www.webestica.com/">Webestica.</a> All rights
+              reserved</p>
+          </form>
+          <!-- Form END -->
+        </div>
+        <!-- Sign in START -->
+      </div>
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+
+<!-- =======================
+JS libraries, plugins and custom scripts -->
+
+<!-- Bootstrap JS -->
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendors -->
+<script src="assets/vendor/pswmeter/pswmeter.min.js"></script>
+
+<!-- Theme Functions -->
+<script src="assets/js/functions.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    //html 로딩 되면 함수 시작
+    window.onload = function () {
+        myProfile();
+    };
+
+
+    function myProfile() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/users/me/profile');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            if (xhr.status === 200) {
+                const nicknameInput = document.querySelector('input[name="nickname"]');
+                nicknameInput.placeholder = response.result.nickname;
+
+                const messageInput = document.querySelector('input[name="profileMessage"]');
+                messageInput.placeholder = response.result.profileMessage;
+            } else {
+
+            }
+        };
+        xhr.send();
+    }
+
+
+    //이미지 미리 보기
+    const fileInput = document.getElementById('fileInput');
+    const imgPreview = document.querySelector('img');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            imgPreview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+    function updateProfile() {
+        if (!validateFileUpload()) {
+            return;
+        }
+        // 이미지 파일, 닉네임, 상태 메시지 값을 읽어옴
+        const imageFile = document.getElementById('fileInput').files[0];
+        const nickname = document.getElementsByName('nickname')[0].value;
+        const profileMessage = document.getElementById('message').value;
+        const profileImageUrl = 'asdfasdf';
+
+        // 이미지 파일을 FormData 객체에 담음
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        const json = JSON.stringify({
+            nickname: nickname,
+            profileMessage: profileMessage,
+            profileImageUrl: profileImageUrl
+        })
+        const blob = new Blob([json], {type: 'application/json'})
+        formData.append('json', blob);
+
+        // AJAX를 사용하여 서버로 전송
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/users/me/profile');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            if (xhr.status === 200) {
+                alert('프로필 수정이 완료 되었습니다')
+                const nicknameInput = document.querySelector('input[name="nickname"]');
+                nicknameInput.placeholder = response.result.nickname;
+
+                const messageInput = document.querySelector('input[name="profileMessage"]');
+                messageInput.placeholder = response.result.profileMessage;
+            } else {
+                alert('프로필 수정이 실패 하였습니다')
+            }
+        };
+        xhr.send(formData);
+    }
+
+    //이미지 검증
+    function validateFileUpload() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        const fileTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        // if (!file) {
+        //     alert('파일을 선택해주세요.');
+        //     return false;
+        // }
+
+        if (file && !fileTypes.includes(file.type)) {
+            alert('이미지 파일만 업로드 가능합니다.');
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+</body>
+</html>

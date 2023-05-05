@@ -4,8 +4,10 @@ let post = {
       this.posting();
     }); //on(1,2) 1에는 어떤 이벤트인지 적어주고 2에 그 이벤트시 어떤일이 일어날지 적는다
 
-    $("#posting-button-demo").on("click",()=>{
-      this.posting_demo();
+    $("#enter-content-input").on("keydown",(e)=>{
+      if (e.keyCode === 13) {
+        this.enterkey();
+      }
     });
   },
 
@@ -69,8 +71,31 @@ let post = {
       var url = response.url;
       var fileName = response.fileName;
     });
-  }
+  },
 
+  enterkey:function(){
+    let data={
+      content: $("#enter-content-input").val(),
+      title: "제목이 없습니다.",
+      range: "0",
+      groupId: "0"
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/api/feed",
+      data: JSON.stringify(data),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json"
+    }).done(function(resp){
+      alert('포스팅 완료');
+      location.href = "/";
+    }).fail(function(error){
+      alert('포스팅 실패');
+      alert(JSON.stringify(error));
+    });
+
+  }
 
 };
 

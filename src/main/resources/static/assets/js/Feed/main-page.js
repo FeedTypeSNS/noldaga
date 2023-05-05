@@ -1,3 +1,18 @@
+function iinit() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/getuser",
+        async: false
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        initProfile(resp);
+        init();
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+iinit();
+
 function init() {
 
     var page = 0;
@@ -35,6 +50,21 @@ function loadmore(currentPage){
     });
 }
 
+function initProfile(data){
+    let profileDiv = document.querySelector("#profileDiv");
+    let profileBox = document.createElement("a");
+    profileBox.href = "/mypage?user_id="+data.id;
+    profileBox.innerHTML = profileContent(data);
+    profileDiv.append(profileBox);
+}
+
+function profileContent(data) {
+    return `<img
+                        class="avatar-img rounded-circle"
+                        src="assets/images/albums/07.jpg"
+                        alt=""
+                />`;
+}
 
 //댓글 안나오는거
 function initMainPageSimpleModified(data) {
@@ -67,7 +97,7 @@ function getFeedBoxContentRemoveComment(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="#!">
+                      <a href="/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
                           src="assets/images/avatar/04.jpg"
@@ -163,13 +193,17 @@ function getFeedBoxContentRemoveComment(data) {
                       data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
                       onclick="like(${data.id})"
                     >
-                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
-                      (${data.totalLike})</a
+                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a
                     >
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
-                      <i class="bi bi-chat-fill pe-1"></i>Comments (${data.totalComment})</a
+                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!" onclick="save(${data.id})">
+                      <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a
                     >
                   </li>
                   <!-- Card share action START -->
@@ -181,8 +215,7 @@ function getFeedBoxContentRemoveComment(data) {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
-                      (3)
+                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>공유하기(##)
                     </a>
                     <!-- Card share action dropdown menu -->
                     <ul
@@ -296,6 +329,49 @@ function like_delete(data) {
     $.ajax({
         type: "DELETE",
         url: "api/like/feed/"+data
+    }).done(function(resp){
+        window.location.href = "/";
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/";
+    });
+}
+
+function save(data) {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/store/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) save_delete(data);
+        else save_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function save_register(data) {
+
+    $.ajax({
+        type: "POST",
+        url: "api/feed/store/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/";
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/";
+    });
+}
+
+function save_delete(data) {
+
+    $.ajax({
+        type: "DELETE",
+        url: "api/feed/store/"+data
     }).done(function(resp){
         window.location.href = "/";
     }).fail(function(error){
