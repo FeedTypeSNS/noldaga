@@ -74,7 +74,7 @@ public class FeedDto {
                 feed.getLikeCount(),
                 feed.getCommentCount(),
                 CommentDto.listFromEntity(feed.getComment()),
-                FeedTagDto.listFromEntity(feed.getFeedTags())
+                FeedTagDto.fromEntityList(feed.getFeedTags())
         );
     }
 
@@ -92,7 +92,7 @@ public class FeedDto {
                 feed.getTotalView(),
                 feed.getLikeCount(),
                 feed.getCommentCount(),
-                FeedTagDto.listFromEntity(feed.getFeedTags())
+                FeedTagDto.fromEntityList(feed.getFeedTags())
         );
     }
 
