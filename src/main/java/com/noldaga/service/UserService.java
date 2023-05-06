@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,7 +65,6 @@ public class UserService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         //등록이 되어있다면 password가 일치하는지 체크
-//        if (!user.getPassword().equals(password)){
         if (!encoder.matches(password, user.getPassword())) {
             throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
         }
@@ -83,9 +83,8 @@ public class UserService {
     }
 
 
-    public UserDto searchUsernameByEmail(String emailAddress) {
-        return userRepository.findByEmail(emailAddress).map(UserDto::fromEntity).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is invalid E-mailAddress", emailAddress)));
+    public List<String> searchUsernameListByEmail(String emailAddress) {
+        return userRepository.findAllUsernameByEmail(emailAddress);
     }
 
     public String searchEmail(String username) {
@@ -148,7 +147,7 @@ public class UserService {
 
     public Optional<UserDto> loadUserByUsername(String username){
         return userRepository.findByUsername(username).map(UserDto::fromEntity);
-    }//OAuth2UserService 에서 사용되는 메서드
+    }//OAuth2UserService 에서 사용되는 메서드: 인증용이여서 웬만하면 안쓰는쪽으로....
 
     private void generateTokenCookie(HttpServletResponse response, String token) {
         final int A_MONTH = 60 * 60 * 24 * 30;
@@ -190,5 +189,9 @@ public class UserService {
 
         user.modifyPassword(encoder.encode(newPassword));
         return UserDto.fromEntity(user);
+    }
+
+    public int countByEmail(String email) {
+        return userRepository.countByEmail(email);
     }
 }
