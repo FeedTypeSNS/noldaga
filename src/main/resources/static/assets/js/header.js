@@ -316,7 +316,7 @@ function headerContent(data) {
             </li>
             <!-- Links -->
             <li>
-              <a class="dropdown-item" href="settings.html"
+              <a class="dropdown-item" href="settings"
               ><i class="bi bi-gear fa-fw me-2"></i>내 정보 & 알림 범위 수정</a
               >
             </li>
