@@ -13,7 +13,7 @@ public class CodeGenerator {
     private final String NUMBERS = "0123456789";
     private final String ALL = UPPER + LOWER + NUMBERS;
 
-    public String generateRandomCode(int size) {
+    public String generateRandomString(int size) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < size; i++) {
