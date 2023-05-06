@@ -154,6 +154,162 @@ Header END -->
     </div>
     <!-- Container END -->
 
+    <div
+            class="modal fade"
+            id="modalCreateFeed"
+            tabindex="-1"
+            aria-labelledby="modalLabelCreateFeed"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- Modal feed header START -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabelCreateFeed">Create post</h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+                <!-- Modal feed header END -->
+                <form enctype="multipart/form-data">
+                    <!-- Modal feed body START -->
+                    <div class="modal-body">
+                        <!-- Add Feed -->
+                        <div class="d-flex mb-3">
+                            <!-- Avatar -->
+                            <div class="avatar avatar-xs me-2">
+                                <img
+                                        class="avatar-img rounded-circle"
+                                        src="assets/images/albums/07.jpg"
+                                        alt=""
+                                />
+                            </div>
+                            <!-- Feed box  -->
+                            <div class="col">
+                                <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="1"
+                              placeholder="title..."
+                              autofocus
+                              id="title"
+                      ></textarea>
+                                </div>
+                                <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="4"
+                              placeholder="Share your thoughts..."
+                              autofocus
+                              id="content"
+                      ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Feed rect START -->
+                        <div class="hstack gap-2">
+                            <label
+                                    class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Photo"
+                                    for="uploadFile"
+                            >
+                                <i class="bi bi-image-fill"></i>
+                            </label>
+                            <input type="file" id="uploadFile" style="display:none" multiple/>
+                            <a
+                                    class="icon-md bg-info bg-opacity-10 text-info rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Video"
+                            >
+                                <i class="bi bi-camera-reels-fill"></i>
+                            </a>
+                            <a
+                                    class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Events"
+                            >
+                                <i class="bi bi-calendar2-event-fill"></i>
+                            </a>
+                            <a
+                                    class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Feeling/Activity"
+                            >
+                                <i class="bi bi-emoji-smile-fill"></i>
+                            </a>
+                            <a
+                                    class="icon-md bg-light text-secondary rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Check in"
+                            >
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </a>
+                            <a
+                                    class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle"
+                                    href="#"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Tag people on top"
+                            >
+                                <i class="bi bi-tag-fill"></i>
+                            </a>
+                        </div>
+                        <!-- Feed rect END -->
+                    </div>
+                    <!-- Modal feed body END -->
+
+                    <!-- Modal feed footer -->
+                    <div class="modal-footer row justify-content-between">
+                        <!-- Select -->
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <select
+                                        id="open_range"
+                                        class="form-select choice-select-text-none"
+                                        data-position="top"
+                                        data-search-enabled="false"
+                                >
+                                    <option value=0>Public</option>
+                                    <option value=1>Friends</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <select
+                                        id="group_id"
+                                        class="form-select choice-select-text-none"
+                                        data-position="top"
+                                        data-search-enabled="false"
+                                >
+                                    <option value=0>MyPage</option>
+                                </select>
+                                <!-- Button -->
+                            </div>
+
+                            <div class="col-sm-4 text-sm-end">
+                                <button type="button" id="posting-button" class="btn btn-success-soft">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Modal feed footer -->
+            </div>
+        </div>
+    </div>
+    <!-- Modal create feed END -->
 
     <!--------------------------------------------------------------------삭제 경고 모달 창-------------------------------------------->
     <div
@@ -236,14 +392,7 @@ Header END -->
                             <!-- Feed box  -->
                             <div class="col">
                                 <div class="row">
-
-                                    <textarea
-                                            class="form-control pe-4 fs-3 lh-1 border-0"
-                                            rows="1"
-                                            placeholder="id..."
-                                            autofocus
-                                            id="id"
-                                    ></textarea>
+                                    <input type="hidden" id="modify_id"/>
                                 </div>
                                 <div class="row">
                                   <textarea
@@ -251,7 +400,7 @@ Header END -->
                                           rows="1"
                                           placeholder="title..."
                                           autofocus
-                                          id="title"
+                                          id="modify_title"
                                   ></textarea>
                                 </div>
                                 <div class="row">
@@ -260,7 +409,7 @@ Header END -->
                                           rows="4"
                                           placeholder="Share your thoughts..."
                                           autofocus
-                                          id="content"
+                                          id="modify_content"
                                   ></textarea>
                                 </div>
                                 <div>
@@ -345,7 +494,7 @@ Header END -->
                         <div class="row">
                             <div class="col-sm-4">
                                 <select
-                                        id="open_range"
+                                        id="modify_open_range"
                                         class="form-select js-choice choice-select-text-none"
                                         data-position="top"
                                         data-search-enabled="false"
@@ -356,15 +505,12 @@ Header END -->
                             </div>
                             <div class="col-sm-4">
                                 <select
-                                        id="group_id"
+                                        id="modify_group_id"
                                         class="form-select js-choice choice-select-text-none"
                                         data-position="top"
                                         data-search-enabled="false"
                                 >
                                     <option value=0>MyPage</option>
-                                    <option value=1>Group1</option>
-                                    <option value=2>Group2</option>
-                                    <option value=3>Group3</option>
                                 </select>
                                 <!-- Button -->
                             </div>
@@ -416,13 +562,7 @@ Header END -->
                             <!-- Feed box  -->
                             <div class="col">
                                 <div class="row">
-                                    <textarea
-                                            class="form-control pe-4 fs-3 lh-1 border-0"
-                                            rows="1"
-                                            placeholder="id..."
-                                            autofocus
-                                            id="commentId"
-                                    ></textarea>
+                                    <input type="hidden" id="commentId"/>
                                 </div>
                                 <div class="row">
                                   <textarea

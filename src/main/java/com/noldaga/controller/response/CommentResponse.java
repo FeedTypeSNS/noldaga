@@ -1,8 +1,13 @@
 package com.noldaga.controller.response;
 
 import com.noldaga.domain.CommentDto;
+import com.noldaga.domain.FeedTagDto;
+import com.noldaga.domain.entity.FeedTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -24,5 +29,16 @@ public class CommentResponse {
                 commentDto.getRegDate(),
                 commentDto.getTotalLike()
         );
+    }
+
+    public static List<CommentResponse> fromCommentDtoList(List<CommentDto> commentDtoList) {
+        if(commentDtoList == null)
+            return null;
+        List<CommentResponse> commentResponseList = new ArrayList<>();
+        commentDtoList.forEach(commentDto -> {
+            CommentResponse commentResponse = CommentResponse.fromCommentDto(commentDto);
+            commentResponseList.add(commentResponse);
+        });
+        return commentResponseList;
     }
 }

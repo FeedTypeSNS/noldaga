@@ -33,7 +33,7 @@ public class FeedTagDto {
         );
     }
 
-    public static List<FeedTagDto> listFromEntity(List<FeedTag> feedTagList) {
+    public static List<FeedTagDto> fromEntityList(List<FeedTag> feedTagList) {
         if(feedTagList == null)
             return null;
         List<FeedTagDto> feedTagDtoList = new ArrayList<>();

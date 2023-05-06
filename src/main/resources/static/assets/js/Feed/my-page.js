@@ -12,7 +12,7 @@ function getUser() {
 
     $("#loadmore-button").on("click",()=>{
         alert("버튼확인");
-        this.loadmore(++page);
+        loadmore(++page);
     });
 }
 getUser();
@@ -72,7 +72,8 @@ function profileContentMine(data) {
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
+                  <p class="mb-0 h6">${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
+                  <h1 class="mb-0 h5">${data.profileMessage}</h1>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
@@ -95,9 +96,36 @@ function profileContentMine(data) {
               </div>
               <!-- List profile -->
               <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
-                <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
-                <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on Nov 26, 2019</li>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/09.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt=""/>
+                </div>
               </ul>
             </div>
             <!-- Card body END -->
@@ -126,7 +154,8 @@ function profileContentOther(data) {
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
+                  <p class="mb-0 h6">${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
+                  <h1 class="mb-0 h5">${data.profileMessage}</h1>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
@@ -148,9 +177,36 @@ function profileContentOther(data) {
               </div>
               <!-- List profile -->
               <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
-                <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
-                <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on Nov 26, 2019</li>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/09.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt=""/>
+                </div>
               </ul>
             </div>
             <!-- Card body END -->
@@ -175,7 +231,7 @@ function insertPhotoCards(data){
 }
 
 function photoCardContent(data) {
-    return `<a href="assets/images/albums/01.jpg" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
+    return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
                               <img class="rounded img-fluid" src="assets/images/albums/01.jpg" alt="">
                           </a>
                           <!-- likes -->
@@ -184,7 +240,7 @@ function photoCardContent(data) {
                           </ul>
                           <ul class="nav nav-stack py-2 small">
                               <li class="nav-item">
-                                  <a class="nav-link" href="#!"> <i class="bi bi-heart-fill text-danger pe-1"></i>${data.totalLike} </a>
+                                  <a class="nav-link" href="#!" onclick="like(${data.id})"><i class="bi bi-heart-fill text-danger pe-1"></i>${data.totalLike} </a>
                               </li>
                               <li class="nav-item">
                                   <a class="nav-link" href="#!"> <i class="bi bi-chat-left-text-fill pe-1"></i>${data.totalComment} </a>
@@ -319,44 +375,44 @@ function loadmore(currentPage){
 }
 
 function like(data) {
+    const url = window.location.href;
 
     $.ajax({
         type: "GET",
         url: "api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
-        if(resp) like_delete(data);
-        else like_register(data);
+        if(resp) like_delete(data,url);
+        else like_register(data,url);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function like_register(data) {
+function like_register(data,url) {
 
     $.ajax({
         type: "POST",
         url: "api/like/feed/"+data,
-        data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
 
-function like_delete(data) {
+function like_delete(data,url) {
 
     $.ajax({
         type: "DELETE",
         url: "api/like/feed/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }

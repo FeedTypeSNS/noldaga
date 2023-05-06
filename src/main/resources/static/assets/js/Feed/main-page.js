@@ -5,13 +5,28 @@ function getUser() {
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         setProfile(resp);
+        getGroups();
         getFeeds();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
+
 }
 
 getUser();
+
+function getGroups() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/groups/member",
+        dataType: "json"
+    }).done(function(resp){
+        setModalGroupSelectBox(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
 
 function getFeeds() {
     var page = 0;
@@ -27,12 +42,9 @@ function getFeeds() {
     });
 
     $("#loadmore-button").on("click",()=>{
-        alert("버튼확인");
-        this.loadmore(++page);
+        loadmore(++page);
     });
 }
-
-init();
 
 
 function loadmore(currentPage){
@@ -41,10 +53,22 @@ function loadmore(currentPage){
         url: "/api/feeds/"+currentPage,
         dataType: "json"
     }).done(function(resp){
-        setFeedsContent(resp);
+        setFeedsContent(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
+}
+
+function setModalGroupSelectBox(data){
+    for(let i=0; i<data.length; i++){
+        let groupSelectBox = document.querySelector("#group_id");
+
+        //카드 형식의 피드
+        let selectOption = document.createElement("option"); //<option></option>
+        selectOption.value = `${data[i].id}`;
+        selectOption.innerHTML = `${data[i].name}`;
+        groupSelectBox.append(selectOption);
+    }
 }
 
 function setProfile(data){
@@ -66,6 +90,7 @@ function profileContent(data) {
 }
 
 function setFeedsContent(data) {
+
     for(let i=0; i<data.length; i++){
         let feedsBox = document.querySelector("#feed");
 
@@ -87,7 +112,7 @@ function setFeedsContent(data) {
 
         feedCard.append(tagCard);
         feedCard.append(blankBox);
-        feedsBox.append(feedCard); //그걸 feedBox에 붙임
+        feedsBox.append(feedCard); //그걸 feedsBox에 붙임
     }
 }
 
@@ -183,7 +208,7 @@ function feedContent(data) {
                 <ul class="nav nav-stack py-3 small">
                   <li class="nav-item">
                     <a
-                      class="nav-link active"
+                      class="nav-link like"
                       href="#!"
                       data-bs-container="body"
                       data-bs-toggle="tooltip"
@@ -192,19 +217,17 @@ function feedContent(data) {
                       data-bs-custom-class="tooltip-text-start"
                       data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
                       onclick="like(${data.id})"
+                      id="like-button-zzzzz"
                     >
-                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a
-                    >
+                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
-                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a
-                    >
+                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#!" onclick="save(${data.id})">
-                      <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a
-                    >
+                    <a class="nav-link save" href="#!" onclick="save(${data.id})">
+                      <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a>
                   </li>
                   <!-- Card share action START -->
                   <li class="nav-item dropdown ms-sm-auto">
@@ -271,6 +294,22 @@ function feedContent(data) {
                </div>`;
 }
 
+function like2(data) {
+    let result = "";
+
+    $.ajax({
+        type: "GET",
+        url: "api/like/feed/"+data,
+        dataType: "json",
+        async: false
+    }).done(function(resp){
+        if(resp) result = "true";
+        else result = "false";
+        return result;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
 
 function like(data) {
 
@@ -279,8 +318,14 @@ function like(data) {
         url: "api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
-        if(resp) like_delete(data);
-        else like_register(data);
+        if(resp){
+            like_delete(data);
+            make_like_inactive();
+        }
+        else{
+            like_register(data);
+            make_like_active();
+        }
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -302,6 +347,17 @@ function like_register(data) {
     });
 }
 
+function make_like_active() {
+    //$("#like-button-zzzzz").classList.remove("nav-link", "like");
+    //$("#like-button-zzzzz").classList.add("nav-link", "active");
+    //const navLinkLike = document.querySelector(".nav-link.like");
+    //navLinkLike.classList.remove("nav-link", "like");
+    //navLinkLike.classList.add("nav-link", "active");
+    const navLinkLike = document.querySelector('#like-button-zzzzz');
+    navLinkLike.classList.remove("nav-link", "like");
+    navLinkLike.classList.add("nav-link", "active");
+}
+
 function like_delete(data) {
 
     $.ajax({
@@ -313,6 +369,14 @@ function like_delete(data) {
         alert(JSON.stringify(error));
         window.location.href = "/";
     });
+}
+
+function make_like_inactive() {
+    const navLinkLike = document.querySelector('.nav-link.like');
+    const cList =  navLinkLike.classList;
+    navLinkLike.classList.remove("nav-link", "like");
+    navLinkLike.classList.add("nav-link", "active");
+
 }
 
 function save(data) {

@@ -7,6 +7,7 @@ function init() {
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         makeHeader(resp);
         makeLeftNav(resp);
+        headerGetGroups();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -20,6 +21,7 @@ function init() {
         }
     })
 }
+
 init();
 
 function makeHeader(data){
@@ -490,6 +492,31 @@ function leftNavContent(data) {
           <!-- Side Nav END -->
           <!-- Card body END -->
         </div>`;
+}
+
+function headerGetGroups() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/groups/member",
+        dataType: "json"
+    }).done(function(resp){
+        setHeaderModalGroupSelectBox(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+
+function setHeaderModalGroupSelectBox(data){
+    for(let i=0; i<data.length; i++){
+        let groupSelectBox = document.querySelector("#group_id");
+
+        let selectOption = document.createElement("option"); //<option></option>
+        selectOption.value = `${data[i].id}`;
+        selectOption.innerHTML = `${data[i].name}`;
+        groupSelectBox.append(selectOption);
+    }
 }
 
 function sidebarToggleStart() {

@@ -76,7 +76,7 @@ let post = {
   enterkey:function(){
     let data={
       content: $("#enter-content-input").val(),
-      title: "제목이 없습니다.",
+      title: $("#enter-content-input").val().substring(0, 10),
       range: "0",
       groupId: "0"
     };

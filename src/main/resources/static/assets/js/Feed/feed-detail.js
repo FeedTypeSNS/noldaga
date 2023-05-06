@@ -6,11 +6,38 @@ function getUser() {
         async: false
     }).done(function(loginUser){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         getFeedData(loginUser);
+        getGroups();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 getUser();
+
+
+function getGroups() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/groups/member",
+        dataType: "json"
+    }).done(function(resp){
+        setModalGroupSelectBox(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+
+function setModalGroupSelectBox(data){
+    for(let i=0; i<data.length; i++){
+        let modifyGroupSelectBox = document.querySelector("#modify_group_id");
+
+        let selectOption = document.createElement("option"); //<option></option>
+        selectOption.value = `${data[i].id}`;
+        selectOption.innerHTML = `${data[i].name}`;
+        modifyGroupSelectBox.append(selectOption);
+    }
+}
 
 function getFeedData(loginUser) {
     const queryString = window.location.search;
@@ -44,7 +71,7 @@ function loadmoreComments(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(data.commentList[i].userDto.username == loginUser.username)
+            if(data.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
@@ -93,7 +120,7 @@ function setDetailPage(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(feedData.commentList[i].userDto.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
@@ -257,7 +284,7 @@ function getDetailPage_comment_others(data){
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userDto.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -301,7 +328,7 @@ function getDetailPage_comment_mine(data){
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userDto.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -488,36 +515,40 @@ function show() {
     });
 
     function setModifyModal(data){
-        $('#title').val(data.result.title);
-        $('#content').val(data.result.content);
-        $('#id').val(data.result.id);
+        $('#modify_title').val(data.result.title);
+        $('#modify_content').val(data.result.content);
+        $('#modify_id').val(data.result.id);
+        $("#modify_open_range").val(data.result.range).prop("selected", true);
+        $("#modify_group_id").val(data.result.groupId).prop("selected", true);
     }
 }
 
-function modify(){
-    const queryString = window.location.search;
 
-    let data={
-        title: $("#title").val(),
-        content: $("#content").val(),
-        range: $("#open_range").val(),
-        groupId: $("#group_id").val()
-    };
-
-    alert(JSON.stringify(data));
-
-    $.ajax({
-        type: "PUT",
-        url: "/api/feed"+queryString,
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
-    }).done(function(resp){
-        alert('수정 완료');
-        location.href = "/";
-    }).fail(function(error){
-        alert('수정 실패');
-        alert(JSON.stringify(error));
-    });
-
-}
+////????
+//function modify(){
+//    const queryString = window.location.search;
+//
+//    let data={
+//        title: $("#title").val(),
+//        content: $("#content").val(),
+//        range: $("#open_range").val(),
+//        groupId: $("#group_id").val()
+//    };
+//
+//    alert(JSON.stringify(data));
+//
+//    $.ajax({
+//        type: "PUT",
+//        url: "/api/feed"+queryString,
+//        data: JSON.stringify(data),
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json"
+//    }).done(function(resp){
+//        alert('수정 완료');
+//        location.href = "/";
+//    }).fail(function(error){
+//        alert('수정 실패');
+//        alert(JSON.stringify(error));
+//    });
+//
+//}
