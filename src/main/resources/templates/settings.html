@@ -537,8 +537,9 @@ Header END -->
                         </span>
                     </div>
                     <!-- Pswmeter -->
-                    <div id="pswmeter" class="mt-2"></div>
-                    <div id="pswmeter-message" class="rounded mt-1"></div>
+<!--                    <div id="pswmeter" class="mt-2"></div>-->
+<!--                    <div id="pswmeter-message" class="rounded mt-1"></div>-->
+
                   </div>
                   <!-- Confirm password -->
                   <div class="col-12">
@@ -1415,7 +1416,7 @@ JS libraries, plugins and custom scripts -->
         }
         console.log('이메일이 왜 널이냐 ');
         console.log(email);
-        xhr.send(JSON.stringify({email: email}))
+        xhr.send(JSON.stringify({codeId:codeId,email: email}))
 
     }
 

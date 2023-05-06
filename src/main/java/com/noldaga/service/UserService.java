@@ -99,7 +99,7 @@ public class UserService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        String newPassword = codeGenerator.generateRandomCode(INIT_PASSWORD_SIZE);
+        String newPassword = codeGenerator.generateRandomString(INIT_PASSWORD_SIZE);
         user.changePassword(encoder.encode(newPassword));
         userRepository.save(user);//@Transactional 있으면 자동으로 save 되긴함
 

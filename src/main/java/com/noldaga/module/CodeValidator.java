@@ -22,23 +22,42 @@ public class CodeValidator {
     private final CodeGenerator codeGenerator;
 
     private final int CODE_SIZE =  6;
+    private final String AUTH_FLAG="*";
+    private final String DELIMITER="/";
 
 
     public void validateCode(Integer codeId, String codeRequest) {
-        String code = storage.get(codeId);
-        if (code != null && code.equals(codeRequest)) {
-            storage.remove(codeId);
-            return;
+        String code_email = storage.get(codeId);
+        if(code_email==null){
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
+        }
+        String[] split = code_email.split(DELIMITER);
+        if (split[0].equals(codeRequest)) {
+            storage.put(codeId, code_email + AUTH_FLAG);
+            return ;
         }
         throw new SnsApplicationException(ErrorCode.INVALID_CODE);
+    }
+
+    public void validateAuthenticatedEmail(Integer codeId,String email){
+        String code_email_authFlag = storage.get(codeId);
+        if(code_email_authFlag==null){
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
+        }
+        String[] split = code_email_authFlag.split(DELIMITER);
+        if(split[1].equals(email+AUTH_FLAG)){
+            storage.remove(codeId);
+            return ;
+        }
+        throw new SnsApplicationException(ErrorCode.INVALID_EMAIL);
     }
 
     public CodeUserDto validateCodeForPassword(Integer codeId, String codeRequest) {
         String code_email_username = storage.get(codeId);
         if (code_email_username == null) {
-            throw new SnsApplicationException(ErrorCode.INVALID_CODE);
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
-        String[] split = code_email_username.split("_");
+        String[] split = code_email_username.split(DELIMITER);
         if (split[0].equals(codeRequest)) {
             storage.remove(codeId);
             return CodeUserDto.of(split[1], split[2]);
@@ -47,23 +66,23 @@ public class CodeValidator {
     }
 
 
-    public CodeDto generateCode() {
-        String code = generateRandomCode();
+    public CodeDto generateCode(String email) {
+        String code = generateRandomString();
         int key = keyGenerator.incrementAndGet();
-        storage.put(key, code);
+        storage.put(key, code+DELIMITER+email);
         return CodeDto.of(key, code);
     }
 
-    public CodeDto generateCode(String emailAddress, String username) {
-        String code = generateRandomCode();
+    public CodeDto generateCodeForPassword(String emailAddress, String username) {
+        String code = generateRandomString();
         int key = keyGenerator.incrementAndGet();
-        storage.put(key, code + "_" + emailAddress + "_" + username);
+        storage.put(key, code + DELIMITER + emailAddress + DELIMITER + username);
         return CodeDto.of(key, code);
     }
 
 
-    private String generateRandomCode(){
-        return codeGenerator.generateRandomCode(CODE_SIZE);
+    private String generateRandomString(){
+        return codeGenerator.generateRandomString(CODE_SIZE);
     }
 
 

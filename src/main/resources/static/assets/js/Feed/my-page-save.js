@@ -1,20 +1,39 @@
-function iinit() {
+function getUser() {
 
     $.ajax({
         type: "GET",
         url: "/api/feed/getuser",
         async: false
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initProfile(resp);
-        init();
+    }).done(function(loginUser){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        getMyPageOwnerData(loginUser);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+
+    $("#loadmore-button").on("click",()=>{
+        alert("버튼확인");
+        loadmore(++page);
+    });
+}
+getUser();
+
+
+function getMyPageOwnerData(loginUser) {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/users/"+loginUser.id+"/profile",
+        dataType: "json"
+    }).done(function(myPageOwner){
+        setProfile(myPageOwner.result);
+        getSavedFeeds();
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
-iinit();
 
 
-function init() {
+function getSavedFeeds() {
     var page = 0;
 
     $.ajax({
@@ -34,12 +53,13 @@ function init() {
 }
 
 
-function initProfile(data){
+function setProfile(myPageOwner){
     let profileCard = document.querySelector("#profileCard");
-    profileCard.innerHTML = profileContent(data);
+    profileCard.innerHTML = profileContentMine(myPageOwner); //저장됨 버튼이 보임
 }
 
-function profileContent(data) {
+
+function profileContentMine(data) {
     return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
@@ -53,11 +73,12 @@ function profileContent(data) {
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
-                  <p>250 connections</p>
+                  <p class="mb-0 h6">${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
+                  <h1 class="mb-0 h5">${data.profileMessage}</h1>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                  <button class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </button>
+                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </a>
                   <div class="dropdown">
                     <!-- Card share action menu -->
                     <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -75,10 +96,37 @@ function profileContent(data) {
                 </div>
               </div>
               <!-- List profile -->
-              <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-                <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Lead Developer</li>
-                <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> New Hampshire</li>
-                <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Joined on Nov 26, 2019</li>
+             <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/09.jpg" alt=""/>
+                </div>
+                <div class="flex-shrink-0 avatar avatar-xs me-2">
+                   <img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt=""/>
+                </div>
               </ul>
             </div>
             <!-- Card body END -->
@@ -88,10 +136,12 @@ function profileContent(data) {
                   <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link active" href="/save" > 저장됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small"> 230</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
+
+
 
 function insertPhotoCards(data){
     for(let i=0; i<data.length; i++) {
@@ -104,7 +154,7 @@ function insertPhotoCards(data){
 }
 
 function photoCardContent(data) {
-    return `<a href="assets/images/albums/01.jpg" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
+    return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
                               <img class="rounded img-fluid" src="assets/images/albums/01.jpg" alt="">
                           </a>
                           <!-- likes -->
@@ -113,7 +163,7 @@ function photoCardContent(data) {
                           </ul>
                           <ul class="nav nav-stack py-2 small">
                               <li class="nav-item">
-                                  <a class="nav-link" href="#!"> <i class="bi bi-heart-fill text-danger pe-1"></i>${data.totalLike} </a>
+                                  <a class="nav-link" href="#!" onclick="like(${data.id})"> <i class="bi bi-heart-fill text-danger pe-1"></i>${data.totalLike} </a>
                               </li>
                               <li class="nav-item">
                                   <a class="nav-link" href="#!"> <i class="bi bi-chat-left-text-fill pe-1"></i>${data.totalComment} </a>
@@ -248,70 +298,22 @@ function loadmore(currentPage){
 }
 
 
-//댓글 안나오는거
-function initProfileCard(data) {
-    for(let i=0; i<data.length; i++){
-        let feedBox = document.querySelector("#feed");
-
-        //카드박스 body
-        let cardBox = document.createElement("div"); //<div></div>
-        cardBox.className = "card"; //<div class="card"></div>
-        cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
-        //카드박스 해쉬태그
-        let tagBox = document.createElement("li");
-        tagBox.className = "list-inline-item m-0";
-        for(let j=0; j<data[i].feedTagDtoList.length; j++){
-            tagBox.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
-        }
-        //해쉬태그 밑에 공백을 만들고싶어서..
-        let blankBox = document.createElement("div");
-        blankBox.innerHTML=`&nbsp`;
-
-        cardBox.append(tagBox);
-        cardBox.append(blankBox);
-        feedBox.append(cardBox); //그걸 feedBox에 붙임
-    }
-}
-
-
-
-function reply() {
-    let content={
-        content: $("#replyContent").val(),
-        feedId: $("#feedId").val()
-    };
-    alert(content.content+'  '+content.feedId);
-    $.ajax({
-        type: "POST",
-        url: "/api/comment",
-        data: JSON.stringify(content),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json"
-    }).done(function(resp){
-        alert('댓글 등록 완료');
-        window.location.href = "/test";
-    }).fail(function(error){
-        alert('댓글 등록 실패');
-        alert(JSON.stringify(error));
-        window.location.href = "/test";
-    });
-}
-
 function like(data) {
+    const url = window.location.href;
 
     $.ajax({
         type: "GET",
         url: "api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
-        if(resp) like_delete(data);
-        else like_register(data);
+        if(resp) like_delete(data,url);
+        else like_register(data,url);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function like_register(data) {
+function like_register(data,url) {
 
     $.ajax({
         type: "POST",
@@ -320,22 +322,22 @@ function like_register(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
 
-function like_delete(data) {
+function like_delete(data,url) {
 
     $.ajax({
         type: "DELETE",
         url: "api/like/feed/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }

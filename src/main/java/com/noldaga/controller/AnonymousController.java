@@ -48,6 +48,8 @@ public class AnonymousController {
 
     @PostMapping("/join") //회원가입 4 : 회원가입
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest req) {
+        //todo 포스트맨으로 회원가입 되도록 주석처리해놓음
+//                mailAuthService.validateAuthenticatedEmail(req.getCodeId(), req.getEmail());
         UserDto userDto = userService.join(req.getUsername(), req.getPassword(), req.getNickname(), req.getEmail());
         UserJoinResponse userJoinResponse = UserJoinResponse.fromUserDto(userDto);
 
@@ -58,7 +60,7 @@ public class AnonymousController {
     public Response<CodeIdResponse> findPassword(@RequestBody UsernameRequest req) throws MessagingException, UnsupportedEncodingException {
 
         String emailAddress = userService.searchEmail(req.getUsername());
-        Integer codeId = mailAuthService.sendCode(emailAddress, req.getUsername());
+        Integer codeId = mailAuthService.sendCodeForPassword(emailAddress, req.getUsername());
         return Response.success(CodeIdResponse.of(codeId));
     }
 

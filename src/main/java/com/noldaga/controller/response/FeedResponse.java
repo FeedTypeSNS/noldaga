@@ -17,25 +17,30 @@ public class FeedResponse {
     private String title;
     private String content;
     private UserResponse userResponse;
+    private Long GroupId;
+    private int range;
     private String ModDate;
     private String RegDate;
     private Long totalView;
     private Long totalLike;
     private Long totalComment;
-    private List<CommentDto> commentList;
+    private List<CommentResponse> commentList;
     private List<FeedTagDto> feedTagDtoList;
 
     public static FeedResponse fromFeedDto(FeedDto feedDto) {
-        return new FeedResponse(feedDto.getId(),
+        return new FeedResponse(
+                feedDto.getId(),
                 feedDto.getTitle(),
                 feedDto.getContent(),
                 UserResponse.fromUserDto(feedDto.getUserDto()),
+                feedDto.getGroupId(),
+                feedDto.getRange(),
                 feedDto.getModDate(),
                 feedDto.getRegDate(),
                 feedDto.getTotalView(),
                 feedDto.getTotalLike(),
                 feedDto.getTotalComment(),
-                feedDto.getCommentList(),
+                CommentResponse.fromCommentDtoList(feedDto.getCommentList()),
                 feedDto.getFeedTagDtoList()
         );
     }

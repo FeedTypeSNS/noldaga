@@ -1,24 +1,22 @@
 package com.noldaga.controller.request;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
-@Getter // @PostMapping 에서 json -> 자바객체로 바인딩 될때 getter 없어도 됨,  All생성자 or No생성자 둘중 하나 있으면됨 (ObjectMapper기반)
+@Getter
 @NoArgsConstructor
-@ToString
-public class MailRequest {
-
+public class MailModifyRequest {
     @NotNull
     @NotBlank
     @Email
     private String email;
 
-
+    @Positive
+    private Integer codeId;
 }
