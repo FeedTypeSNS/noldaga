@@ -29,13 +29,13 @@ public class MailAuthService {
     public Integer sendCodeForPassword(String emailAddress, String username) throws MessagingException, UnsupportedEncodingException {
 
         CodeDto codeDto = codeValidator.generateCodeForPassword(emailAddress,username);
-        String message = "인증코드를 입력해주세요 " + codeDto.getCode();
+        String message = "인증코드를 입력해주세요   " + codeDto.getCode();
         mailSender.sendEmail(emailAddress,message);
         return codeDto.getCodeId();
     }
 
-    public void sendUsername(String emailAddress, String username) throws MessagingException, UnsupportedEncodingException {
-        String message = "해당 이메일로가입된 아이디 입니다 : " + username;
+    public void sendUsernames(String emailAddress, String usernames) throws MessagingException, UnsupportedEncodingException {
+        String message = "해당 이메일로 가입된 아이디 목록입니다   " + usernames;
         mailSender.sendEmail(emailAddress,message);
     }
 
@@ -52,7 +52,7 @@ public class MailAuthService {
     }
 
     public void sendPassword(String emailAddress, String newPassword) throws MessagingException, UnsupportedEncodingException {
-        String message = "초기화된 비밀번호 입니다 : " + newPassword;
+        String message = "초기화된 비밀번호 입니다   " + newPassword;
         mailSender.sendEmail(emailAddress,message);
     }
 }

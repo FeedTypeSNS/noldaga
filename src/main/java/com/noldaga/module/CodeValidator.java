@@ -32,7 +32,8 @@ public class CodeValidator {
             throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
         String[] split = code_email.split(DELIMITER);
-        if (split[0].equals(codeRequest)) {
+        String code= split[0];
+        if (codeRequest.equals(code)) {
             storage.put(codeId, code_email + AUTH_FLAG);
             return ;
         }
@@ -45,22 +46,28 @@ public class CodeValidator {
             throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
         String[] split = code_email_authFlag.split(DELIMITER);
-        if(split[1].equals(email+AUTH_FLAG)){
+        String emailWithFlag = split[1];
+        if((email+AUTH_FLAG).equals(emailWithFlag)){
             storage.remove(codeId);
             return ;
         }
         throw new SnsApplicationException(ErrorCode.INVALID_EMAIL);
     }
 
+
+    //이메일이 DELIMITER 를 포함하면 user not found Exception ErrorCode 발생
     public CodeUserDto validateCodeForPassword(Integer codeId, String codeRequest) {
         String code_email_username = storage.get(codeId);
         if (code_email_username == null) {
             throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
         String[] split = code_email_username.split(DELIMITER);
-        if (split[0].equals(codeRequest)) {
+        String code = split[0];
+        String email = split[1];
+        String username=split[2];
+        if (codeRequest.equals(code)) {
             storage.remove(codeId);
-            return CodeUserDto.of(split[1], split[2]);
+            return CodeUserDto.of(email, username);
         }
         throw new SnsApplicationException(ErrorCode.INVALID_CODE);
     }

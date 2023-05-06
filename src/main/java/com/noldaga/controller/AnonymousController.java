@@ -6,6 +6,8 @@ import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserJoinResponse;
 import com.noldaga.domain.CodeUserDto;
 import com.noldaga.domain.userdto.UserDto;
+import com.noldaga.exception.ErrorCode;
+import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.MailAuthService;
 import com.noldaga.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,6 +28,7 @@ public class AnonymousController {
 
     private final UserService userService;
     private final MailAuthService mailAuthService;
+    private final int MAX_ACCOUNTS_PER_EMAIL=50;
 
     //todo 회원가입이라는 하나의 트랜잭션안에 여러번의 api를 통해 인증을 하는데, 서버쪽에서 상태를 유지해야함.
     @PostMapping("/join/validate-username") //회원가입 1 : 아이디중복검사
@@ -34,7 +39,9 @@ public class AnonymousController {
 
     @PostMapping("/join/send-code") //회원가입 2 : 이메일 인증 : 이메일 로 코드전송
     public Response<CodeIdResponse> email(@RequestBody MailRequest req) throws MessagingException, UnsupportedEncodingException {
-
+        if (MAX_ACCOUNTS_PER_EMAIL <= userService.countByEmail(req.getEmail())) {
+            throw new SnsApplicationException(ErrorCode.EMAIL_LIMIT_EXCEEDED);
+        }
         Integer codeId = mailAuthService.sendCode(req.getEmail());
         return Response.success(CodeIdResponse.of(codeId));
     }
@@ -50,6 +57,12 @@ public class AnonymousController {
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest req) {
         //todo 포스트맨으로 회원가입 되도록 주석처리해놓음
 //                mailAuthService.validateAuthenticatedEmail(req.getCodeId(), req.getEmail());
+
+        //회원가입시 횟수 넘으면 이메일 코드조차 보낼수 없어서 이 로직은 무조건 false 이긴한데 안전빵으로 넣어줌
+        if(userService.countByEmail(req.getEmail())>=MAX_ACCOUNTS_PER_EMAIL){
+            throw new SnsApplicationException(ErrorCode.EMAIL_LIMIT_EXCEEDED);
+        }
+
         UserDto userDto = userService.join(req.getUsername(), req.getPassword(), req.getNickname(), req.getEmail());
         UserJoinResponse userJoinResponse = UserJoinResponse.fromUserDto(userDto);
 
@@ -76,11 +89,15 @@ public class AnonymousController {
         return Response.success();
     }
 
-    //todo 한 이메일에 여러 아이디를 가입 했을때 대응해야함.
     @PostMapping("/find-username/send-username")// 아이디찾기: 가입된 이메일로 아이디전송
     public Response<Void> findUsername(@RequestBody MailRequest req) throws MessagingException, UnsupportedEncodingException {
-        UserDto userDto = userService.searchUsernameByEmail(req.getEmail());
-        mailAuthService.sendUsername(req.getEmail(), userDto.getUsername());
+        List<String> usernameList = userService.searchUsernameListByEmail(req.getEmail());
+        if(usernameList.isEmpty()){
+            throw new SnsApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("No Account associated withe email: %s", req.getEmail()));
+        }
+
+        String usernames = usernameList.stream().collect(Collectors.joining(" , "));
+        mailAuthService.sendUsernames(req.getEmail(), usernames);
 
         return Response.success();
     }
