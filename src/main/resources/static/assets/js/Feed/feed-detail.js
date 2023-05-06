@@ -44,7 +44,7 @@ function loadmoreComments(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(data.commentList[i].userDto.username == loginUser.username)
+            if(data.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
@@ -93,7 +93,7 @@ function setDetailPage(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(feedData.commentList[i].userDto.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
@@ -257,7 +257,7 @@ function getDetailPage_comment_others(data){
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userDto.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -301,7 +301,7 @@ function getDetailPage_comment_mine(data){
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userDto.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -491,6 +491,8 @@ function show() {
         $('#title').val(data.result.title);
         $('#content').val(data.result.content);
         $('#id').val(data.result.id);
+        $("#open_range").val(data.result.range).prop("selected", true);
+        $("#group_id").val(data.result.groupId).prop("selected", true);
     }
 }
 
