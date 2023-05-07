@@ -63,7 +63,7 @@ function initProfile(data){
 function profileContent(data) {
     return `<img
                         class="avatar-img rounded-circle"
-                        src="assets/images/albums/07.jpg"
+                        src="/assets/images/albums/07.jpg"
                         alt=""
                 />`;
 }
@@ -102,7 +102,7 @@ function getFeedBoxContentRemoveComment(data) {
                       <a href="/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
-                          src="assets/images/avatar/04.jpg"
+                          src="/assets/images/avatar/04.jpg"
                           alt=""
                         />
                       </a>
@@ -178,7 +178,7 @@ function getFeedBoxContentRemoveComment(data) {
                 <!-- Card img -->
                 <img
                   class="card-img"
-                  src="assets/images/post/3by2/01.jpg"
+                  src="/assets/images/post/3by2/01.jpg"
                   alt="Post"
                 />
                 <!-- Feed react START -->

@@ -36,12 +36,12 @@ function headerContent(data) {
       <a class="navbar-brand" href="/">
         <img
                 class="light-mode-item navbar-brand-item"
-                src="assets/images/logo.svg"
+                src="/assets/images/logo.svg"
                 alt="logo"
         />
         <img
                 class="dark-mode-item navbar-brand-item"
-                src="assets/images/logo.svg"
+                src="/assets/images/logo.svg"
                 alt="logo"
         />
       </a>
@@ -158,7 +158,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/avatar/01.jpg"
+                                src="/assets/images/avatar/01.jpg"
                                 alt=""
                         />
                       </div>
@@ -190,7 +190,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/avatar/02.jpg"
+                                src="/assets/images/avatar/02.jpg"
                                 alt=""
                         />
                       </div>
@@ -247,7 +247,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/logo/12.svg"
+                                src="/assets/images/logo/12.svg"
                                 alt=""
                         />
                       </div>
@@ -286,7 +286,7 @@ function headerContent(data) {
           >
             <img
                     class="avatar-img rounded-2"
-                    src="assets/images/albums/07.jpg"
+                    src="/assets/images/albums/07.jpg"
                     alt=""
             />
           </a>
@@ -301,7 +301,7 @@ function headerContent(data) {
                 <div class="avatar me-3">
                   <img
                           class="avatar-img rounded-circle"
-                          src="assets/images/avatar/07.jpg"
+                          src="/assets/images/avatar/07.jpg"
                           alt="avatar"
                   />
                 </div>
@@ -479,7 +479,7 @@ function leftNavContent(data) {
                   <div class="avatar avatar-xxs me">
                     <img
                             class="avatar-img rounded-circle"
-                            src="assets/images/albums/07.jpg"
+                            src="/assets/images/albums/07.jpg"
                             alt=""
                     />
                   </div>
