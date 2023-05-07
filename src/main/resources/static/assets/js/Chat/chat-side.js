@@ -42,7 +42,7 @@ function getFollowlistContent(data) {
     return `                <li  style="list-style: none; padding-left: 0px;">
                                     <div class="d-flex">
                                         <div class="avatar">
-                                            <img class="avatar-img rounded-circle" src="assets/images/avatar/11.jpg" alt=""> <!--사용자 프로필이미지 열기-->
+                                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/11.jpg" alt=""> <!--사용자 프로필이미지 열기-->
                                         </div>
                                         <div class="flex-grow-1 d-block">
                                             <input style="margin: 0.4rem;zoom: 1.5; float: right" class="sendUserCheck" type="checkbox" name="joinUserList" value="${data.username}" onclick="getJoinName()"/>

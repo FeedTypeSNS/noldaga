@@ -214,13 +214,13 @@ function getReactButtonsOthers(data){
 
 function getDetailPage_Feed(data){
     return `<!-- Fees images --><!-- 함수에 넣을 부분 시작 -->
-                            <img class="card-img rounded" src="assets/images/post/16by9/big/01.jpg" alt="">
+                            <img class="card-img rounded" src="/assets/images/post/16by9/big/01.jpg" alt="">
                             <!-- Feed meta START -->
                             <div class="d-flex align-items-center justify-content-between my-3">
                                 <div class="d-flex align-items-center">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-story me-2">
-                                        <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""> </a>
+                                        <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt=""> </a>
                                     </div>
                                     <!-- Info -->
                                     <div>
@@ -278,7 +278,7 @@ function getDetailPage_comment_others(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
@@ -322,7 +322,7 @@ function getDetailPage_comment_mine(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
