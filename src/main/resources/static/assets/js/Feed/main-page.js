@@ -5,7 +5,6 @@ function getUser() {
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         setProfile(resp);
-        getGroups();
         getFeeds();
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -134,7 +133,7 @@ function feedContent(data) {
                     <div>
                       <div class="nav nav-divider">
                         <h6 class="nav-item card-title mb-0">
-                          <a href="#">${data.userResponse.username} </a>
+                          ${data.userResponse.username}
                         </h6>
                         <span class="nav-item small"> ${data.modDate} </span>
                       </div>
