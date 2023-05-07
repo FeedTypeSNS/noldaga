@@ -2,6 +2,7 @@ package com.noldaga.controller;
 
 
 import com.noldaga.controller.request.*;
+import com.noldaga.controller.response.CodeIdResponse;
 import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserInfoResponse;
 import com.noldaga.controller.response.UserResponse;
@@ -17,9 +18,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.io.UnsupportedEncodingException;
 
 
 @RequiredArgsConstructor
@@ -75,6 +77,7 @@ public class UserController {
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }
 
+
     //내 유저정보 수정
     @PostMapping("/me/info")
     public Response<UserInfoResponse> modifyMyUserInfo(@Validated @RequestBody UserInfoModifyRequest req, Authentication authentication) {
@@ -83,18 +86,48 @@ public class UserController {
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }
 
-    @PostMapping("/me/email")
-    public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody MailModifyRequest req, Authentication authentication) {
-        //todo 이메일 인증 안해도 포스트맨으로 바로 가능하도록 주석처리
-//        mailAuthService.validateAuthenticatedEmail(req.getCodeId(), req.getEmail());
-        UserDto userDto = userService.modifyMyEmail(req.getEmail(), authentication.getName());
+    @PostMapping("/me/password")
+    public Response<UserInfoResponse> modifyMyPassword
+            (@Validated @RequestBody UserPasswordModifyRequest req, Authentication authentication) {
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        userService.matchPassword(req.getCurrentPassword(),loginUserDto.getPassword());
+
+        UserDto userDto = userService.modifyPassword(req.getNewPassword(), authentication.getName());
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }
 
-    @PostMapping("/me/password")
-    public Response<UserInfoResponse> modifyMyPassword
-            (@Validated @RequestBody UserPasswordModifyRequest req, Authentication authentication){
-        UserDto userDto =userService.modifyPassword(req.getCurrentPassword(),req.getNewPassword(),authentication.getName());
-        return Response.success(UserInfoResponse.fromUserDto(userDto));
+
+
+
+    //todo 회원정보수정에서이메일 수정시 비번 검증하고 이메일 수정해야함
+    @PostMapping("/me/validate-password")//비밀번호를 아는 상태면 코드를 보낼수 있음 : 비밀번호를 몰라도 되지만 다음단계에서 비밀번호 필요해서 미리 검증해줌
+    public Response<CodeIdResponse> sendCodeForEmail(@Validated @RequestBody UserEmailCodeRequest req, Authentication authentication) throws MessagingException, UnsupportedEncodingException {
+        UserDto userDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        userService.matchPassword(req.getPassword(),userDto.getPassword());
+
+        Integer codeId =mailAuthService.sendCodeForEmail(req.getEmail());//code_email
+
+        return Response.success(CodeIdResponse.of(codeId));
     }
+
+    @PostMapping("/me/email")//비밀번호를 아는 상태에서 코드를 맞춰야 이메일 변경가능
+    public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody UserMailModifyRequest req, Authentication authentication) {
+
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        userService.matchPassword(req.getPassword(),loginUserDto.getPassword());
+
+        String email= mailAuthService.validateCodeForEmail(req.getCodeId(),req.getCode()); //코드대조후 코드를 전송했던 이메일을 꺼내옴
+
+        UserDto resultUserDto =userService.modifyMyEmail(email, authentication.getName());
+
+
+        return Response.success(UserInfoResponse.fromUserDto(resultUserDto));
+    }
+
 }

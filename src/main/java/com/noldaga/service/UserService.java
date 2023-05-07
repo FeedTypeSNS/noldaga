@@ -65,15 +65,19 @@ public class UserService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         //등록이 되어있다면 password가 일치하는지 체크
-        if (!encoder.matches(password, user.getPassword())) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
-        }
+        matchPassword(password,user.getPassword());
 
         //토큰생성
         String token = JwtTokenUtils.generateToken(username, key, expiredTimeMs);
         generateTokenCookie(httpServletResponse,token);
 
         return token;
+    }
+
+    public void matchPassword(String passwordInput,String password ){
+        if (!encoder.matches(passwordInput, password)) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 
     public void validateDuplication(String username){
@@ -179,19 +183,16 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto modifyPassword(String currentPassword,String newPassword, String username) {
+    public UserDto modifyPassword(String newPassword, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
 
-        if (!encoder.matches(currentPassword, user.getPassword())) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
-        }
-
         user.modifyPassword(encoder.encode(newPassword));
+
         return UserDto.fromEntity(user);
     }
 
-    public int countByEmail(String email) {
+    public int countUserByEmail(String email) {
         return userRepository.countByEmail(email);
     }
 }
