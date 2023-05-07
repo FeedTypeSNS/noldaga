@@ -36,7 +36,7 @@ function init() {
     });
 }
 
-init();
+
 
 
 function loadmore(currentPage, groupId){
