@@ -225,9 +225,26 @@ JS libraries, plugins and custom scripts -->
 <script>
 
     let codeId;
+    let code;
     let authModal;
     let idCheckDone = false;
     let emailCheckDone = false;
+
+    //입력 검사
+    const usernameInput = document.getElementById('usernameInput');
+    const passwordInput = document.getElementById('psw-input');
+    const nicknameInput = document.getElementById('nicknameInput');
+    const emailInput = document.getElementById('emailInput');
+
+    const submitButton = document.getElementById('submitButton');
+    submitButton.disabled=true;
+
+
+    usernameInput.addEventListener('input',checkInputs);
+    passwordInput.addEventListener('input',checkInputs);
+    nicknameInput.addEventListener('input',checkInputs);
+    emailInput.addEventListener('input',checkInputs);
+
 
     //아이디 중복 검사 //todo 아이디 중복확인을 한후 아이디를 다시 바꾸는 상황에 대해서 대처해야함
     function checkDuplicate() {
@@ -260,11 +277,10 @@ JS libraries, plugins and custom scripts -->
         } else {
             passwordMessage.innerHTML = "비밀번호가 일치합니다.";
         }
-
     }
 
 
-    //이메일 인증 하기 //todo 인증후 이메일 바꾸는 경우 대응해야함
+    //이메일 인증 하기
     function mailAuth() {
         // 이메일 주소 가져오기
         const email = document.querySelector('input[name="email"]').value;
@@ -278,7 +294,11 @@ JS libraries, plugins and custom scripts -->
                     codeId = response.result.codeId;
                     authModal = new bootstrap.Modal(document.getElementById('authModal'))
                     authModal.show();
-                } else {
+                }
+                else if(response.resultCode==='EMAIL_LIMIT_EXCEEDED'){
+                    alert('해당이메일로 가입할 수 있는 횟수를 초과하셨습니다. 다른 이메일을 사용해 주세요.')
+                }
+                else {
                     alert('이메일전송에 실패했습니다 다시 시도해주세요')
                 }
             }
@@ -290,7 +310,7 @@ JS libraries, plugins and custom scripts -->
     //인증코드검사
     function checkCode() {
         console.log('인증코드검사함수')
-        const code = document.querySelector('#authCodeInput').value;
+        code = document.querySelector('#authCodeInput').value;
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/anonymous/join/validate-code', true);
         xhr.setRequestHeader('content-Type', 'application/json');
@@ -325,6 +345,7 @@ JS libraries, plugins and custom scripts -->
             // 폼 데이터를 JSON 형태로 직렬화
             let formData = new FormData(document.querySelector('form'));
             formData.append('codeId', codeId);
+            formData.append('code',code);
             let jsonData = {};
             formData.forEach(function (value, key) {
                 jsonData[key] = value;
@@ -343,29 +364,21 @@ JS libraries, plugins and custom scripts -->
                     alert('회원가입에 성공하였습니다')
                     window.location.href = "/login-form";
                 } else {
-                    //todo 실패시
+                    alert('회원가입에 실패하였습니다');
                 }
             };
-            xhr.onerror = function () {
-                // 요청 실패시 처리
-            };
+            // xhr.onerror = function () {
+            //     // 요청 실패시 처리
+            // };
             xhr.send(JSON.stringify(jsonData));
         });
     });
 
 
-    //입력 검사
-    const usernameInput = document.getElementById('usernameInput');
-    const passwordInput = document.getElementById('psw-input');
-    const nicknameInput = document.getElementById('nicknameInput');
-    const emailInput = document.getElementById('emailInput');
-
-    const submitButton = document.getElementById('submitButton');
-    submitButton.disabled=true;
-
 
     // 사용자가 아이디 입력 폼에서 텍스트를 입력할 때마다 호출되는 함수
     function checkInputs() {
+
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
         const nickname = nicknameInput.value.trim();
@@ -376,13 +389,8 @@ JS libraries, plugins and custom scripts -->
         }else{
           submitButton.disabled =false;
         }
+
     }
-
-    usernameInput.addEventListener('input',checkInputs);
-    passwordInput.addEventListener('input',checkInputs);
-    nicknameInput.addEventListener('input',checkInputs);
-    emailInput.addEventListener('input',checkInputs);
-
 
 </script>
 

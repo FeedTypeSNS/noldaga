@@ -45,7 +45,7 @@ public enum ErrorCode {
 
     UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
 
-    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value"), //@Validated 실패시
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Invalid data value"), //@Validated 실패시
 
 
     ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
@@ -53,6 +53,9 @@ public enum ErrorCode {
     //Group
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),//피드수정개발할때 추가됨
 
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "No Account associated with this email"),
+
+    EMAIL_LIMIT_EXCEEDED(HttpStatus.CONFLICT,"This Email has exceeded the limit")
     ;
 
     private HttpStatus status;

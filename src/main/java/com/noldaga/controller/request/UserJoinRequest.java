@@ -32,4 +32,8 @@ public class UserJoinRequest {
     @NotNull
     @NotBlank
     private Integer codeId;
+
+    @NotNull
+    @NotBlank
+    private String code;
 }

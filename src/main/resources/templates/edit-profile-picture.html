@@ -99,7 +99,7 @@
         <div class="card card-body text-center p-4 p-sm-5">
           <!-- Title -->
           <div class="position-absolute top-0 start-0 m-3">
-            <button class="btn btn-primary" onclick="history.back()">뒤로 가기</button>
+            <button class="btn btn-primary" onclick="window.location.href = document.referrer">뒤로 가기</button>
           </div>
           <h1 class="mt-3">프로필 수정</h1>
           <!-- Form START -->
@@ -112,7 +112,7 @@
             <!-- Email -->
 
             <div class="mb-3 input-group-lg">
-              <div class="mt-4" style="text-align: left;"><h5>닉네임</h5></div>
+              <label class="form-label">Email</label>
               <input type="text" name="nickname" class="form-control" value="">
             </div>
             <!-- New password -->
