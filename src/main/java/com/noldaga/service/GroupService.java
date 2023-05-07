@@ -5,9 +5,11 @@ import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.entity.Feed;
 import com.noldaga.domain.entity.Group;
+import com.noldaga.domain.entity.GroupMember;
 import com.noldaga.domain.entity.User;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.repository.GroupMemberRepository;
 import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GroupService {
 
+    private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
@@ -112,6 +115,15 @@ public class GroupService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
         }
 
+        //그룹에 속한 멤버들 가져오기
+        List<User> members = groupMemberRepository.findAllByGroup(group);
+
+        //그룹 멤버들 삭제
+        for(User member : members) {
+            groupMemberRepository.deleteByUser(member);
+        }
+
+        //그룹삭제
         groupRepository.deleteById(id);
     }
 
