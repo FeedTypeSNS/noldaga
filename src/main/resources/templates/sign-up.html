@@ -225,6 +225,7 @@ JS libraries, plugins and custom scripts -->
 <script>
 
     let codeId;
+    let code;
     let authModal;
     let idCheckDone = false;
     let emailCheckDone = false;
@@ -276,7 +277,6 @@ JS libraries, plugins and custom scripts -->
         } else {
             passwordMessage.innerHTML = "비밀번호가 일치합니다.";
         }
-
     }
 
 
@@ -310,7 +310,7 @@ JS libraries, plugins and custom scripts -->
     //인증코드검사
     function checkCode() {
         console.log('인증코드검사함수')
-        const code = document.querySelector('#authCodeInput').value;
+        code = document.querySelector('#authCodeInput').value;
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/anonymous/join/validate-code', true);
         xhr.setRequestHeader('content-Type', 'application/json');
@@ -345,6 +345,7 @@ JS libraries, plugins and custom scripts -->
             // 폼 데이터를 JSON 형태로 직렬화
             let formData = new FormData(document.querySelector('form'));
             formData.append('codeId', codeId);
+            formData.append('code',code);
             let jsonData = {};
             formData.forEach(function (value, key) {
                 jsonData[key] = value;
@@ -377,6 +378,7 @@ JS libraries, plugins and custom scripts -->
 
     // 사용자가 아이디 입력 폼에서 텍스트를 입력할 때마다 호출되는 함수
     function checkInputs() {
+
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
         const nickname = nicknameInput.value.trim();
@@ -387,6 +389,7 @@ JS libraries, plugins and custom scripts -->
         }else{
           submitButton.disabled =false;
         }
+
     }
 
 </script>
