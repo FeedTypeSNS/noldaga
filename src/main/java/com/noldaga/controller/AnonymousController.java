@@ -28,7 +28,7 @@ public class AnonymousController {
 
     private final UserService userService;
     private final MailAuthService mailAuthService;
-    private final int MAX_ACCOUNTS_PER_EMAIL=2;
+    private final int MAX_ACCOUNTS_PER_EMAIL=30;
 
     //todo 회원가입이라는 하나의 트랜잭션안에 여러번의 api를 통해 인증을 하는데, 서버쪽에서 상태를 유지해야함.
     @PostMapping("/join/validate-username") //회원가입 1 : 아이디중복검사
