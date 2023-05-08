@@ -115,7 +115,7 @@ function getMyChatList(data){
             <a class="nav-link" id="chat-${data.roomInfo.id}-tap" data-bs-toggle="pill" role="tab" onclick="getChatDetailRoom(this)">
                 <div class="d-flex">
                     <div  class="flex-shrink-0 avatar me-2" id="joinListImg${data.roomInfo.id}">
-                        <!--<img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt="">--><!--img url 넣어줘야함 회원의-->
+                        <!--<img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt="">--><!--img url 넣어줘야함 회원의-->
                     </div>    
                     <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
@@ -160,7 +160,7 @@ function getBody(){
 }
 
 function getOneImg(data){
-    return`<img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""><p style="display: none">${data.joinPeoples[0].username}</p>`;
+    return`<img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""><p style="display: none">${data.joinPeoples[0].username}</p>`;
     //img url 걸어줘야함. 아직 없으니 임시 대체
 }
 //한사람일 경우 img 태그만 필요..
@@ -168,11 +168,11 @@ function getOneImg(data){
 function getTwoImg(data){
     return`<ul class="avatar-group avatar-group-two">
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[0].username}</p>
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[1].username}</p>
                         </li>
                     </ul>
@@ -182,15 +182,15 @@ function getTwoImg(data){
 function getThreeImg(data){
     return`<ul class="avatar-group avatar-group-three">
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[0].username}</p>
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[1].username}</p>
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[2].username}</p>
                         </li>
                     </ul>
@@ -200,19 +200,19 @@ function getThreeImg(data){
 function getFourImg(data){
     return `<ul class="avatar-group avatar-group-four">
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/06.jpg" alt="avatar">
                              <p style="display: none">${data.joinPeoples[0].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt="avatar">
                              <p style="display: none">${data.joinPeoples[1].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/08.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[2].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/placeholder.jpg" alt="avatar">
+                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/placeholder.jpg" alt="avatar">
                             <p style="display: none">${data.joinPeoples[3].username}</p>
                         </li>
                     </ul>`;

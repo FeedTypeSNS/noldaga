@@ -74,11 +74,14 @@ let post = {
     },
 
     enterkey:function(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const group_id = urlParams.get('id');
         let data={
             content: $("#enter-content-input").val(),
-            title: "제목이 없습니다.",
+            title: $("#enter-content-input").val().substring(0, 10),
             range: "0",
-            groupId: "0"
+            groupId: group_id
         };
 
         $.ajax({
@@ -89,7 +92,7 @@ let post = {
             dataType: "json"
         }).done(function(resp){
             alert('포스팅 완료');
-            location.href = "/";
+            location.reload();
         }).fail(function(error){
             alert('포스팅 실패');
             alert(JSON.stringify(error));

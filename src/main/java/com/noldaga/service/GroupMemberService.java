@@ -54,6 +54,15 @@ public class GroupMemberService {
     }
 
     @Transactional
+    public List<User> getGroupMemberList(Long groupId) {
+        // 그룹 정보
+        Group group = groupRepository.findById(groupId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", groupId)));
+
+        return groupMemberRepository.findAllByGroup(group);
+    }
+
+    @Transactional
     public void unregisterGroup(Long id, String username) {
         //유저확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -89,4 +98,20 @@ public class GroupMemberService {
         return groupMemberDto;
     }
 
+    @Transactional
+    public void expelGroup(Long group_id, Long user_id, String username) {
+        //유저확인
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", user_id)));
+
+        //그룹확인
+        Group group = groupRepository.findById(group_id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", group_id)));
+
+        //가입여부확인
+        GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", group_id)));
+
+        groupMemberRepository.deleteById(groupMember.getId());
+    }
 }

@@ -5,6 +5,7 @@ import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.GroupMemberDto;
 import com.noldaga.domain.entity.Group;
 import com.noldaga.domain.entity.GroupMember;
+import com.noldaga.domain.entity.User;
 import com.noldaga.service.GroupMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,12 @@ public class GroupMemberController {
         return Response.success(groupList2);
     }
 
+    @GetMapping("/members/group/{group_id}") // 그룹에 가입된 멤버리스트
+    public Response<List<User>> getGroupMemberList(@PathVariable Long group_id) {
+        List<User> groupMemberList = groupMemberService.getGroupMemberList(group_id);
+        return Response.success(groupMemberList);
+    }
+
     @DeleteMapping("/group/member/{group_id}")
     public Response<Void> unregisterGroup(@PathVariable Long group_id,  Authentication authentication) {
         groupMemberService.unregisterGroup(group_id, authentication.getName());
@@ -43,5 +50,12 @@ public class GroupMemberController {
         GroupMemberDto groupMemberDto = groupMemberService.getGroupMember(group_id, authentication.getName());
 
         return Response.success(groupMemberDto);
+    }
+
+    @DeleteMapping("/group/member/{group_id}/{user_id}")
+    public Response<Void> expelGroup(@PathVariable Long group_id, @PathVariable Long user_id,  Authentication authentication) {
+        groupMemberService.expelGroup(group_id, user_id, authentication.getName());
+
+        return Response.success();
     }
 }

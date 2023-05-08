@@ -665,11 +665,11 @@ var e = {
 				showMessage: true,
 				messageContainer: '#pswmeter-message',
 				messagesList: [
-					'Write your password...',
-					'Easy peasy!',
-					'That is a simple one',
-					'That is better',
-					'Yeah! that password rocks ;)'
+					'비밀번호를 입력해주세요...',
+					'너무 쉬운 번호입니다!',
+					'좋은 비밀번호 입니다.',
+					'훨씬 좋습니다.',
+					'너무나 좋은 비밀번호입니다 ;)'
 				],
 				height: 8,
 				borderRadius: 4,
