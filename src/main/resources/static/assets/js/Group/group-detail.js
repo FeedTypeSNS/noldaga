@@ -40,6 +40,7 @@ function init2(user, groupMember) {
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         initDetailGroupPage(resp.result, user, groupMember);
+        initDetailGroupPostPage(resp.result, user, groupMember);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -174,3 +175,20 @@ function getDetailGroupPage(group, user, groupMember) {
 </div>
 <!-- Modal modify group END -->`;
 }
+
+/* ----------------------------------------------------------------- */
+function initDetailGroupPostPage(group, user, groupMember) {
+    let GroupPostBox = document.querySelector("#groupPostBox");
+
+    if(user.id === group.userDto.id) {
+        GroupPostBox.style.display = "";
+    } else if(groupMember != null ){
+        if(groupMember.userDto.id === user.id) {
+            GroupPostBox.style.display = "";
+        }
+    } else {
+        GroupPostBox.style.display = "none";
+    }
+}
+
+
