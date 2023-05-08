@@ -90,7 +90,7 @@ public class AnonymousController {
         CodeUserDto codeUserDto = mailAuthService.validateCodeForPassword(req.getCodeId(), req.getCode());
 
         String newPassword = userService.initPassword(codeUserDto.getUsername());
-        mailAuthService.sendPassword(codeUserDto.getEmail(), newPassword);
+        mailAuthService.sendPassword(codeUserDto.getEmail(), newPassword); //메일 인증에 성공했다면(코드를 잘 입력했다면 여기서 에러날 일은 없긴함 : 네이버 서버만 문제 없으면)
 
         return Response.success();
     }

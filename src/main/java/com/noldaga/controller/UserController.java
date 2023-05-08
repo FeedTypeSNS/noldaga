@@ -86,6 +86,7 @@ public class UserController {
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }
 
+    //비밀번호 수정
     @PostMapping("/me/password")
     public Response<UserInfoResponse> modifyMyPassword
             (@Validated @RequestBody UserPasswordModifyRequest req, Authentication authentication) {
@@ -101,6 +102,7 @@ public class UserController {
 
 
 
+    //이메일 수정시 비밀번호 확인
     //todo 회원정보수정에서이메일 수정시 비번 검증하고 이메일 수정해야함
     @PostMapping("/me/validate-password")//비밀번호를 아는 상태면 코드를 보낼수 있음 : 비밀번호를 몰라도 되지만 다음단계에서 비밀번호 필요해서 미리 검증해줌
     public Response<CodeIdResponse> sendCodeForEmail(@Validated @RequestBody UserEmailCodeRequest req, Authentication authentication) throws MessagingException, UnsupportedEncodingException {
@@ -114,6 +116,8 @@ public class UserController {
         return Response.success(CodeIdResponse.of(codeId));
     }
 
+
+    //이메일 수정
     @PostMapping("/me/email")//비밀번호를 아는 상태에서 코드를 맞춰야 이메일 변경가능
     public Response<UserInfoResponse> modifyMyEmail(@Validated @RequestBody UserMailModifyRequest req, Authentication authentication) {
 
