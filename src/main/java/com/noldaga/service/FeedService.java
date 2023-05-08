@@ -212,15 +212,15 @@ public class FeedService {
         Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s is not founded", feedId)));
 
-        //권한확인
-        if (feed.getUser() != user) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
-        }
+//        //권한확인
+//        if (feed.getUser() != user) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
+//        }
 
         //해시태그 지우기
         hashTagService.deleteHashTag(feedId);
         //delete
-        feedRepository.deleteById(feedId);
+        feedRepository.delete(feed);
     }
 
 
