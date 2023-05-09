@@ -71,7 +71,12 @@ function headerContent(data) {
                 class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
         >
           <div class="nav-item w-100">
-            <form class="rounded position-relative">
+              <button
+                      class="btn bg-transparent px-2 py-1 position-absolute"
+                      type="button"
+              >
+                <i class="bi bi-search fs-5"> </i>
+              </button>
               <input
                       class="form-control ps-5 bg-light"
                       type="search"
@@ -79,13 +84,6 @@ function headerContent(data) {
                       aria-label="Search"
                       id="search-content"
               />
-              <button
-                      class="btn bg-transparent px-2 py-0 position-absolute top-50 start-0 translate-middle-y"
-                      type="button"
-              >
-                <i class="bi bi-search fs-5"> </i>
-              </button>
-            </form>
           </div>
         </div>
         <!-- Nav Search END -->
@@ -544,5 +542,5 @@ function sidebarToggleEnd() {
 }
 
 function search(data){
-    window.location.assign("http://localhost:8800/search?query");
+    window.location.href = "/searchfeed?q="+data;
 }

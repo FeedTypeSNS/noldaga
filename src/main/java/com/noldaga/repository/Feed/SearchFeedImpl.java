@@ -20,6 +20,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
     QFeed feed = QFeed.feed;
     QFollow follow = QFollow.follow;
     QStoreFeed storeFeed = QStoreFeed.storeFeed;
+    QFeedTag feedTag = QFeedTag.feedTag;
 
     public SearchFeedImpl() {
         super(Feed.class);
@@ -101,6 +102,33 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
                 .join(storeFeed).on(feed.id.eq(storeFeed.feed.id))
                 .where(storeFeed.user.id.eq(userId))
                 .orderBy(storeFeed.regDate.desc());
+
+        this.getQuerydsl().applyPagination(pageable,query);
+        List<Feed> feedList = query.fetch();
+        long count = query.fetchCount();
+
+        return new PageImpl<>(feedList,pageable,count);
+    }
+
+    @Override
+    public Page<Feed> findAllBySearch(String q, Pageable pageable) {
+        JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
+                .where((feed.content.contains(q)).or(feed.title.contains(q)))
+                .orderBy(feed.regDate.desc());
+
+        this.getQuerydsl().applyPagination(pageable,query);
+        List<Feed> feedList = query.fetch();
+        long count = query.fetchCount();
+
+        return new PageImpl<>(feedList,pageable,count);
+    }
+
+    @Override
+    public Page<Feed> findAllByHashTag(Long hashTagId, Pageable pageable) {
+        JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
+                .join(feedTag).on(feed.id.eq(feedTag.feed.id))
+                .where(feedTag.hashTag.id.eq(hashTagId))
+                .orderBy(feed.modDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
