@@ -143,6 +143,8 @@ function profileContentMine(data) {
 }
 
 function profileContentOther(data) {
+    var profileMessage = (data.profileMessage==="" || data.profileMessage==null)? "" : data.profileMessage;
+
     return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
@@ -157,7 +159,7 @@ function profileContentOther(data) {
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
                   <p class="mb-0 h6">${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
-                  <h1 class="mb-0 h5">${data.profileMessage}</h1>
+                  <h1 class="mb-0 h5">${profileMessage}</h1>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
