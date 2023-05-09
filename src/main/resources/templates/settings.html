@@ -1332,6 +1332,7 @@ JS libraries, plugins and custom scripts -->
                 if(response.resultCode==='SUCCESS'){
                     alert('비밀번호 수정완료');
                     clearPassword();
+                    checkPasswordInputs();
                 }
                 else if(response.resultCode==='INVALID_PASSWORD'){
                     alert('비밀번호가 틀렸습니다.');
@@ -1399,6 +1400,7 @@ JS libraries, plugins and custom scripts -->
 
                     alert('이메일이 변경되었습니다');
                     clearPassword();
+                    checkEmailInputs();
                     authModal.hide();
 
 
