@@ -34,6 +34,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final StoreFeedRepository storeFeedRepository;
     private final FollowRepository followRepository;
     private final HashTagService hashTagService;
 
@@ -176,6 +177,24 @@ public class FeedService {
     }
 
     @Transactional
+    public List<FeedDto> getHashTagFeed(Long hashTagId, int page,String username){
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        Pageable pageable = PageRequest.of(page,20);
+        Page<Feed> feedListPagination = feedRepository.findAllByHashTag(hashTagId,pageable);
+
+        List<FeedDto> feedDtoList = new ArrayList<>();
+
+        feedListPagination.getContent().forEach(feed -> {
+            FeedDto feedDto = FeedDto.fromEntity(feed);
+            feedDtoList.add(feedDto);
+        });
+        return feedDtoList;
+    }
+
+    @Transactional
     public FeedDto modify(FeedModifyRequest request, Long feedId, String username) {
         //유저확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -212,18 +231,18 @@ public class FeedService {
         Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s is not founded", feedId)));
 
-        //권한확인
-        if (feed.getUser() != user) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
-        }
+//        //권한확인
+//        if (feed.getUser() != user) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
+//        }
 
         //해시태그 지우기
         hashTagService.deleteHashTag(feedId);
         //delete
-        feedRepository.deleteById(feedId);
+        if(storeFeedRepository.findByFeedId(feedId)>0){//저장한 사람이 한명이라도 있으면 삭제하지않고 업데이트로 진행한다
+            feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+        }
+        else
+            feedRepository.delete(feed);
     }
-
-
-
-
 }

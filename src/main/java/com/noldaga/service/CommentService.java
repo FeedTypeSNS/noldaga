@@ -101,10 +101,10 @@ public class CommentService{
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
 
-        //권한있나확인
-        if (comment.getUser().getId() != user.getId()) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
-        }
+//        //권한있나확인 -> 권한이 있어야만 삭제 버튼이 보이므로 재확인 필요 없음
+//        if (comment.getUser().getId() != user.getId()) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
+//        }
 
         comment.change(request.getContent());
         Comment changedComment = commentRepository.save(comment);
@@ -122,11 +122,11 @@ public class CommentService{
         //답글 확인
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.COMMENT_NOT_FOUND, String.format("%s not founded", commentId)));
-
-        //권한있나확인
-        if (comment.getUser().getId() != user.getId()) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
-        }
+//
+//        //권한있나확인 -> 권한이 있어야만 삭제 버튼이 보이므로 재확인 필요 없음
+//        if (comment.getUser().getId() != user.getId()) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, commentId));
+//        }
 
         commentRepository.deleteById(commentId);
 
