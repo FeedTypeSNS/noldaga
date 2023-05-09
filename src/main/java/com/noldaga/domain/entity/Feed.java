@@ -20,11 +20,11 @@ import java.util.List;
 
 //@Builder
 //@AllArgsConstructor
+//@SQLDelete(sql = "UPDATE feed SET del_date = current_timestamp WHERE feed_id = ?")
+//@Where(clause = "del_date is null")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor
-@Where(clause = "del_date is null")
-@SQLDelete(sql = "UPDATE feed SET del_date = current_timestamp WHERE feed_id = ?")
 @Table(name="feed")
 @Entity
 public class Feed {
@@ -67,8 +67,8 @@ public class Feed {
     @Column(nullable = false, name="mod_date")
     private LocalDateTime modDate;
 
-    @Column(name = "del_date")
-    private LocalDateTime delDate;
+//    @Column(name = "del_date")
+//    private LocalDateTime delDate;
 
     @Column(name="total_view")
     private long totalView; //default로 0들어가게 long설정
@@ -80,14 +80,17 @@ public class Feed {
     private long likeCount; //default로 0들어가게 long설정
 
  //   @JsonIgnoreProperties({"feed,user"})
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comment;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
     private List<FeedTag> feedTags;
 
-//    @OneToMany(mappedBy = "feed")
-//    private List<FeedLike> feedLikes;
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    private List<FeedLike> feedLikes;
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    private List<StoreFeed> storeFeeds;
 
     private Feed(String title, String content, long groupId, int range, User user) {
         this.title = title;

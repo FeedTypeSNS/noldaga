@@ -91,6 +91,7 @@ function profileContent(data) {
 function setFeedsContent(data) {
 
     for(let i=0; i<data.length; i++){
+        if(data[i].title === "삭제된 게시물입니다.") continue;
         let feedsBox = document.querySelector("#feed");
 
         //카드 형식의 피드
