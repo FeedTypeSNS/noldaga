@@ -31,7 +31,6 @@ public class PageController {
 
     @GetMapping("/")
     public String home(){
-        //return "index_removeHeader";
         return "index";
     }
 
@@ -48,6 +47,26 @@ public class PageController {
     @GetMapping("/save")
     public String mypageSave(){
         return "my-profile-save";
+    }
+
+    @GetMapping("/searchfeed")
+    public String searchFeed(){
+        return "search-feed";
+    }
+
+    @GetMapping("/searchhash")
+    public String searchHashTag(){
+        return "search-hashTag";
+    }
+
+    @GetMapping("/hashtag")
+    public String hashtagFeeds(){
+        return "search-hashTag-detail";
+    }
+
+    @GetMapping("/searchpeople")
+    public String searchPeople(){
+        return "search-people";
     }
 
     @GetMapping("/chat")
