@@ -1,3 +1,5 @@
+var page = 0;
+
 function makeSearchMenu(query){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -21,25 +23,20 @@ function searchMenuContent(queryString){
 }
 
 function getSearchFeeds(searchQuery){
-    var page = 0;
 
     $.ajax({
         type: "GET",
         url: "/api/search/feed/"+searchQuery+"/"+page,
         dataType: "json"
     }).done(function(resp){
-        setSearchFeeds(resp.result);
+        setSearchFeeds(resp.result,page);
     }).fail(function(error){
         alert(JSON.stringify(error));
-    });
-
-    $("#loadmore-button").on("click",()=>{
-        loadmore(++page);
     });
 }
 
 
-function setSearchFeeds(feeds){
+function setSearchFeeds(feeds,page){
     for(let i=0; i<feeds.length; i++){
         let feedBox = document.querySelector("#search-feed-content");
 
@@ -71,6 +68,7 @@ function setFeedCardContent(feed) {
                   <h5><a href="/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
                   <div class="d-none d-sm-inline-block">
                     <p class="mb-2">${feed.content}</p>
+                    <p class="mb-2">${feed.userResponse.username}</p>
                     <!-- BLog date -->
                     <a class="small text-secondary" href="#!"> <i class="bi bi-calendar-date pe-1"></i> ${feed.modDate}</a>
                   </div>
@@ -79,12 +77,28 @@ function setFeedCardContent(feed) {
 }
 
 function setLoadMoreButton(){
-    return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-                <span class="load-text"> Load more connections </span>
+    return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true" onclick="loadmoreSearchFeed(++page)">
+                <span class="load-text"> 더보기 </span>
                 <div class="load-icon">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
                 </div>
               </a>`;
+}
+
+function loadmoreSearchFeed(page){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const searchQuery = urlParams.get('q');
+
+    $.ajax({
+        type: "GET",
+        url: "/api/search/feed/"+searchQuery+"/"+page,
+        dataType: "json"
+    }).done(function(resp){
+        setSearchFeeds(resp.result,page);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
 }

@@ -151,7 +151,10 @@ Header END -->
 
         <!-- Main content START -->
         <div class="col-lg">
-          <div class="bg-mode p-4" id="search-hashTag-content">
+          <div class="bg-mode p-4">
+            <div id="search-hashTag-content">
+
+            </div>
             <!-- 해시태그하나 -->
             <!-- 구분선-->
             <!-- 해시태그하나 -->
@@ -184,7 +187,7 @@ Header END -->
       <div class="modal-content">
         <!-- Modal feed header START -->
         <div class="modal-header">
-          <h5 class="modal-title" id="modalLabelCreateFeed">Create post</h5>
+          <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
           <button
                   type="button"
                   class="btn-close"
@@ -212,7 +215,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="1"
-                              placeholder="title..."
+                              placeholder="제목"
                               autofocus
                               id="title"
                       ></textarea>
@@ -221,7 +224,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="4"
-                              placeholder="Share your thoughts..."
+                              placeholder="내용"
                               autofocus
                               id="content"
                       ></textarea>
@@ -235,7 +238,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Photo"
+                      title="사진"
                       for="uploadFile"
               >
                 <i class="bi bi-image-fill"></i>
@@ -246,7 +249,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Video"
+                      title="비디오"
               >
                 <i class="bi bi-camera-reels-fill"></i>
               </a>
@@ -255,7 +258,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Events"
+                      title="이벤트"
               >
                 <i class="bi bi-calendar2-event-fill"></i>
               </a>
@@ -264,7 +267,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Feeling/Activity"
+                      title="기분/활동"
               >
                 <i class="bi bi-emoji-smile-fill"></i>
               </a>
@@ -273,7 +276,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Check in"
+                      title="위치태그"
               >
                 <i class="bi bi-geo-alt-fill"></i>
               </a>
@@ -282,7 +285,7 @@ Header END -->
                       href="#"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
-                      title="Tag people on top"
+                      title="회원태그"
               >
                 <i class="bi bi-tag-fill"></i>
               </a>
@@ -302,8 +305,8 @@ Header END -->
                         data-position="top"
                         data-search-enabled="false"
                 >
-                  <option value=0>Public</option>
-                  <option value=1>Friends</option>
+                  <option value=0>공개</option>
+                  <option value=1>친구 공개</option>
                 </select>
               </div>
               <div class="col-sm-4">
@@ -313,13 +316,13 @@ Header END -->
                         data-position="top"
                         data-search-enabled="false"
                 >
-                  <option value=0>MyPage</option>
+                  <option value=0>마이페이지</option>
                 </select>
                 <!-- Button -->
               </div>
 
               <div class="col-sm-4 text-sm-end">
-                <button type="button" id="posting-button" class="btn btn-success-soft">Post</button>
+                <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
               </div>
             </div>
           </div>

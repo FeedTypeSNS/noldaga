@@ -103,7 +103,7 @@ public class FeedService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         //lmit은 변경예정
-        Pageable pageable = PageRequest.of(page,5);
+        Pageable pageable = PageRequest.of(page,50);
         Page<Feed> feedListPagination = null;
 
         //공개범위 1(부분공개),0(전체)
@@ -164,7 +164,7 @@ public class FeedService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        Pageable pageable = PageRequest.of(page,100);
+        Pageable pageable = PageRequest.of(page,50);
         Page<Feed> feedListPagination = feedRepository.MyStoredFeed(user.getId(),pageable);
 
         List<FeedDto> feedDtoList = new ArrayList<>();

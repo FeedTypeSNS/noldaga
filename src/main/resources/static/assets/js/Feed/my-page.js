@@ -79,7 +79,7 @@ function profileContentMine(data) {
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </a>
+                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> 프로필 수정 </a>
                   <div class="dropdown">
                     <!-- Card share action menu -->
                     <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">

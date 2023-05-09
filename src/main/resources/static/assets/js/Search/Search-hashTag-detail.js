@@ -67,6 +67,7 @@ function setHashTagFeedsContent(feed) {
                   <h5><a href="/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
                   <div class="d-none d-sm-inline-block">
                     <p class="mb-2">${feed.content}</p>
+                    <p class="mb-2">${feed.userResponse.username}</p>
                     <!-- BLog date -->
                     <a class="small text-secondary" href="#!"> <i class="bi bi-calendar-date pe-1"></i> ${feed.modDate}</a>
                   </div>
@@ -76,7 +77,7 @@ function setHashTagFeedsContent(feed) {
 
 function setLoadMoreButton(){
     return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-                <span class="load-text"> Load more connections </span>
+                <span class="load-text"> 더보기 </span>
                 <div class="load-icon">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>

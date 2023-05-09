@@ -48,7 +48,7 @@ public class SearchService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        Pageable pageable = PageRequest.of(0,20);
+        Pageable pageable = PageRequest.of(0,100);
         List<User> userList = userRepository.findAllBySearch(query);
 
         List<UserDto> userDtoList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class SearchService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        Pageable pageable = PageRequest.of(0,20);
+        Pageable pageable = PageRequest.of(page,20);
         Page<HashTag> feedListPagination = hashTagRepository.findAllBySearch(query,pageable);
 
         List<HashTagDto> hashTagDtoList = new ArrayList<>();

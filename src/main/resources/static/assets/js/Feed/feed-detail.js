@@ -56,7 +56,7 @@ function getFeedData(loginUser) {
     });
 
     $("#comment-loadmore-button").on("click",()=>{
-        this.loadmoreComments(responseData,++comment_page,loginUser);
+        loadmoreComments(responseData,++comment_page,loginUser);
     });
 }
 
@@ -71,7 +71,7 @@ function loadmoreComments(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(data.commentList[i].userResponse.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임

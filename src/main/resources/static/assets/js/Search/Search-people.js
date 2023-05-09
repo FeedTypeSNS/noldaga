@@ -72,14 +72,14 @@ function setFeedCardContent(user) {
               </div>
               <!-- Button -->
               <div class="ms-md-auto d-flex">
-                <button class="btn btn-danger-soft btn-sm mb-0 me-2"> Follow </button>
-                <button class="btn btn-primary-soft btn-sm mb-0"> Message </button>
+                <button class="btn btn-danger-soft btn-sm mb-0 me-2"> follow </button>
+                <button class="btn btn-primary-soft btn-sm mb-0"> chatting </button>
               </div>`;
 }
 
 function setLoadMoreButton(){
     return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-                <span class="load-text"> Load more connections </span>
+                <span class="load-text"> 더보기 </span>
                 <div class="load-icon">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
