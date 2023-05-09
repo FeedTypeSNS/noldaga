@@ -53,6 +53,12 @@ public enum ErrorCode {
     //Group
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),//피드수정개발할때 추가됨
 
+
+    //File
+    CONVERT_MULTIPART_FILE_FAILE(HttpStatus.CONFLICT, "Conversion of multipart file failed."),
+    FILE_NOT_EXIST(HttpStatus.BAD_REQUEST, "This file does not exist."),
+    FILE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "Wrong image format. (Must be jpg,jpeg,png format)"),
+
     ;
 
     private HttpStatus status;

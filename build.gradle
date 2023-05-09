@@ -81,10 +81,10 @@ dependencies {
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'com.vladmihalcea:hibernate-types-52:2.20.0' //for jsonb
 
-    /*//view
-    implementation 'org.webjars.bower:vue:2.5.16'
-    implementation 'org.webjars.bower:axios:0.17.1'
-    implementation 'com.google.code.gson:gson:2.8.0'*/
+    //AWS S3
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.290')
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }
 
