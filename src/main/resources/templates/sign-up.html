@@ -230,6 +230,11 @@ JS libraries, plugins and custom scripts -->
     let idCheckDone = false;
     let emailCheckDone = false;
 
+    let usernameAuthenticated;
+    let emailAuthenticated;
+    let usernameHolder;
+    let emailHolder;
+
     //입력 검사
     const usernameInput = document.getElementById('usernameInput');
     const passwordInput = document.getElementById('psw-input');
@@ -258,6 +263,8 @@ JS libraries, plugins and custom scripts -->
                 const response = JSON.parse(this.responseText);
                 if (response.resultCode === 'SUCCESS') {
                     idCheckDone = true;
+
+                    usernameAuthenticated =username;
                     alert('사용 가능한 아이디입니다.');
                 } else {
                     alert('중복된 아이디입니다. 다른 아이디를 사용해주세요.');
@@ -302,6 +309,7 @@ JS libraries, plugins and custom scripts -->
             }
         }
         xhr.send(JSON.stringify({email: email}));
+        emailHolder=email;
     }
 
 
@@ -317,6 +325,7 @@ JS libraries, plugins and custom scripts -->
                 const response = JSON.parse(this.responseText);
                 if (response.resultCode === 'SUCCESS') {
                     emailCheckDone = true;
+                    emailAuthenticated = emailHolder;
                     authModal.hide();
                 } else {
                     alert('잘못된 코드를 입력 하셨습니다.')
@@ -335,7 +344,7 @@ JS libraries, plugins and custom scripts -->
         document.querySelector('form').addEventListener('submit', function (e) {
             // 폼 전송 막기
             e.preventDefault();
-            if (!idCheckDone || !emailCheckDone) {
+            if (!idCheckDone || !emailCheckDone ) {
                 alert('아이디 중복체크 혹은 이메일 인증이 안된것이 있습니다.')
                 return;
             }
@@ -385,6 +394,18 @@ JS libraries, plugins and custom scripts -->
             submitButton.disabled = true;
         } else {
             submitButton.disabled = false;
+        }
+        if(usernameAuthenticated!==username){
+            idCheckDone=false;
+        }
+        else{
+            idCheckDone=true;
+        }
+        if(emailAuthenticated!==email){
+            emailCheckDone=false;
+        }
+        else{
+            emailCheckDone=true;
         }
 
     }
