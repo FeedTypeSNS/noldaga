@@ -2,9 +2,11 @@ package com.noldaga.service;
 
 import com.noldaga.domain.CommentLikeDto;
 import com.noldaga.domain.FeedLikeDto;
+import com.noldaga.domain.alarm.*;
 import com.noldaga.domain.entity.*;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.Comment.CommentRepository;
 import com.noldaga.repository.CommentLikeRepository;
 import com.noldaga.repository.Feed.FeedRepository;
@@ -25,6 +27,8 @@ public class LikeService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
+
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public int feedLikeCheck(Long feedId, String username){
@@ -58,6 +62,10 @@ public class LikeService {
 
         //피드 좋아요+1
         feed.plusLikeCount();
+
+
+        alarmRepository.save(Alarm.of(feed.getUser().getId(), AlarmType.NEW_LIKE_ON_FEED,
+                AlarmArgs.of(UserObject.from(user), FeedObject.from(feed))));
 
         return FeedLikeDto.fromEntity(feedLiked);
     }
