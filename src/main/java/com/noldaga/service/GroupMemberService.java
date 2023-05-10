@@ -37,7 +37,7 @@ public class GroupMemberService {
                 new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", groupId)));
 
         //그룹 가입
-        GroupMember groupMember = groupMemberRepository.save(GroupMember.of(group, user));
+        GroupMember groupMember = groupMemberRepository.save(GroupMember.of(group, user, 0));
         GroupMemberDto groupMemberDto = GroupMemberDto.fromEntity(groupMember);
 
         return groupMemberDto;
@@ -113,5 +113,64 @@ public class GroupMemberService {
                 new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", group_id)));
 
         groupMemberRepository.deleteById(groupMember.getId());
+    }
+
+    @Transactional
+    public GroupMemberDto favorGroup(Long id, String username) {
+
+        //유저확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //그룹확인
+        Group group = groupRepository.findById(id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
+
+        //가입여부확인
+        GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
+
+
+
+        groupMember.favorChange(1);
+        groupMemberRepository.save(groupMember);
+
+        GroupMemberDto favorGroup = GroupMemberDto.fromEntity(groupMember);
+
+        return favorGroup;
+    }
+
+    @Transactional
+    public GroupMemberDto unfavorGroup(Long id, String username) {
+
+        //유저확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        //그룹확인
+        Group group = groupRepository.findById(id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
+
+        //가입여부확인
+        GroupMember groupMember = groupMemberRepository.findByGroupAndUser(group, user).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", id)));
+
+
+
+        groupMember.favorChange(0);
+        groupMemberRepository.save(groupMember);
+
+        GroupMemberDto unfavorGroup = GroupMemberDto.fromEntity(groupMember);
+
+        return unfavorGroup;
+    }
+
+    @Transactional
+    public List<Group> getFavorGroupList(String username) {
+        // 유저 정보
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        return groupMemberRepository.findAllByUserAndFavor(user);
     }
 }
