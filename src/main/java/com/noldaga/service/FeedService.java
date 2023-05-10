@@ -247,11 +247,13 @@ public class FeedService {
         //해시태그 지우기
         hashTagService.deleteHashTag(feedId);
         //delete
-        if(storeFeedRepository.findByFeedId(feedId)>0){//저장한 사람이 한명이라도 있으면 삭제하지않고 업데이트로 진행한다
-            feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
-            feed.setDelDate(LocalDateTime.now());
-        }
-        else
-            feedRepository.delete(feed);
+        feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+        feed.setDelDate(LocalDateTime.now());
+//        if(storeFeedRepository.findByFeedId(feedId)>0){//저장한 사람이 한명이라도 있으면 삭제하지않고 업데이트로 진행한다
+//            feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+//            feed.setDelDate(LocalDateTime.now());
+//        }
+//        else
+//            feedRepository.delete(feed);
     }
 }

@@ -67,8 +67,9 @@ public class Feed {
     @Column(nullable = false, name="mod_date")
     private LocalDateTime modDate;
 
-//    @Column(name = "del_date")
-//    private LocalDateTime delDate;
+    @Setter
+    @Column(name = "del_date")
+    private LocalDateTime delDate;
 
     @Column(name="total_view")
     private long totalView; //default로 0들어가게 long설정
@@ -81,6 +82,7 @@ public class Feed {
 
  //   @JsonIgnoreProperties({"feed,user"})
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OrderBy("regDate DESC")
     private List<Comment> comment;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
