@@ -5,6 +5,7 @@ import com.noldaga.controller.response.HashTagResponse;
 import com.noldaga.controller.response.Response;
 import com.noldaga.controller.response.UserResponse;
 import com.noldaga.domain.FeedDto;
+import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.HashTagDto;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.userdto.UserDto;
@@ -60,6 +61,12 @@ public class SearchController {
         });
 
         return Response.success(hashTagResponseList);
+    }
+
+    @GetMapping("/api/search/group/{query}")
+    public Response<List<GroupDto>> searchHashTag(@PathVariable String query, Authentication authentication){
+        List<GroupDto> groupDtoList = searchService.getMatchedGroup(query,authentication.getName());
+        return Response.success(groupDtoList);
     }
 
 }

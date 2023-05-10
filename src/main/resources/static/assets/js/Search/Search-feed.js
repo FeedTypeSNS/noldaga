@@ -19,6 +19,7 @@ function searchMenuContent(queryString){
               <li class="nav-item"> <a class="nav-link active" href="/searchfeed${queryString}"> 게시글 </a> </li>
               <li class="nav-item"> <a class="nav-link" href="/searchhash${queryString}"> 해시태그 </a> </li>
               <li class="nav-item"> <a class="nav-link" href="/searchpeople${queryString}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchgroup${queryString}"> 그룹 </a> </li>
             </ul>`;
 }
 

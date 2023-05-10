@@ -69,6 +69,11 @@ public class PageController {
         return "search-people";
     }
 
+    @GetMapping("/searchgroup")
+    public String searchGroup(){
+        return "search-group";
+    }
+
     @GetMapping("/chat")
     public String chatMain(){
         return "messaging";

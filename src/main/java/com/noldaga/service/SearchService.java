@@ -1,14 +1,17 @@
 package com.noldaga.service;
 
 import com.noldaga.domain.FeedDto;
+import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.HashTagDto;
 import com.noldaga.domain.entity.Feed;
+import com.noldaga.domain.entity.Group;
 import com.noldaga.domain.entity.HashTag;
 import com.noldaga.domain.entity.User;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.Feed.FeedRepository;
+import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.HashTag.HashTagRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +29,9 @@ public class SearchService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;
+    private final GroupRepository groupRepository;
 
     public List<FeedDto> getMatchedFeed(String query,int page,String username){
-        //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
@@ -44,7 +47,6 @@ public class SearchService {
     }
 
     public List<UserDto> getMatchedUser(String query, String username){
-        //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
@@ -60,7 +62,6 @@ public class SearchService {
     }
 
     public List<HashTagDto> getMatchedHashTag(String query, int page, String username){
-        //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
@@ -73,5 +74,18 @@ public class SearchService {
             hashTagDtoList.add(hashTagDto);
         });
         return hashTagDtoList;
+    }
+
+    public List<GroupDto> getMatchedGroup(String query, String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        List<Group> groupList = groupRepository.finaAllBySearch(query);
+        List<GroupDto> groupDtoList = new ArrayList<>();
+        groupList.forEach(group -> {
+            groupDtoList.add(GroupDto.fromEntity(group));
+        });
+
+        return groupDtoList;
     }
 }

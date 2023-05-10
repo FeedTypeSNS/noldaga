@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Social - Network, Community and Event Theme</title>
+
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Webestica.com">
+	<meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
+
+	<!-- Dark mode -->
+	<script>
+		const storedTheme = localStorage.getItem('theme')
+ 
+		const getPreferredTheme = () => {
+			if (storedTheme) {
+				return storedTheme
+			}
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		}
+
+		const setTheme = function (theme) {
+			if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.setAttribute('data-bs-theme', 'dark')
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', theme)
+			}
+		}
+
+		setTheme(getPreferredTheme())
+
+		window.addEventListener('DOMContentLoaded', () => {
+		    var el = document.querySelector('.theme-icon-active');
+			if(el != 'undefined' && el != null) {
+				const showActiveTheme = theme => {
+				const activeThemeIcon = document.querySelector('.theme-icon-active use')
+				const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+				const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+				document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+					element.classList.remove('active')
+				})
+
+				btnToActive.classList.add('active')
+				activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+			}
+
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+				if (storedTheme !== 'light' || storedTheme !== 'dark') {
+					setTheme(getPreferredTheme())
+				}
+			})
+
+			showActiveTheme(getPreferredTheme())
+
+			document.querySelectorAll('[data-bs-theme-value]')
+				.forEach(toggle => {
+					toggle.addEventListener('click', () => {
+						const theme = toggle.getAttribute('data-bs-theme-value')
+						localStorage.setItem('theme', theme)
+						setTheme(theme)
+						showActiveTheme(theme)
+					})
+				})
+
+			}
+		})
+		
+	</script>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="assets/images/favicon.ico">
+
+	<!-- Google Font -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap">
+
+	<!-- Plugins CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
+
+	<!-- Theme CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
+
+</head>
+
+<body>
+
+<!-- =======================
+Header START -->
+<header class="navbar-light fixed-top header-static bg-mode">
+  <!-- Logo Nav START -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid" id="header">
+            <!-- SideNav button -->
+            <!-- Logo START -->
+
+            <!-- Logo Nav END -->
+            <!-- Nav right END -->
+        </div>
+    </nav>
+    <!-- Logo Nav END -->
+</header>
+<!-- =======================
+Header END -->
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+  
+  <!-- Container START -->
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Sidenav START -->
+        <div class="col-md-2 col-lg-2 col-xxl-2 mt-n4" id="leftNav">
+
+        </div>
+      <!-- Sidenav END -->
+
+      <!-- Main content START -->
+      <div class="col-md-8 col-lg-6 vstack gap-4">
+          <!-- Card START -->
+          <div class="card">
+            <!-- Card header START -->
+            <div
+                    class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
+            >
+              <div class="nav-item w-100" id="search-bar">
+                <button
+                        class="btn bg-transparent px-2 py-1 position-absolute"
+                        type="button"
+                >
+                  <i class="bi bi-search fs-5"> </i>
+                </button>
+                <input
+                        class="form-control ps-5 bg-light"
+                        type="search"
+                        placeholder="Search..."
+                        aria-label="Search"
+                        id="search-content-second"
+                />
+              </div>
+            </div>
+            <div class="card-footer pt-2 pb-0" id="cardFooter">
+              <!-- 게시글, 해시태그, 사람 -->
+            </div>
+          </div>
+            <!-- Card header START -->
+            <!-- Card body START -->
+          <div class="col-lg">
+            <div class="bg-mode p-4">
+              <div id="search-group-content" class="row g-4">
+<!--------------------------------------------------------------------------------------------------->
+              </div>
+              <div class="d-grid" id="load-more-button">
+
+              </div>
+            </div>
+          </div>
+          <!-- Card body END -->
+        </div>
+        <!-- Card END -->
+      <!-- Right sidebar END -->
+    </div> <!-- Row END -->
+  </div>
+  <!-- Container END -->
+  <div
+          class="modal fade"
+          id="modalCreateFeed"
+          tabindex="-1"
+          aria-labelledby="modalLabelCreateFeed"
+          aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <!-- Modal feed header START -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
+          <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+          ></button>
+        </div>
+        <!-- Modal feed header END -->
+        <form enctype="multipart/form-data">
+          <!-- Modal feed body START -->
+          <div class="modal-body">
+            <!-- Add Feed -->
+            <div class="d-flex mb-3">
+              <!-- Avatar -->
+              <div class="avatar avatar-xs me-2">
+                <img
+                        class="avatar-img rounded-circle"
+                        src="assets/images/albums/07.jpg"
+                        alt=""
+                />
+              </div>
+              <!-- Feed box  -->
+              <div class="col">
+                <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="1"
+                              placeholder="제목"
+                              autofocus
+                              id="title"
+                      ></textarea>
+                </div>
+                <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="4"
+                              placeholder="내용"
+                              autofocus
+                              id="content"
+                      ></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- Feed rect START -->
+            <div class="hstack gap-2">
+              <label
+                      class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="사진"
+                      for="uploadFile"
+              >
+                <i class="bi bi-image-fill"></i>
+              </label>
+              <input type="file" id="uploadFile" style="display:none" multiple/>
+              <a
+                      class="icon-md bg-info bg-opacity-10 text-info rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="비디오"
+              >
+                <i class="bi bi-camera-reels-fill"></i>
+              </a>
+              <a
+                      class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="이벤트"
+              >
+                <i class="bi bi-calendar2-event-fill"></i>
+              </a>
+              <a
+                      class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="기분/활동"
+              >
+                <i class="bi bi-emoji-smile-fill"></i>
+              </a>
+              <a
+                      class="icon-md bg-light text-secondary rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="위치태그"
+              >
+                <i class="bi bi-geo-alt-fill"></i>
+              </a>
+              <a
+                      class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle"
+                      href="#"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="회원태그"
+              >
+                <i class="bi bi-tag-fill"></i>
+              </a>
+            </div>
+            <!-- Feed rect END -->
+          </div>
+          <!-- Modal feed body END -->
+
+          <!-- Modal feed footer -->
+          <div class="modal-footer row justify-content-between">
+            <!-- Select -->
+            <div class="row">
+              <div class="col-sm-4">
+                <select
+                        id="open_range"
+                        class="form-select choice-select-text-none"
+                        data-position="top"
+                        data-search-enabled="false"
+                >
+                  <option value=0>공개</option>
+                  <option value=1>친구 공개</option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <select
+                        id="group_id"
+                        class="form-select choice-select-text-none"
+                        data-position="top"
+                        data-search-enabled="false"
+                >
+                  <option value=0>마이페이지</option>
+                </select>
+                <!-- Button -->
+              </div>
+
+              <div class="col-sm-4 text-sm-end">
+                <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- Modal feed footer -->
+      </div>
+    </div>
+  </div>
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+
+<!-- =======================
+JS libraries, plugins and custom scripts -->
+
+<!-- Bootstrap JS -->
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendors -->
+<script src="assets/vendor/glightbox-master/dist/js/glightbox.min.js"></script>
+<script src="assets/vendor/dropzone/dist/dropzone.js"></script>
+<script src="assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<!-- Theme Functions -->
+<script src="/assets/js/functions.js"></script>
+<script src="/assets/js/Search/Search-group.js"></script>
+<script src="/assets/js/Group/group-member-register.js"></script>
+<script src="/assets/js/Feed/feed-posting.js"></script>
+
+<script src="assets/js/header.js"></script>
+
+
+
+<script th:inline="javascript">
+    function togglePassword() {
+        var passwordField = document.getElementById("passwordDiv");
+        if (document.getElementById("private").checked) {
+            passwordField.style.display = "block";
+        } else {
+            passwordField.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
