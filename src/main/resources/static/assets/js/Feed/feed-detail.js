@@ -62,7 +62,6 @@ function getFeedData(loginUser) {
 
 
 function loadmoreComments(feedData,comment_page,loginUser){
-
     let page = Math.ceil(feedData.totalComment/10);
 
     if(comment_page < page) { //아직 보여줄 댓글이 남음
@@ -103,10 +102,14 @@ function setDetailPage(feedData,comment_page,loginUser){
     feedCard.innerHTML = getDetailPage_Feed(feedData);
     feedBox.append(feedCard);
 
-    if(feedData.userResponse.id == loginUser.id)
-        feedReactCard.innerHTML = getReactButtonsMine(feedData); //남이 쓴 댓글은 안보임
+    if(feedData.userResponse.id == loginUser.id) {
+        if(feedData.delDate == null)
+            feedReactCard.innerHTML = getReactButtonsMine(feedData); //내가 쓴 글은 수정 삭제 보임
+        else
+            feedReactCard.innerHTML = getReactButtonsOthers(feedData);
+    }
     else
-        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 댓글은 안보임
+        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 글은 수정 삭제 버튼 없음
     feedReactBox.append(feedReactCard);
 
     replySubmitForm.innerHTML = reply_submit_form(feedData);
@@ -120,8 +123,9 @@ function setDetailPage(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(feedData.commentList[i].userResponse.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username) {
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
+            }
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
             replyBox.append(replyCard);
