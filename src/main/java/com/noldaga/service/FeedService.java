@@ -185,6 +185,24 @@ public class FeedService {
     }
 
     @Transactional
+    public List<FeedDto> getMyLikedFeed(int page,String username){
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        Pageable pageable = PageRequest.of(page,50);
+        Page<Feed> feedListPagination = feedRepository.MyLikedFeed(user.getId(),pageable);
+
+        List<FeedDto> feedDtoList = new ArrayList<>();
+
+        feedListPagination.getContent().forEach(feed -> {
+            FeedDto feedDto = FeedDto.fromEntity(feed);
+            feedDtoList.add(feedDto);
+        });
+        return feedDtoList;
+    }
+
+    @Transactional
     public List<FeedDto> getHashTagFeed(Long hashTagId, int page,String username){
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->

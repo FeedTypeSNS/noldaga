@@ -136,6 +136,7 @@ function profileContentMine(data) {
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
                   <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link" href="/save" > 저장됨</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/like" > 좋아요한</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
