@@ -78,7 +78,7 @@ function getDetailGroupPage(group, user, groupMember) {
     <div class="mb-2">
         <!-- Avatar -->
         <div class="avatar avatar-xl">
-            <img class="avatar-img border-0" src="assets/images/logo/13.svg" alt="">
+            <img class="avatar-img border-0" src="/assets/images/logo/13.svg" alt="">
         </div>
     </div>
     <div class="ms-md-4 mt-3">
@@ -139,7 +139,7 @@ function getDetailGroupPage(group, user, groupMember) {
                 </div>
                 <!-- Avatar preview -->
                 <div class="avatar avatar-xl position-relative">
-                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/avatar/placeholder.jpg" alt="">
+                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="/assets/images/avatar/placeholder.jpg" alt="">
                 </div>
               </div>
               <!-- Avatar remove button -->

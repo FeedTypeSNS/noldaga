@@ -70,18 +70,18 @@
   </script>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
   <!-- Plugins CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
 
   <!-- Theme CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
 </head>
 
@@ -99,8 +99,8 @@
         <div class="card card-body rounded-3 p-4 p-sm-5">
           <div class="text-center">
             <!-- Title -->
-            <h1 class="mb-2">Sign up</h1>
-            <span class="d-block">Already have an account? <a href="login-form">Sign in here</a></span>
+            <h1 class="mb-2">회원 가입</h1>
+            <span class="d-block">이미 계정이 있으신가요? <a href="login-form">로그인 하기</a></span>
           </div>
           <!-- Form START -->
           <form class="mt-4">
@@ -134,7 +134,7 @@
                 <div class="ms-auto">
                   <i class="bi bi-info-circle ps-1" data-bs-container="body" data-bs-toggle="popover"
                      data-bs-placement="top"
-                     data-bs-content="Include at least one uppercase, one lowercase, one special character, one number and 8 characters long."
+                     data-bs-content="비밀번호 안내메시지"
                      data-bs-original-title="" title=""></i>
                 </div>
               </div>
@@ -162,10 +162,10 @@
 
 
             <!-- Keep me signed in -->
-            <div class="mb-3 text-start">
-              <input type="checkbox" class="form-check-input" id="keepsingnedCheck">
-              <label class="form-check-label" for="keepsingnedCheck"> Keep me signed in</label>
-            </div>
+            <!--            <div class="mb-3 text-start">-->
+            <!--              <input type="checkbox" class="form-check-input" id="keepsingnedCheck">-->
+            <!--              <label class="form-check-label" for="keepsingnedCheck"> Keep me signed in</label>-->
+            <!--            </div>-->
             <!-- Button -->
             <div class="d-grid">
               <button type="submit" id="submitButton" class="btn btn-lg btn-primary">가입하기</button>
@@ -214,13 +214,13 @@
 JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+<!--<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>-->
+<script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <!-- Vendors -->
-<script src="assets/vendor/pswmeter/pswmeter.min.js"></script>
+<script src="/assets/vendor/pswmeter/pswmeter.min.js"></script>
 
 <!-- Theme Functions -->
-<script src="assets/js/functions.js"></script>
+<script src="/assets/js/functions.js"></script>
 
 <script>
 
@@ -230,6 +230,11 @@ JS libraries, plugins and custom scripts -->
     let idCheckDone = false;
     let emailCheckDone = false;
 
+    let usernameAuthenticated;
+    let emailAuthenticated;
+    let usernameHolder;
+    let emailHolder;
+
     //입력 검사
     const usernameInput = document.getElementById('usernameInput');
     const passwordInput = document.getElementById('psw-input');
@@ -237,13 +242,13 @@ JS libraries, plugins and custom scripts -->
     const emailInput = document.getElementById('emailInput');
 
     const submitButton = document.getElementById('submitButton');
-    submitButton.disabled=true;
+    submitButton.disabled = true;
 
 
-    usernameInput.addEventListener('input',checkInputs);
-    passwordInput.addEventListener('input',checkInputs);
-    nicknameInput.addEventListener('input',checkInputs);
-    emailInput.addEventListener('input',checkInputs);
+    usernameInput.addEventListener('input', checkInputs);
+    passwordInput.addEventListener('input', checkInputs);
+    nicknameInput.addEventListener('input', checkInputs);
+    emailInput.addEventListener('input', checkInputs);
 
 
     //아이디 중복 검사 //todo 아이디 중복확인을 한후 아이디를 다시 바꾸는 상황에 대해서 대처해야함
@@ -258,6 +263,8 @@ JS libraries, plugins and custom scripts -->
                 const response = JSON.parse(this.responseText);
                 if (response.resultCode === 'SUCCESS') {
                     idCheckDone = true;
+
+                    usernameAuthenticated =username;
                     alert('사용 가능한 아이디입니다.');
                 } else {
                     alert('중복된 아이디입니다. 다른 아이디를 사용해주세요.');
@@ -294,16 +301,15 @@ JS libraries, plugins and custom scripts -->
                     codeId = response.result.codeId;
                     authModal = new bootstrap.Modal(document.getElementById('authModal'))
                     authModal.show();
-                }
-                else if(response.resultCode==='EMAIL_LIMIT_EXCEEDED'){
+                } else if (response.resultCode === 'EMAIL_LIMIT_EXCEEDED') {
                     alert('해당이메일로 가입할 수 있는 횟수를 초과하셨습니다. 다른 이메일을 사용해 주세요.')
-                }
-                else {
+                } else {
                     alert('이메일전송에 실패했습니다 다시 시도해주세요')
                 }
             }
         }
         xhr.send(JSON.stringify({email: email}));
+        emailHolder=email;
     }
 
 
@@ -319,6 +325,7 @@ JS libraries, plugins and custom scripts -->
                 const response = JSON.parse(this.responseText);
                 if (response.resultCode === 'SUCCESS') {
                     emailCheckDone = true;
+                    emailAuthenticated = emailHolder;
                     authModal.hide();
                 } else {
                     alert('잘못된 코드를 입력 하셨습니다.')
@@ -337,7 +344,7 @@ JS libraries, plugins and custom scripts -->
         document.querySelector('form').addEventListener('submit', function (e) {
             // 폼 전송 막기
             e.preventDefault();
-            if (!idCheckDone || !emailCheckDone) {
+            if (!idCheckDone || !emailCheckDone ) {
                 alert('아이디 중복체크 혹은 이메일 인증이 안된것이 있습니다.')
                 return;
             }
@@ -345,7 +352,7 @@ JS libraries, plugins and custom scripts -->
             // 폼 데이터를 JSON 형태로 직렬화
             let formData = new FormData(document.querySelector('form'));
             formData.append('codeId', codeId);
-            formData.append('code',code);
+            formData.append('code', code);
             let jsonData = {};
             formData.forEach(function (value, key) {
                 jsonData[key] = value;
@@ -375,7 +382,6 @@ JS libraries, plugins and custom scripts -->
     });
 
 
-
     // 사용자가 아이디 입력 폼에서 텍스트를 입력할 때마다 호출되는 함수
     function checkInputs() {
 
@@ -385,9 +391,21 @@ JS libraries, plugins and custom scripts -->
         const email = emailInput.value.trim();
 
         if (username === '' || password === '' || nickname === '' || email === '') {
-          submitButton.disabled=true;
-        }else{
-          submitButton.disabled =false;
+            submitButton.disabled = true;
+        } else {
+            submitButton.disabled = false;
+        }
+        if(usernameAuthenticated!==username){
+            idCheckDone=false;
+        }
+        else{
+            idCheckDone=true;
+        }
+        if(emailAuthenticated!==email){
+            emailCheckDone=false;
+        }
+        else{
+            emailCheckDone=true;
         }
 
     }

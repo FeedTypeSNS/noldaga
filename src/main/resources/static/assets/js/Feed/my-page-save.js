@@ -60,6 +60,8 @@ function setProfile(myPageOwner){
 
 
 function profileContentMine(data) {
+    var profileMessage = (data.profileMessage==="" || data.profileMessage==null)? "" : data.profileMessage;
+
     return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
@@ -67,14 +69,14 @@ function profileContentMine(data) {
                 <div>
                   <!-- Avatar -->
                   <div class="avatar avatar-xxl mt-n5 mb-3">
-                    <img class="avatar-img rounded-circle border border-white border-3" src="assets/images/avatar/07.jpg" alt="">
+                    <img class="avatar-img rounded-circle border border-white border-3" src="/assets/images/avatar/07.jpg" alt="">
                   </div>
                 </div>
                 <div class="ms-sm-4 mt-sm-3">
                   <!-- Info -->
                   <h1 class="mb-0 h5">${data.username} <i class="bi bi-patch-check-fill text-success small"></i></h1>
                   <p class="mb-0 h6">${data.totalFollower} 팔로워  ${data.totalFollowing} 팔로우</p>
-                  <h1 class="mb-0 h5">${data.profileMessage}</h1>
+                  <h1 class="mb-0 h5">${profileMessage}</h1>
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
@@ -98,34 +100,34 @@ function profileContentMine(data) {
               <!-- List profile -->
              <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/06.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/08.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/09.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/09.jpg" alt=""/>
                 </div>
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt=""/>
+                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""/>
                 </div>
               </ul>
             </div>
@@ -155,7 +157,7 @@ function insertPhotoCards(data){
 
 function photoCardContent(data) {
     return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
-                              <img class="rounded img-fluid" src="assets/images/albums/01.jpg" alt="">
+                              <img class="rounded img-fluid" src="/assets/images/albums/01.jpg" alt="">
                           </a>
                           <!-- likes -->
                           <ul class="nav nav-stack py-2 small">
@@ -175,7 +177,7 @@ function photoCardContent(data) {
                                   <div class="d-flex align-items-center">
                                       <!-- Avatar -->
                                       <div class="avatar me-2">
-                                          <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="">
+                                          <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="">
                                       </div>
                                       <!-- Info -->
                                       <div>
@@ -232,7 +234,7 @@ function photoCardContent(data) {
                               <div class="d-flex mb-3">
                                   <!-- Avatar -->
                                   <div class="avatar avatar-xs me-2">
-                                      <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="">
+                                      <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="">
                                   </div>
                                   <!-- Comment box  -->
                                   <form class="position-relative w-100">
@@ -250,7 +252,7 @@ function photoCardContent(data) {
                                       <div class="d-flex">
                                           <!-- Avatar -->
                                           <div class="avatar avatar-xs">
-                                              <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt="">
+                                              <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt="">
                                           </div>
                                           <div class="ms-2">
                                               <!-- Comment by -->

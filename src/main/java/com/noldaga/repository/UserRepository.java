@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT COUNT(*) FROM User u where u.email= :email")
     int countByEmail(String email);
 
+    @Query("SELECT u from User u where u.username =:q") //users 가 아닌 User로 해줘야함 (엔티티 클래스 이름으로 해줘야함)
+    List<User> findAllBySearch(String q);
 }

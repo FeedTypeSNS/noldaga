@@ -5,7 +5,6 @@ function getUser() {
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         setProfile(resp);
-        getGroups();
         getFeeds();
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -84,7 +83,7 @@ function setProfile(data){
 function profileContent(data) {
     return `<img
                         class="avatar-img rounded-circle"
-                        src="assets/images/albums/07.jpg"
+                        src="/assets/images/albums/07.jpg"
                         alt=""
                 />`;
 }
@@ -92,6 +91,7 @@ function profileContent(data) {
 function setFeedsContent(data) {
 
     for(let i=0; i<data.length; i++){
+        if(data[i].title === "삭제된 게시물입니다.") continue;
         let feedsBox = document.querySelector("#feed");
 
         //카드 형식의 피드
@@ -125,7 +125,7 @@ function feedContent(data) {
                       <a href="/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
-                          src="assets/images/avatar/04.jpg"
+                          src="/assets/images/avatar/04.jpg"
                           alt=""
                         />
                       </a>
@@ -134,7 +134,7 @@ function feedContent(data) {
                     <div>
                       <div class="nav nav-divider">
                         <h6 class="nav-item card-title mb-0">
-                          <a href="#">${data.userResponse.username} </a>
+                          ${data.userResponse.username}
                         </h6>
                         <span class="nav-item small"> ${data.modDate} </span>
                       </div>
@@ -201,7 +201,7 @@ function feedContent(data) {
                 <!-- Card img -->
                 <img
                   class="card-img"
-                  src="assets/images/post/3by2/01.jpg"
+                  src="/assets/images/post/3by2/01.jpg"
                   alt="Post"
                 />
                 <!-- Feed react START -->
@@ -229,56 +229,6 @@ function feedContent(data) {
                     <a class="nav-link save" href="#!" onclick="save(${data.id})">
                       <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a>
                   </li>
-                  <!-- Card share action START -->
-                  <li class="nav-item dropdown ms-sm-auto">
-                    <a
-                      class="nav-link mb-0"
-                      href="#"
-                      id="cardShareAction"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>공유하기(##)
-                    </a>
-                    <!-- Card share action dropdown menu -->
-                    <ul
-                      class="dropdown-menu dropdown-menu-end"
-                      aria-labelledby="cardShareAction"
-                    >
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-envelope fa-fw pe-2"></i>Send via
-                          Direct Message</a
-                        >
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-bookmark-check fa-fw pe-2"></i
-                          >Bookmark
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-link fa-fw pe-2"></i>Copy link to
-                          post</a
-                        >
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-share fa-fw pe-2"></i>Share post via
-                          …</a
-                        >
-                      </li>
-                      <li><hr class="dropdown-divider" /></li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to
-                          News Feed</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <!-- Card share action END -->
                 </ul>
                 <!-- Feed react END -->
 

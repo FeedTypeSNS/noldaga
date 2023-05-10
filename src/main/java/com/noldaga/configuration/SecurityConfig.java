@@ -3,7 +3,6 @@ package com.noldaga.configuration;
 
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.userdto.security.KakaoOAuth2Response;
-import com.noldaga.domain.userdto.security.UserDetailsImpl;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.UserRepository;
@@ -35,6 +34,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //시큐리티가 사용하는거 (jwt토큰필터)
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {//UserDetailsService.loadByUsername() 의 로직
         return username -> userRepository
@@ -43,6 +43,7 @@ public class SecurityConfig {
                 );
     }
 
+    //OAuth2가 사용하는거
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService
             (UserService userService, BCryptPasswordEncoder encoder) { //OAuth2UserService.loadUser() 의 로직
