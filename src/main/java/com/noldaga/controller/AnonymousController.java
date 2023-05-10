@@ -34,10 +34,12 @@ public class AnonymousController {
         return Response.success();
     }
 
+
     @PostMapping("/join/send-code") //회원가입 2 : 이메일 인증 : 이메일 로 코드전송
+
     public Response<CodeIdResponse> sendCodeForJoin(@RequestBody MailRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        Integer codeId= anonymousService.sendCodeForJoin(req.getEmail());
+        Integer codeId = anonymousService.sendCodeForJoin(req.getEmail());
 
         return Response.success(CodeIdResponse.of(codeId));
     }
@@ -45,7 +47,7 @@ public class AnonymousController {
     @PostMapping("/join/validate-code")//회원가입 3 : 코드 대조
     public Response<Void> validateCode(@RequestBody CodeRequest req) {
 
-        anonymousService.validateCodeForJoin(req.getCodeId(),req.getCode());
+        anonymousService.validateCodeForJoin(req.getCodeId(), req.getCode());
 
         return Response.success();
     }
@@ -78,7 +80,7 @@ public class AnonymousController {
     @PostMapping("/find-password/init-password") //비번찾기2 : 코드 검증후 비밀번호 초기화
     public Response<Void> initPassword(@RequestBody CodeRequest req) throws MessagingException, UnsupportedEncodingException {
 
-        anonymousService.initPassword(req.getCodeId(),req.getCode());
+        anonymousService.initPassword(req.getCodeId(), req.getCode());
 
         return Response.success();
     }
@@ -97,7 +99,7 @@ public class AnonymousController {
 
         String token = anonymousService.login(req.getUsername(), req.getPassword());
 
-        generateTokenCookie(httpServletResponse,token);
+        generateTokenCookie(httpServletResponse, token);
         return Response.success(token);
     }
 

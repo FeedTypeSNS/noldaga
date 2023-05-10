@@ -92,4 +92,9 @@ public class Alarm {
     public static Alarm of(Long toUserId, AlarmType alarmType, AlarmArgs alarmArgs){
         return new Alarm(null, alarmType, toUserId, alarmArgs);
     }
+
+    public String getFromType(){
+        return alarmArgs.getFromType();
+    }
+
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AlarmArgs {
 
     private String fromType;
-    private Long fromId;//알람 보낸 사람
+    private Long fromId;//알람 보낸 사람 or 그룹
     private String fromNameOnAlarm;
 
     private String targetType; // 클릭했을때 이동될 object(피드 , 유저, 그룹 , 피드:댓글 )

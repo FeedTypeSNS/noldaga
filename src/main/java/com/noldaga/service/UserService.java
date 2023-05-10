@@ -12,6 +12,7 @@ import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -155,7 +156,8 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<AlarmDto> alarmList(Long userId, Pageable pageable) {
 
-        return alarmRepository.findAllByToUserId(userId, pageable).map(AlarmDto::fromEntity);
+
+        return alarmRepository.findAllByToUserIdOrderByIdDesc(userId, pageable).map(AlarmDto::fromEntity);
     }
 
 

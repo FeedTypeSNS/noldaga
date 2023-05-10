@@ -35,7 +35,7 @@ public class AnonymousService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
     private final int INIT_PASSWORD_SIZE =10;
-    private final int MAX_ACCOUNTS_PER_EMAIL=2;
+    private final int MAX_ACCOUNTS_PER_EMAIL=30;
 
     //회원가입 1 : 아이디 중복검사
     public void validateDuplication(String username){

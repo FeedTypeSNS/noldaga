@@ -13,7 +13,7 @@ public class UserObject implements AlarmObject{
     private String username;
     private String nickname;
 
-    private final String OBJECT_TYPE = "USER";
+    private final String OBJECT_TYPE = "USERS";
 
     @Override
     public Long getId() {

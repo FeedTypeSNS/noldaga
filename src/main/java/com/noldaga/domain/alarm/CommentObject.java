@@ -9,6 +9,8 @@ public class CommentObject implements AlarmObject{
 
     private Long id;
     private String content;
+
+    private String feedTitle;
     private final String OBJECT_TYPE = "COMMENT";
 
 
@@ -20,7 +22,7 @@ public class CommentObject implements AlarmObject{
 
     @Override
     public String getNameOnAlarm() {
-        return this.content;
+        return feedTitle + "  -  " + content;
     }
 
 
@@ -29,8 +31,8 @@ public class CommentObject implements AlarmObject{
         return this.OBJECT_TYPE;
     }
 
-    public static AlarmObject from(Comment comment){
-        return new CommentObject(comment.getId(), comment.getContent());
+    public static AlarmObject from(Comment comment,String feedTitle){
+        return new CommentObject(comment.getId(), comment.getContent(),feedTitle);
 
     }
 }
