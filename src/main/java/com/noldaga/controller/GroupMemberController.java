@@ -58,4 +58,24 @@ public class GroupMemberController {
 
         return Response.success();
     }
+
+    @GetMapping("/group/member/favor/{group_id}")
+    public Response<GroupMemberDto> favorGroup(@PathVariable Long group_id, Authentication authentication) {
+        GroupMemberDto favorGroupMember = groupMemberService.favorGroup(group_id, authentication.getName());
+
+        return Response.success(favorGroupMember);
+    }
+
+    @GetMapping("/group/member/unfavor/{group_id}")
+    public Response<GroupMemberDto> unfavorGroup(@PathVariable Long group_id, Authentication authentication) {
+        GroupMemberDto unfavorGroupMember = groupMemberService.unfavorGroup(group_id, authentication.getName());
+
+        return Response.success(unfavorGroupMember);
+    }
+
+    @GetMapping("/groups/member/favor") // 자신이 가입한 그룹 중 즐겨찾는 그룹 리스트
+    public Response<List<Group>> getFavorGroupList(Authentication authentication) {
+        List<Group> FavorGroupList = groupMemberService.getFavorGroupList(authentication.getName());
+        return Response.success(FavorGroupList);
+    }
 }
