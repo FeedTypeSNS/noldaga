@@ -91,7 +91,6 @@ function profileContent(data) {
 function setFeedsContent(data) {
 
     for(let i=0; i<data.length; i++){
-        if(data[i].title === "삭제된 게시물입니다.") continue;
         let feedsBox = document.querySelector("#feed");
 
         //카드 형식의 피드
@@ -103,7 +102,7 @@ function setFeedsContent(data) {
         let tagCard = document.createElement("li");
         tagCard.className = "list-inline-item m-0";
         for(let j=0; j<data[i].feedTagDtoList.length; j++){
-            tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="#">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
+            tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="/hashtag?tag_id=${data[i].feedTagDtoList[j].hashTagDto.id}&tag_name=${data[i].feedTagDtoList[j].hashTagDto.tagName.substr(1)}">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
         }
 
         //해쉬태그 밑에 공백을 만들고싶어서..

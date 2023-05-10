@@ -12,11 +12,12 @@ function makeSearchMenu(query){
 
 makeSearchMenu();
 
-function searchMenuContent(query){
+function searchMenuContent(queryString){
     return `<ul class="nav nav-bottom-line align-items-center justify-content-center mb-0 border-0">
-              <li class="nav-item"> <a class="nav-link" href="/searchfeed${query}"> 게시글 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchhash${query}"> 해시태그 </a> </li>
-              <li class="nav-item"> <a class="nav-link active" href="/searchpeople${query}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchfeed${queryString}"> 게시글 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchhash${queryString}"> 해시태그 </a> </li>
+              <li class="nav-item"> <a class="nav-link active" href="/searchpeople${queryString}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchgroup${queryString}"> 그룹 </a> </li>
             </ul>`;
 }
 
@@ -72,14 +73,14 @@ function setFeedCardContent(user) {
               </div>
               <!-- Button -->
               <div class="ms-md-auto d-flex">
-                <button class="btn btn-danger-soft btn-sm mb-0 me-2"> Follow </button>
-                <button class="btn btn-primary-soft btn-sm mb-0"> Message </button>
+                <button class="btn btn-danger-soft btn-sm mb-0 me-2"> follow </button>
+                <button class="btn btn-primary-soft btn-sm mb-0"> chatting </button>
               </div>`;
 }
 
 function setLoadMoreButton(){
     return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-                <span class="load-text"> Load more connections </span>
+                <span class="load-text"> 더보기 </span>
                 <div class="load-icon">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>

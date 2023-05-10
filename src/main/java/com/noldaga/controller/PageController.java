@@ -49,6 +49,11 @@ public class PageController {
         return "my-profile-save";
     }
 
+    @GetMapping("/like")
+    public String mypageLiked(){
+        return "my-profile-like";
+    }
+
     @GetMapping("/searchfeed")
     public String searchFeed(){
         return "search-feed";
@@ -67,6 +72,11 @@ public class PageController {
     @GetMapping("/searchpeople")
     public String searchPeople(){
         return "search-people";
+    }
+
+    @GetMapping("/searchgroup")
+    public String searchGroup(){
+        return "search-group";
     }
 
     @GetMapping("/chat")
