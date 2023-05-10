@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -152,10 +153,17 @@ public class FeedService {
         //피드 확인
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
-        feed.plusViewCount();
 
         FeedDto feedDto = FeedDto.fromEntity(feed);
         return feedDto;
+    }
+
+    @Transactional
+    public void plusViewCount(Long feedId){
+        //피드 확인
+        Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
+        feed.plusViewCount();
     }
 
     @Transactional
@@ -241,6 +249,7 @@ public class FeedService {
         //delete
         if(storeFeedRepository.findByFeedId(feedId)>0){//저장한 사람이 한명이라도 있으면 삭제하지않고 업데이트로 진행한다
             feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+            feed.setDelDate(LocalDateTime.now());
         }
         else
             feedRepository.delete(feed);
