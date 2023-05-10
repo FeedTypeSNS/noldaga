@@ -140,6 +140,19 @@ public class FeedController {
         return Response.success(feedResponseList);
     }
 
+    //좋아요한 피드 가져오기 - 본인만 볼 수 있음
+    @GetMapping("/api/feeds/like/{page}")
+    public Response<List<FeedResponse>> getMyLikedFeeds(@PathVariable int page, Authentication authentication){
+        List<FeedDto> feedDtoList = feedService.getMyLikedFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
     //해시태그별 피드 가져오기
     @GetMapping("/api/feeds/hashTag/{hashTagId}/{page}")
     public Response<List<FeedResponse>> getHashTagFeeds(@PathVariable Long hashTagId,@PathVariable int page, Authentication authentication){
