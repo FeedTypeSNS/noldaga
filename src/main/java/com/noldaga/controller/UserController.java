@@ -20,6 +20,7 @@ import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 
 @RequiredArgsConstructor
@@ -60,6 +61,8 @@ public class UserController {
 
         System.out.println("multipartFile = " + multipartFile);
         System.out.println("req = " + req);
+
+
 
         UserDto userDto = userService.modifyMyProfile(multipartFile,
                 req.getNickname(), req.getProfileMessage(), req.getProfileImageUrl(),

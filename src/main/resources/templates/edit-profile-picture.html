@@ -70,18 +70,18 @@
   </script>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
   <!-- Plugins CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
 
   <!-- Theme CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
 </head>
 
@@ -106,7 +106,7 @@
           <form class="mt-sm-4" method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-              <img alt="Kakao Login" src="/img/tomtom.png" class="rounded-circle" style="width: 250px; height: 250px;">
+              <img alt="noldaga" src="" class="rounded-circle" id="pimg" style="width: 250px; height: 250px;">
               <input type="file" accept="image/*" name="file" id="fileInput">
             </div>
             <!-- Email -->
@@ -174,7 +174,7 @@ JS libraries, plugins and custom scripts -->
     initMyProfile();
     imageViewer();
 
-
+    let imageUrl;
 
     function initMyProfile() {
         const xhr = new XMLHttpRequest();
@@ -185,9 +185,12 @@ JS libraries, plugins and custom scripts -->
             if (xhr.status === 200) {
                 const nicknameInput = document.querySelector('input[name="nickname"]');
                 nicknameInput.value = response.result.nickname;
+                imageUrl=response.result.profileImageUrl;
 
                 const messageView = document.querySelector('input[name="profileMessage"]');
                 const profileMessage = response.result.profileMessage;
+                const imageElement = document.getElementById('pimg');
+                imageElement.src=imageUrl;
 
 
                 if(profileMessage !== null && profileMessage!==''){
@@ -229,8 +232,9 @@ JS libraries, plugins and custom scripts -->
         const imageFile = document.getElementById('fileInput').files[0];
         const nickname = document.getElementsByName('nickname')[0].value;
         const profileMessage = document.getElementById('message').value;
-        const profileImageUrl = 'asdfasdf';
+        const profileImageUrl = imageUrl;
 
+        console.log(profileImageUrl);
         // 이미지 파일을 FormData 객체에 담음
         const formData = new FormData();
         formData.append('file', imageFile);
