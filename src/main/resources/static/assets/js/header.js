@@ -454,7 +454,7 @@ function leftNavContent(data) {
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="notifications.html">
+              <a class="nav-link" href="/notifications">
                 <i class="bi bi-bell-fill nav-icon"></i>
                 <span class="nav-text">Notifications </span></a
               >
