@@ -1,3 +1,10 @@
+function getChatPage(){
+    $.ajax({
+        type: "GET",
+        url:"/chat"
+    });
+}
+
 let chatting = {
     init:function (){
         $("#new-chatting-submit").on("click", (event)=>{
@@ -68,19 +75,38 @@ function getOneChatRoom(roomId, uuid){
         let name = document.querySelector("#ws-username").value;
         enterRoom(resp.result);
         wsOpen(name, uuid);
-        console.log('채팅기본 뷰 완성');
+        //console.log('채팅기본 뷰 완성');
     }).fail(function (error){
         console.log('채팅방 불러오기 실패');
         alert(JSON.stringify(error));
         throw new Error(error);
-    })
+    });
 }
 
-function deleteChatRoom(){}
+function deleteChatRoom(event){
+    let uuid = document.querySelector("#ws-romeUuid").value;
+    event.preventDefault();
+    let roomId = $("#ws-romeId").val();
+    $.ajax({
+        type: "DELETE",
+        url:"/api/chat/"+roomId,
+        dataType: "json"
+    }).done(function (resp) {
+        console.log(JSON.stringify(resp));
+        getChatBody();
+        cws.send(JSON.stringify(sendDelRoomAlarm(uuid)));
+    }).fail(function (error){
+        console.log('채팅방 삭제 실패');
+        alert(JSON.stringify(error));
+        throw new Error(error);
+    });
+}
 
 function enterRoom(resp){
     $("#chatting-tool *").remove();
     $("#chatting-tool").remove();
+    $(".card-footer *").remove();
+    $(".card-footer").remove();
     let me = document.querySelector("#ws-username").value;
     console.log(me);
     //let name = me.querySelector("input[name='chat-username-me']").value;
@@ -115,11 +141,10 @@ function initChattingPage(resp, name){
     body.innerHTML = initChatBody(resp, name);
     chatBody.append(body);
 
-    let tool = document.querySelector("#chatting-tool");
     let footer = document.createElement("div");
-    footer.className="card-footer";
+    footer.className="card-footer flex-shrink-0";
     footer.innerHTML = cardFooter();
-    tool.parentNode.insertBefore(footer, tool.nextSibling);
+    body.after(footer);
 
     let roomId = resp.roomInfo.id;
     let joinCount = Number(resp.joinPeoples.length)-1; //회원 참가수에 따라 회원 이미지 변화..
@@ -137,12 +162,17 @@ function initChattingPage(resp, name){
     //alert(resp.pastChat); //확인
     //console.log("pastChat"+"\n"+JSON.stringify(resp.pastChat));
     let data = resp.pastChat;
-    console.log("과거 채팅 목록 정상 불러옴\n"+JSON.stringify(data));
+    let rmId = -1;
     for(let i=0; i<data.length; i++) {
-        console.log(JSON.stringify(data[i]));
         showChatMsg(data[i], name);
+        if (rmId === data[i].id){
+            $("#senderImg-" + rmId + " *").remove();
+            $("#senderImg-" + rmId).remove();
+            $("#sender-" + rmId + " *").remove();
+            $("#sender-" + rmId).remove();
+        }
         if(i!==data.length-1){
-            delSameTimeChat(data[i], data[i+1]);
+            rmId = delSameTimeChat(data[i], data[i+1]);
         }
     }
     const chatDisplayBody = document.getElementById('chat-display-body');
@@ -151,8 +181,6 @@ function initChattingPage(resp, name){
 }
 
 function showChatMsg(data, name){
-    console.log("채팅 보여주기"+"\n"+name);
-    console.log(JSON.stringify(data));
         let chatList = document.querySelector("#chat-display-body");
         let chat;
         //console.log(data.sender.username === name);
@@ -166,6 +194,7 @@ function showChatMsg(data, name){
 
             chat.innerHTML= chatSent_o(data);
         }
+
 
         chatList.append(chat);
 
@@ -209,9 +238,9 @@ function initChatBody(resp, name){
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-check-lg me-2 fw-icon"></i>모두 읽음 표시</a></li>
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-mic-mute me-2 fw-icon"></i>대화 음소거</a></li>
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-check me-2 fw-icon"></i>상대 프로필 페이지 이동</a></li>
-                                                <li><a class="dropdown-item" href="#"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
+                                                <li><a class="dropdown-item" onclick="deleteChatRoom(event)"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
                                                 <li class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="/chat"><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
+                                                <li><a class="dropdown-item" onclick="getChatPage()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
                                             </ul>
                                         </div>
                                         <!-- Card action END -->
@@ -223,7 +252,7 @@ function initChatBody(resp, name){
                                 <input type="hidden" id="pre-msg-username" value="">
                                 <input type="hidden" id="pre-msg-create" value="">
                                 <input type="hidden" id="pre-msg-id" value="">
-                                <div class="chat-conversation-content custom-scrollbar" id="chat-display-body">
+                                <div class="chat-conversation-content" style="overflow: auto" id="chat-display-body">
                                
                                 </div>
                         </div>
@@ -242,8 +271,12 @@ function cardFooter(){
 
 const readData = (data) => {
     let html = '';
+    //alert(data.unread);
     if(Number(data.unread)!==0){
         html += `<i class="fa-solid fa-check" style="color: #0a58ca"><br> ${data.unread_count}</i>`;
+    }else {
+        $(".readData-me-send *").remove();
+        $(".readData-me-send").remove();
     }
     return html;
 }//읽은 수에 따라 다르게 표시
@@ -253,23 +286,22 @@ function delSameTimeChat(one, two){
     let twoT = forChatTimestamp(two.createAt);
     if(one.sender.username===two.sender.username){
         if(oneT===twoT) {
-            $("#sender-" + two.id + " *").remove();
-            $("#sender-" + two.id).remove();
             $("#createDate-" + one.id + " *").remove();
             $("#createDate-" + one.id).remove();
+            return two.id;
         }
     }
 }//만약 둘이 같은 시간에 보내면 화면 표시 달라짐
 
 function chatSent_m(resp){
     let sendData = forChatTimestamp(resp.createAt);
-    console.log(sendData);
+    //console.log(sendData);
     return `<div class="w-100">
                       <div class="d-flex flex-column align-items-end">                  
                         <div class="bg-primary text-white p-2 px-3 rounded-2">${resp.msg}</div>
                         <!-- Images -->
                         <div class="d-flex my-2" id="createDate-${resp.id}">
-                          <div class="small ms-2">${readData(resp)}</div>                         
+                          <div class="small ms-2 readData-me-send">${readData(resp)}</div>                         
                           <div class="small text-secondary">${sendData}</div>
                          
                         </div>
@@ -281,7 +313,7 @@ function chatSent_o(resp){
     let sendData = forChatTimestamp(resp.createAt);
 
     return `<div class="flex-shrink-0 avatar avatar-xs me-2">
-                      <img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
+                      <img id="senderImg-${resp.id}" class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
                     </div>
                     <div class="flex-grow-1">
                       <div class="w-100">

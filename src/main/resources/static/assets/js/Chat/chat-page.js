@@ -2,7 +2,7 @@
 /*let socket = new SockJS("/ws/chat");
 let ws = Stomp.over(socket);
 let reconnect = 0;*/
-function init(){
+function setBasic(){
     getChatBody();
 
     getChatListFunc();
@@ -53,7 +53,11 @@ function getMyChatListHtml(result){
 
     let active = document.querySelector("#active-chat-count");
     active.textContent = '';
-    active.append(result.length);
+    let num = 0;
+    for (let j=0; j<result.length; j++){
+       num += result[j].unreadCount;
+    }
+    active.append(num);
     for(let i=0; i<result.length; i++){
         let data = result[i];
         let chatList = document.querySelector("#chatList");
@@ -107,7 +111,7 @@ function getMyChatList(data){
                     <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
                         <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg} · ${ago}
-                          <div class="position-relative" id="unread-${data.roomInfo.id}"></div>
+                          <div class="position-relative" style="margin-left: 3px;" id="unread-${data.roomInfo.id}"></div>
                         </div>
                     </div>
                 </div>

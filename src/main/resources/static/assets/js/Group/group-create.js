@@ -3,7 +3,7 @@ function createGroup() {
     formData.append('name', $('#name').val());
     formData.append('profile_url', $('#avatarUpload')[0].files[0]);
     formData.append('open', $('input[name="open"]:checked').val());
-    formData.append('pw', $('#pw').val());
+    formData.append('pw', $('#group-pw').val());
     formData.append('intro', $('#intro').val());
     console.log(document.getElementById('avatarUpload').files[0]);
     // FormData 객체를 JSON으로 변환
