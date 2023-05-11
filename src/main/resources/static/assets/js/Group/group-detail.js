@@ -126,7 +126,7 @@ function getDetailGroupPage(group, user, groupMember) {
       </div>
       <div class="modal-body">
         <!-- Form START -->
-        <form enctype="multipart/form-data">
+        
           <!-- Group name -->
           <div class="mb-3">
             <label class="form-label">그룹 이름</label>
@@ -179,7 +179,7 @@ function getDetailGroupPage(group, user, groupMember) {
           <div class="modal-footer">
             <button onclick="updateGroup(${group.id})" class="btn btn-success-soft">그룹 수정</button>
           </div>
-        </form>
+        
         <!-- Form END -->
       </div>
       <!-- Modal footer -->
