@@ -1,17 +1,21 @@
 function registerCheck(GroupPw) {
-
-    if(GroupPw != "" && GroupPw != null) {
-        const insertPw = prompt("비밀번호를 입력해주세요");
-        if(insertPw == GroupPw) {
-            register();
-        } else {
-            alert("비밀번호가 일치하지 않습니다.");
-        }
+    if (GroupPw !== "" && GroupPw !== null) {
+        $('#passwordModal').modal('show');
+        $('#passwordSubmit').on('click', function() {
+            const insertPw = $('#passwordInput').val();
+            $('#passwordModal').modal('hide');
+            if (insertPw == GroupPw) {
+                register();
+            } else {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        });
     } else {
         register();
     }
-
 }
+
+
 
 function register() {
     const queryString = window.location.search;
