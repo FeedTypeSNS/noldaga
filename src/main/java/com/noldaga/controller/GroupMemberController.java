@@ -19,7 +19,7 @@ import java.util.List;
 public class GroupMemberController {
     private final GroupMemberService groupMemberService;
 
-    @PostMapping("/group/member/{group_id}")
+    @PostMapping("/group/member/{group_id}")//그룹가입
     public Response<GroupMemberDto> registerGroup(@PathVariable Long group_id, Authentication authentication) {
         GroupMemberDto registerGroupMember = groupMemberService.registerGroup(group_id, authentication.getName());
 
@@ -52,7 +52,7 @@ public class GroupMemberController {
         return Response.success(groupMemberDto);
     }
 
-    @DeleteMapping("/group/member/{group_id}/{user_id}")
+    @DeleteMapping("/group/member/{group_id}/{user_id}")//그룹 강퇴
     public Response<Void> expelGroup(@PathVariable Long group_id, @PathVariable Long user_id,  Authentication authentication) {
         groupMemberService.expelGroup(group_id, user_id, authentication.getName());
 

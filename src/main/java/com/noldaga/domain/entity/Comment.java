@@ -69,5 +69,9 @@ public class Comment {
     public void minusLikeCount(){
         this.totalLike-=1;
     }
+
+    public String getFeedTitle(){
+        return feed.getTitle();
+    }
 }
 

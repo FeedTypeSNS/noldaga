@@ -1,12 +1,17 @@
 package com.noldaga.service;
 
 import com.noldaga.controller.response.FollowResponse;
+import com.noldaga.domain.alarm.AlarmArgs;
+import com.noldaga.domain.alarm.AlarmType;
+import com.noldaga.domain.alarm.UserObject;
+import com.noldaga.domain.entity.Alarm;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.entity.Follow;
 import com.noldaga.domain.entity.User;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.FollowRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +28,9 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
-    @Transactional
+    private final AlarmRepository alarmRepository;
+
+    @Transactional// me 내자신이 -> 다른 사람 한테 follow 한테 건다
     public FollowResponse doFollow(String me, Long follow){
         User following = userRepository.findByUsername(me).get();
         User follower = userRepository.findById(follow).get();
@@ -50,6 +57,13 @@ public class FollowService {
 
             String msg = following.getUsername()+"님 "+follower.getUsername()+"님을 팔로우 성공했습니다.";
             FollowResponse fr = new FollowResponse(id, msg, UserDto.fromEntity(following), UserDto.fromEntity(follower), both);
+
+
+            Alarm alarm=Alarm.of(follow, AlarmType.NEW_FOLLOWER,
+                    AlarmArgs.of(UserObject.from(following)),
+                    following);
+            alarmRepository.save(alarm);
+
             return fr;
             //팔로우 성공 시-> total follow 수 늘리기, 알람 보내주기
         }

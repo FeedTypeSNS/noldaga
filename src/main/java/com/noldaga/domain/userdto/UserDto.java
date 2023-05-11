@@ -69,6 +69,8 @@ public class UserDto implements UserDetails, OAuth2User {
     }
 
     public static UserDto fromEntity(User entity){
+
+        if(entity ==null) return null;
         return new UserDto(
                 entity.getId(),
                 entity.getUsername(),

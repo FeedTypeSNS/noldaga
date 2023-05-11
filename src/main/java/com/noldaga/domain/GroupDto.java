@@ -29,6 +29,7 @@ public class GroupDto {
     }
 
     public static GroupDto fromEntity(Group group) {
+        if(group==null) return null;
         return new GroupDto(
                 group.getId(),
                 group.getName(),
