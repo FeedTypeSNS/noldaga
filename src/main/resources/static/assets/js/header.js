@@ -14,10 +14,8 @@ function init() {
 
     $("#search-content").on("keydown",(e)=>{
         if (e.keyCode === 13) {
-            let data={
-                content: $("#search-content").val(),
-            };
-            search(data.content);
+            let data= $("#search-content").val();
+            window.location.href = "/searchfeed?q="+data;
         }
     })
 }
@@ -539,8 +537,4 @@ function sidebarToggleEnd() {
             mode.classList.toggle("sidebar-end-enabled");
         });
     }
-}
-
-function search(data){
-    window.location.href = "/searchfeed?q="+data;
 }
