@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final StoreFeedRepository storeFeedRepository;
     private final FollowRepository followRepository;
     private final HashTagService hashTagService;
 
@@ -102,7 +104,7 @@ public class FeedService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
         //lmit은 변경예정
-        Pageable pageable = PageRequest.of(page,5);
+        Pageable pageable = PageRequest.of(page,50);
         Page<Feed> feedListPagination = null;
 
         //공개범위 1(부분공개),0(전체)
@@ -151,10 +153,17 @@ public class FeedService {
         //피드 확인
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
-        feed.plusViewCount();
 
         FeedDto feedDto = FeedDto.fromEntity(feed);
         return feedDto;
+    }
+
+    @Transactional
+    public void plusViewCount(Long feedId){
+        //피드 확인
+        Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
+        feed.plusViewCount();
     }
 
     @Transactional
@@ -163,8 +172,44 @@ public class FeedService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
 
-        Pageable pageable = PageRequest.of(page,100);
+        Pageable pageable = PageRequest.of(page,50);
         Page<Feed> feedListPagination = feedRepository.MyStoredFeed(user.getId(),pageable);
+
+        List<FeedDto> feedDtoList = new ArrayList<>();
+
+        feedListPagination.getContent().forEach(feed -> {
+            FeedDto feedDto = FeedDto.fromEntity(feed);
+            feedDtoList.add(feedDto);
+        });
+        return feedDtoList;
+    }
+
+    @Transactional
+    public List<FeedDto> getMyLikedFeed(int page,String username){
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        Pageable pageable = PageRequest.of(page,50);
+        Page<Feed> feedListPagination = feedRepository.MyLikedFeed(user.getId(),pageable);
+
+        List<FeedDto> feedDtoList = new ArrayList<>();
+
+        feedListPagination.getContent().forEach(feed -> {
+            FeedDto feedDto = FeedDto.fromEntity(feed);
+            feedDtoList.add(feedDto);
+        });
+        return feedDtoList;
+    }
+
+    @Transactional
+    public List<FeedDto> getHashTagFeed(Long hashTagId, int page,String username){
+        //회원가입된 user인지 확인
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        Pageable pageable = PageRequest.of(page,20);
+        Page<Feed> feedListPagination = feedRepository.findAllByHashTag(hashTagId,pageable);
 
         List<FeedDto> feedDtoList = new ArrayList<>();
 
@@ -212,18 +257,21 @@ public class FeedService {
         Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s is not founded", feedId)));
 
-        //권한확인
-        if (feed.getUser() != user) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
-        }
+//        //권한확인
+//        if (feed.getUser() != user) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,String.format("%s ha no permission with %s",username,feedId));
+//        }
 
         //해시태그 지우기
         hashTagService.deleteHashTag(feedId);
         //delete
-        feedRepository.deleteById(feedId);
+        feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+        feed.setDelDate(LocalDateTime.now());
+//        if(storeFeedRepository.findByFeedId(feedId)>0){//저장한 사람이 한명이라도 있으면 삭제하지않고 업데이트로 진행한다
+//            feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
+//            feed.setDelDate(LocalDateTime.now());
+//        }
+//        else
+//            feedRepository.delete(feed);
     }
-
-
-
-
 }

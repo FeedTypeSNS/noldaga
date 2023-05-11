@@ -132,9 +132,8 @@ Header END -->
           <div class="card">
               <!-- Card header START -->
               <div class="card-header d-sm-flex align-items-center justify-content-between border-0 pb-0">
-                  <h5 class="card-title">Photos</h5>
+                  <h5 class="card-title">게시물</h5>
                   <!-- Button modal -->
-                  <a class="btn btn-sm btn-primary-soft" href="#" data-bs-toggle="modal" data-bs-target="#modalCreateAlbum"> <i class="fa-solid fa-plus pe-1"></i> Create album</a>
               </div>
               <!-- Card header END -->
               <!-- Card body START -->
@@ -143,14 +142,6 @@ Header END -->
                   <div class="row g-3" id="photoCard">
 
                       <!-- Add photo START -->
-                      <div class="col-sm-6 col-md-4 col-lg-3">
-                          <div class="border border-2 py-5 border-dashed h-100 rounded text-center d-flex align-items-center justify-content-center position-relative">
-                              <a class="stretched-link" href="#!">
-                                  <i class="fa-solid fa-camera-retro fs-1"></i>
-                                  <h6 class="mt-2">Add photo</h6>
-                              </a>
-                          </div>
-                      </div>
                       <!-- Add photo END -->
 
                       <!-- Photo item START -->
@@ -207,7 +198,7 @@ Header END -->
     <div class="modal-content">
       <!-- Modal feed header START -->
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabelCreateFeed">Create post</h5>
+        <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
         <button
                 type="button"
                 class="btn-close"
@@ -235,7 +226,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="1"
-                              placeholder="title..."
+                              placeholder="제목"
                               autofocus
                               id="title"
                       ></textarea>
@@ -244,7 +235,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="4"
-                              placeholder="Share your thoughts..."
+                              placeholder="내용"
                               autofocus
                               id="content"
                       ></textarea>
@@ -258,7 +249,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Photo"
+                    title="사진"
                     for="uploadFile"
             >
               <i class="bi bi-image-fill"></i>
@@ -269,7 +260,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Video"
+                    title="비디오"
             >
               <i class="bi bi-camera-reels-fill"></i>
             </a>
@@ -278,7 +269,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Events"
+                    title="이벤트"
             >
               <i class="bi bi-calendar2-event-fill"></i>
             </a>
@@ -287,7 +278,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Feeling/Activity"
+                    title="기분/활동"
             >
               <i class="bi bi-emoji-smile-fill"></i>
             </a>
@@ -296,7 +287,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Check in"
+                    title="위치태그"
             >
               <i class="bi bi-geo-alt-fill"></i>
             </a>
@@ -305,7 +296,7 @@ Header END -->
                     href="#"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Tag people on top"
+                    title="회원태그"
             >
               <i class="bi bi-tag-fill"></i>
             </a>
@@ -325,8 +316,8 @@ Header END -->
                       data-position="top"
                       data-search-enabled="false"
               >
-                <option value=0>Public</option>
-                <option value=1>Friends</option>
+                <option value=0>공개</option>
+                <option value=1>친구 공개</option>
               </select>
             </div>
             <div class="col-sm-4">
@@ -336,13 +327,13 @@ Header END -->
                       data-position="top"
                       data-search-enabled="false"
               >
-                <option value=0>MyPage</option>
+                <option value=0>마이페이지</option>
               </select>
               <!-- Button -->
             </div>
 
             <div class="col-sm-4 text-sm-end">
-              <button type="button" id="posting-button" class="btn btn-success-soft">Post</button>
+              <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
             </div>
           </div>
         </div>

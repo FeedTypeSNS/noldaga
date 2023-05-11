@@ -12,6 +12,7 @@ import javax.validation.constraints.Positive;
 @Getter
 @NoArgsConstructor
 public class MailModifyRequest {
+
     @NotNull
     @NotBlank
     @Email

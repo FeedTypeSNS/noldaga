@@ -340,7 +340,7 @@ function chatSent_o(resp){
     let sendData = forChatTimestamp(resp.createAt);
 
     return `<div class="flex-shrink-0 avatar avatar-xs me-2">
-                      <img class="avatar-img rounded-circle" src="assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
+                      <img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
                     </div>
                     <div class="flex-grow-1">
                       <div class="w-100">

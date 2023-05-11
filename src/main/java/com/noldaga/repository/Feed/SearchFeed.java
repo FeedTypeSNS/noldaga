@@ -14,4 +14,7 @@ public interface SearchFeed {
     Page<Feed> GroupPageFeed(long id, Pageable pageable);
     Page<Feed> ExplorePageFeed(Pageable pageable);
     Page<Feed> MyStoredFeed(Long userId, Pageable pageable);
+    Page<Feed> MyLikedFeed(Long userId, Pageable pageable);
+    Page<Feed> findAllBySearch(String q, Pageable pageable);
+    Page<Feed> findAllByHashTag(Long hashTagId, Pageable pageable);
 }

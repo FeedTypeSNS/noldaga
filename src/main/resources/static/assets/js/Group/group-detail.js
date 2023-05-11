@@ -40,6 +40,7 @@ function init2(user, groupMember) {
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         initDetailGroupPage(resp.result, user, groupMember);
+        initDetailGroupPostPage(resp.result, user, groupMember);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -62,17 +63,22 @@ function getDetailGroupPage(group, user, groupMember) {
     let hiddenType = "";
     let hiddenType2 = "hidden";
     const hiddenType3 = user.id === group.userDto.id ? "hidden" : "";
+    let hiddenType4 = "";
+    let hiddenType5 = "hidden";
 
     if(groupMember != null) {
         hiddenType = groupMember.userDto.id === user.id ? "hidden" : "";
         hiddenType2 = groupMember.userDto.id === user.id ? "" : "hidden";
+        hiddenType4 = groupMember.favor === 1 ? "" : "hidden";
+        hiddenType5 = groupMember.favor === 1 ? "hidden" : "";
     }
+
 
     return `<div class="d-md-flex flex-wrap align-items-start text-center text-md-start">
     <div class="mb-2">
         <!-- Avatar -->
         <div class="avatar avatar-xl">
-            <img class="avatar-img border-0" src="assets/images/logo/13.svg" alt="">
+            <img class="avatar-img border-0" src="/assets/images/logo/13.svg" alt="">
         </div>
     </div>
     <div class="ms-md-4 mt-3">
@@ -84,11 +90,17 @@ function getDetailGroupPage(group, user, groupMember) {
     </div>
     <!-- Button -->
     <div class="d-flex justify-content-center justify-content-md-start align-items-center mt-3 ms-lg-auto">
+        <button onclick="favorGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType5}>
+        <i class="bi bi-bookmark-star"></i>
+        </button>
+        <button onclick="unfavorGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType4}>
+        <i class="bi bi-bookmark-star-fill"></i>
+        </button>
         <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType} ${hiddenType3}><i
-            class="bi bi-person-plus-fill pe-1"></i> Join
+            class="bi bi-person-plus-fill pe-1"></i> 가입하기
         </button>
         <button onclick="unregisterGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType3}><i
-            class="bi bi-person-check-fill pe-1"></i> Joined
+            class="bi bi-person-check-fill pe-1"></i> 가입됨
         </button>
         ${userType} 
         <!--<button class="btn btn-sm btn-success me-2" type="button"><i class="fa-solid fa-plus pe-1"></i> Invite
@@ -127,7 +139,7 @@ function getDetailGroupPage(group, user, groupMember) {
                 </div>
                 <!-- Avatar preview -->
                 <div class="avatar avatar-xl position-relative">
-                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/avatar/placeholder.jpg" alt="">
+                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="/assets/images/avatar/placeholder.jpg" alt="">
                 </div>
               </div>
               <!-- Avatar remove button -->
@@ -174,3 +186,63 @@ function getDetailGroupPage(group, user, groupMember) {
 </div>
 <!-- Modal modify group END -->`;
 }
+
+/* ----------------------------------------------------------------- */
+function initDetailGroupPostPage(group, user, groupMember) {
+    let GroupPostBox = document.querySelector("#groupPostBox");
+
+    if(user.id === group.userDto.id) {
+        GroupPostBox.style.display = "";
+    } else if(groupMember != null ){
+        if(groupMember.userDto.id === user.id) {
+            GroupPostBox.style.display = "";
+        }
+    } else {
+        GroupPostBox.style.display = "none";
+    }
+}
+
+function favorGroup(groupId) {
+    $.ajax({
+        url: "/api/group/member/favor/" + groupId,
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+            // API 응답을 성공적으로 받았을 때 실행되는 코드
+            // 응답 데이터는 'response' 매개변수로 전달됨
+            if (response.resultCode === 'SUCCESS') {
+                // 삭제 성공 시 화면에서 그룹 삭제
+                location.reload();
+            } else {
+                alert('즐겨찾기 실패');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('API Error:', error);
+            alert('그룹 즐거찾기에 실패하였습니다.');
+        }
+    });
+}
+
+function unfavorGroup(groupId) {
+    $.ajax({
+        url: "/api/group/member/unfavor/" + groupId,
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+            // API 응답을 성공적으로 받았을 때 실행되는 코드
+            // 응답 데이터는 'response' 매개변수로 전달됨
+            if (response.resultCode === 'SUCCESS') {
+                // 삭제 성공 시 화면에서 그룹 삭제
+                location.reload();
+            } else {
+                alert('즐겨찾기삭제 실패');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('API Error:', error);
+            alert('그룹 즐거찾기삭제에 실패하였습니다.');
+        }
+    });
+}
+

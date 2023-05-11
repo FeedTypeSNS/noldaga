@@ -15,4 +15,7 @@ public interface StoreFeedRepository extends JpaRepository<StoreFeed, Long> {
     @Transactional
     @Query("delete from StoreFeed sf where sf.feed.id=:feedId and sf.user.id=:userId")
     void deleteByFeedIdAndUserId(Long feedId, Long userId);
+
+    @Query("select count(sf) from StoreFeed sf where sf.feed.id=:feedId")
+    int findByFeedId(Long feedId);
 }

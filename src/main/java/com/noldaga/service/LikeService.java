@@ -2,9 +2,11 @@ package com.noldaga.service;
 
 import com.noldaga.domain.CommentLikeDto;
 import com.noldaga.domain.FeedLikeDto;
+import com.noldaga.domain.alarm.*;
 import com.noldaga.domain.entity.*;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.Comment.CommentRepository;
 import com.noldaga.repository.CommentLikeRepository;
 import com.noldaga.repository.Feed.FeedRepository;
@@ -25,6 +27,8 @@ public class LikeService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
+
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public int feedLikeCheck(Long feedId, String username){
@@ -59,6 +63,17 @@ public class LikeService {
         //피드 좋아요+1
         feed.plusLikeCount();
 
+
+        Long likerId = user.getId();
+        Long feedWriterId = feed.getUser().getId();
+        if (likerId != feedWriterId) {// 내가 내피드 좋아요는 알림안함
+            Alarm alarm =Alarm.of(feedWriterId, AlarmType.NEW_LIKE_ON_FEED,
+                    AlarmArgs.of(UserObject.from(user), FeedObject.from(feed)),
+                    user);
+            alarmRepository.save(alarm);
+        }
+
+
         return FeedLikeDto.fromEntity(feedLiked);
     }
 
@@ -91,6 +106,16 @@ public class LikeService {
 
         //댓글 좋아요+1
         comment.plusLikeCount();
+
+
+        Long likerId= user.getId();
+        Long commentWriterId = comment.getId();
+        if (likerId != commentWriterId) {//내가 내꺼 좋아요할때는 알림 안보냄
+            Alarm alarm =Alarm.of(commentWriterId, AlarmType.NEW_LIKE_ON_COMMENT,
+                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment, comment.getFeedTitle())),
+                    user);
+            alarmRepository.save(alarm);
+        }
 
         return CommentLikeDto.fromEntity(commentLiked);
     }
