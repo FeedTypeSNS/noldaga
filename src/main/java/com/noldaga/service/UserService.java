@@ -1,29 +1,29 @@
 package com.noldaga.service;
 
+import com.noldaga.domain.alarm.AlarmDto;
+import com.noldaga.domain.entity.Alarm;
 import com.noldaga.domain.userdto.Gender;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
-import com.noldaga.module.CodeGenerator;
+import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.UserRepository;
-import com.noldaga.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +33,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final MailAuthService mailAuthService;
     private final BCryptPasswordEncoder encoder;
+
+    private final AlarmRepository alarmRepository;
 
     @Value("${com.noldaga.upload.path}")
     private String directoryPath;
@@ -151,5 +153,21 @@ public class UserService {
 
 
 
+    @Transactional(readOnly = true)
+    public Page<AlarmDto> alarmList(Long userId, Pageable pageable) {
 
+
+        return alarmRepository.findAllByToUserIdOrderByIdDesc(userId, pageable).map(AlarmDto::fromEntity);
+    }
+
+
+    @Transactional
+    public void deleteAlarm(Long alarmId, UserDto loginUserDto) {
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new SnsApplicationException(ErrorCode.ALARM_NOT_FOUND));
+        if (loginUserDto.getId() != alarm.getToUserId()) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION);
+        }
+
+        alarmRepository.deleteById(alarmId);
+    }
 }

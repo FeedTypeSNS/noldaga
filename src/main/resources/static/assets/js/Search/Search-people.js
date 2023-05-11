@@ -8,6 +8,13 @@ function makeSearchMenu(query){
     let cardFooterDiv = document.querySelector("#cardFooter");
     cardFooterDiv.innerHTML = searchMenuContent(queryString);
     getSearchUsers(searchQuery);
+
+    $("#search-content-second").on("keydown",(e)=>{
+        if (e.keyCode === 13) {
+            let data= $("#search-content-second").val();
+            window.location.href = "/searchfeed?q="+data;
+        }
+    })
 }
 
 makeSearchMenu();
@@ -22,7 +29,6 @@ function searchMenuContent(queryString){
 }
 
 function getSearchUsers(searchQuery){
-
     $.ajax({
         type: "GET",
         url: "/api/search/user/"+searchQuery,
@@ -73,7 +79,7 @@ function setFeedCardContent(user) {
               </div>
               <!-- Button -->
               <div class="ms-md-auto d-flex">
-                <button class="btn btn-danger-soft btn-sm mb-0 me-2"> follow </button>
+                <button class="btn btn-danger-soft btn-sm mb-0 me-2" onclick="follow(${user.id})"> follow </button>
                 <button class="btn btn-primary-soft btn-sm mb-0"> chatting </button>
               </div>`;
 }
@@ -87,4 +93,19 @@ function setLoadMoreButton(){
                   </div>
                 </div>
               </a>`;
+}
+
+function follow(userId){
+    const url = window.location.href;
+
+    $.ajax({
+        type: "POST",
+        url: "/api/follow/"+userId,
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = url;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = url;
+    });
 }

@@ -2,16 +2,15 @@ package com.noldaga.controller;
 
 
 import com.noldaga.controller.request.*;
-import com.noldaga.controller.response.CodeIdResponse;
-import com.noldaga.controller.response.Response;
-import com.noldaga.controller.response.UserInfoResponse;
-import com.noldaga.controller.response.UserResponse;
+import com.noldaga.controller.response.*;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.UserService;
 import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -129,5 +128,28 @@ public class UserController {
 
         return Response.success(UserInfoResponse.fromUserDto(resultUserDto));
     }
+
+
+//    db에 쌓여있는 알람 가져오기
+    @GetMapping("/me/alarm")
+     public Response<Page<AlarmResponse>> getAlarm(Pageable pageable, Authentication authentication){
+
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        Page<AlarmResponse> alarmResponsePage = userService.alarmList(loginUserDto.getId(), pageable).map(AlarmResponse::fromAlarmDto);
+        return Response.success(alarmResponsePage);
+    }
+
+    @PostMapping("/me/alarm/{alarmId}")
+    public Response<Void> deleteAlarm(@PathVariable Long alarmId, Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        userService.deleteAlarm(alarmId,loginUserDto);
+
+        return Response.success();
+    }
+
 
 }

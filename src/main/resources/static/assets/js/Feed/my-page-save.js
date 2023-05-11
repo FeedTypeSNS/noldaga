@@ -80,7 +80,7 @@ function profileContentMine(data) {
                 </div>
                 <!-- Button -->
                 <div class="d-flex mt-3 justify-content-center ms-sm-auto">
-                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </a>
+                  <a href="/editProfile" class="btn btn-danger-soft me-2" type="button"> <i class="bi bi-pencil-fill pe-1"></i> 프로필 수정 </a>
                   <div class="dropdown">
                     <!-- Card share action menu -->
                     <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -139,7 +139,7 @@ function profileContentMine(data) {
                   <li class="nav-item"> <a class="nav-link active" href="/save" > 저장됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="/like" > 좋아요한</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }

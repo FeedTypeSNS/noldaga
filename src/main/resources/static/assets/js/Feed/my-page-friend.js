@@ -17,6 +17,7 @@ function getUser() {
 }
 getUser();
 
+
 function getMyPageOwnerData(loginUser) {
     const queryString = window.location.search; //마이페이지 소유자 아이디
     const urlParams = new URLSearchParams(queryString);
@@ -28,27 +29,41 @@ function getMyPageOwnerData(loginUser) {
         dataType: "json"
     }).done(function(myPageOwner){
         setProfile(myPageOwner.result,loginUser);
-        getFeeds();
+        getFollower(myPageOwner.result.username);
+        getFollowing(myPageOwner.result.username);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function getFeeds() {
-    const queryString = window.location.search; //마이페이지 소유자
+
+function getFollower(myPageOwnerUsername){
     var page = 0;
 
     $.ajax({
         type: "GET",
-        url: "/api/feeds/mypage/"+page+queryString,
+        url: "/api/follower/"+myPageOwnerUsername, //내가 팔로우한 사람들 목록
         dataType: "json"
-    }).done(function(resp){
-        insertPhotoCards(resp.result);
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        insertPhotoCardFollowers(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
+function getFollowing(myPageOwnerUsername){
+    var page = 0;
+
+    $.ajax({
+        type: "GET",
+        url: "/api/following/"+myPageOwnerUsername, //내가 팔로우한 사람들 목록
+        dataType: "json"
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        insertPhotoCardFollowings(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
 
 function setProfile(myPageOwner,loginUser){
     let profileCard = document.querySelector("#profileCard");
@@ -97,7 +112,7 @@ function profileContentMine(data) {
                 </div>
               </div>
               <!-- List profile -->
-              <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
+             <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
                    <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""/>
                 </div>
@@ -134,11 +149,11 @@ function profileContentMine(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link" href="/save" > 저장됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="/like" > 좋아요한</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
@@ -219,152 +234,61 @@ function profileContentOther(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
 
-function insertPhotoCards(data){
+
+function insertPhotoCardFollowers(data){
     for(let i=0; i<data.length; i++) {
-        let photoCard = document.querySelector("#photoCard");
+        let photoCard = document.querySelector("#photoCardFollower");
         let photoDiv = document.createElement("div");
-        photoDiv.className = "col-sm-6 col-md-4 col-lg-3";
+        photoDiv.className = "card-body";
+        photoDiv.innerHTML = photoCardContent(data[i]);
+        photoCard.append(photoDiv);
+    }
+}
+
+function insertPhotoCardFollowings(data){
+    for(let i=0; i<data.length; i++) {
+        let photoCard = document.querySelector("#photoCardFollowing");
+        let photoDiv = document.createElement("div");
+        photoDiv.className = "card-body";
         photoDiv.innerHTML = photoCardContent(data[i]);
         photoCard.append(photoDiv);
     }
 }
 
 function photoCardContent(data) {
-    return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
-                              <img class="rounded img-fluid" src="/assets/images/albums/01.jpg" alt="">
-                          </a>
-                          <!-- likes -->
-                          <ul class="nav nav-stack py-2 small">
-                          ${data.title}
-                          </ul>
-                          <ul class="nav nav-stack py-2 small">
-                              <li class="nav-item">
-                                  <a class="nav-link" href="#!" onclick="like(${data.id})"><i class="bi bi-heart-fill text-danger pe-1"></i>${data.totalLike} </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a class="nav-link" href="#!"> <i class="bi bi-chat-left-text-fill pe-1"></i>${data.totalComment} </a>
-                              </li>
-                          </ul>
-                          <!-- glightbox Albums left bar START -->
-                          <div class="glightbox-desc custom-desc2">
-                              <div class="d-flex align-items-center justify-content-between">
-                                  <div class="d-flex align-items-center">
-                                      <!-- Avatar -->
-                                      <div class="avatar me-2">
-                                          <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="">
-                                      </div>
-                                      <!-- Info -->
-                                      <div>
-                                          <div class="nav nav-divider">
-                                              <h6 class="nav-item card-title mb-0">Lori Ferguson</h6>
-                                              <span class="nav-item small"> 2hr</span>
-                                          </div>
-                                          <p class="mb-0 small">Web Developer at Webestica</p>
-                                      </div>
-                                  </div>
-                                  <!-- Card feed action dropdown START -->
-                                  <div class="dropdown">
-                                      <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardFeedAction" data-bs-toggle="dropdown" aria-expanded="false">
-                                          <i class="bi bi-three-dots"></i>
-                                      </a>
-                                      <!-- Card feed action dropdown menu -->
-                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardFeedAction">
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
-                                          <li><hr class="dropdown-divider"></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
-                                      </ul>
-                                  </div>
-                                  <!-- Card feed action dropdown END -->
-                              </div>
-                              <p class="mt-3 mb-0">I'm so privileged to be involved in the @bootstrap hiring process! <a href="#">#internship #inclusivebusiness</a> <a href="#">#internship</a> <a href="#"> #hiring</a> <a href="#">#apply</a> </p>
-                              <ul class="nav nav-stack py-3 small">
-                                  <li class="nav-item">
-                                      <a class="nav-link active" href="#!"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked (56)</a>
-                                  </li>
-                                  <li class="nav-item">
-                                      <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>Comments (12)</a>
-                                  </li>
-                                  <!-- Card share action START -->
-                                  <li class="nav-item dropdown ms-auto">
-                                      <a class="nav-link mb-0" href="#" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
-                                          <i class="bi bi-reply-fill fa-flip-horizontal pe-1"></i>Share (3)
-                                      </a>
-                                      <!-- Card share action dropdown menu -->
-                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
-                                          <li><hr class="dropdown-divider"></li>
-                                          <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
-                                      </ul>
-                                  </li>
-                                  <!-- Card share action END -->
-                              </ul>
-                              <!-- Add comment -->
-                              <div class="d-flex mb-3">
-                                  <!-- Avatar -->
-                                  <div class="avatar avatar-xs me-2">
-                                      <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="">
-                                  </div>
-                                  <!-- Comment box  -->
-                                  <form class="position-relative w-100">
-                                      <textarea class="one form-control pe-4 bg-light" data-autoresize rows="1" placeholder="Add a comment..."></textarea>
-                                      <!-- Emoji button -->
-                                      <div class="position-absolute top-0 end-0">
-                                          <button class="btn" type="button">🙂</button>
-                                      </div>
-                                  </form>
-                              </div>
-                              <!-- Comment wrap START -->
-                              <ul class="comment-wrap list-unstyled ">
-                                  <!-- Comment item START -->
-                                  <li class="comment-item">
-                                      <div class="d-flex">
-                                          <!-- Avatar -->
-                                          <div class="avatar avatar-xs">
-                                              <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt="">
-                                          </div>
-                                          <div class="ms-2">
-                                              <!-- Comment by -->
-                                              <div class="bg-light rounded-start-top-0 p-3 rounded">
-                                                  <div class="d-flex justify-content-center">
-                                                      <div class="me-2">
-                                                          <h6 class="mb-1"> <a href="#!"> Frances Guerrero </a></h6>
-                                                          <p class="small mb-0">Removed demands expense account in outward tedious do.</p>
-                                                      </div>
-                                                      <small>5hr</small>
-                                                  </div>
-                                              </div>
-                                              <!-- Comment react -->
-                                              <ul class="nav nav-divider py-2 small">
-                                                  <li class="nav-item">
-                                                      <a class="nav-link" href="#!"> Like (3)</a>
-                                                  </li>
-                                                  <li class="nav-item">
-                                                      <a class="nav-link" href="#!"> Reply</a>
-                                                  </li>
-                                                  <li class="nav-item">
-                                                      <a class="nav-link" href="#!"> View 5 replies</a>
-                                                  </li>
-                                              </ul>
-                                          </div>
-                                      </div>
-                                  </li>
-                              </ul>
-                              <!-- Comment wrap END -->
-                          </div>
-                          <!-- glightbox Albums left bar END  -->`;
+    var profileMessage = (data.profileMessage==="" || data.profileMessage==null)? "" : data.profileMessage;
+    return `<div class="d-md-flex align-items-center mb-4">
+                <!-- Avatar -->
+                <div class="avatar me-3 mb-3 mb-md-0">
+                  <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""> </a>
+                </div>
+                <!-- Info -->
+                <div class="w-100">
+                  <div class="d-sm-flex align-items-start">
+                    <h6 class="mb-0"><a href="#!">아이디 : ${data.username} </a></h6>
+                    <p class="small ms-sm-2 mb-0">닉네임 : ${data.nickname}</p>
+                </div>
+                <!-- Connections START -->
+                <div class="d-sm-flex align-items-start">
+                  <h6 class="small ms-sm-2 mb-0">${profileMessage}</h6 >
+                </div>
+                <div class="d-sm-flex align-items-start">
+                  <h6 class="small mb-0">팔로워수 :  팔로잉수 : </h6 >
+                </div>
+                <!-- Connections END -->
+              </div>
+              <!-- Button -->
+              <div class="ms-md-auto d-flex">
+                <button class="btn btn-danger-soft btn-sm mb-0 me-2" onclick="follow(${data.id})"> Follow </button>
+                <button class="btn btn-primary-soft btn-sm mb-0"> Chatting </button>
+              </div>`;
 }
 
 function loadmore(currentPage){
@@ -380,41 +304,14 @@ function loadmore(currentPage){
     });
 }
 
-function like(data) {
+
+function follow(userId){
     const url = window.location.href;
 
     $.ajax({
-        type: "GET",
-        url: "api/like/feed/"+data,
-        dataType: "json"
-    }).done(function(resp){
-        if(resp) like_delete(data,url);
-        else like_register(data,url);
-    }).fail(function(error){
-        alert(JSON.stringify(error));
-    });
-}
-
-function like_register(data,url) {
-
-    $.ajax({
         type: "POST",
-        url: "api/like/feed/"+data,
-        contentType: "application/json; charset=utf-8",
+        url: "/api/follow/"+userId,
         dataType: "json"
-    }).done(function(resp){
-        window.location.href = url;
-    }).fail(function(error){
-        alert(JSON.stringify(error));
-        window.location.href = url;
-    });
-}
-
-function like_delete(data,url) {
-
-    $.ajax({
-        type: "DELETE",
-        url: "api/like/feed/"+data
     }).done(function(resp){
         window.location.href = url;
     }).fail(function(error){

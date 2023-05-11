@@ -18,7 +18,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),//토큰필터개발에서 추가됨
 
     FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "Feed not founded"),//피드수정개발할때 추가됨
-    INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "Permission is invalid"),//피드수정개발할때 추가됨.
+    INVALID_PERMISSION(HttpStatus.FORBIDDEN, "Permission is invalid"),//피드수정개발할때 추가됨.
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),//런타임 예외등(UserService 회원가입 트랜잭션 런타임예외 하면서 추가한듯.?)
 
@@ -55,7 +55,9 @@ public enum ErrorCode {
 
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "No Account associated with this email"),
 
-    EMAIL_LIMIT_EXCEEDED(HttpStatus.CONFLICT,"This Email has exceeded the limit")
+    EMAIL_LIMIT_EXCEEDED(HttpStatus.CONFLICT,"This Email has exceeded the limit"),
+
+    ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "Alarm not founded"),
     ;
 
     private HttpStatus status;
