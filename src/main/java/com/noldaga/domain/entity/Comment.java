@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EntityListeners(value={AuditingEntityListener.class})
 @NoArgsConstructor
@@ -40,8 +41,9 @@ public class Comment {
     @Column(name = "mod_date")
     private LocalDateTime modDate;
 
-//    @OneToMany(mappedBy = "comment_id")
-//    private List<commentLike> ???;
+    //실제로 사용할 일은 없고 댓글 좋아요 생명주기 관리를 위해서 넣어줌
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLike;
 
     @Column(name="total_like")
     private long totalLike; //default로 0들어가게 long설정
@@ -66,6 +68,10 @@ public class Comment {
 
     public void minusLikeCount(){
         this.totalLike-=1;
+    }
+
+    public String getFeedTitle(){
+        return feed.getTitle();
     }
 }
 

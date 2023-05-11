@@ -56,13 +56,12 @@ function getFeedData(loginUser) {
     });
 
     $("#comment-loadmore-button").on("click",()=>{
-        this.loadmoreComments(responseData,++comment_page,loginUser);
+        loadmoreComments(responseData,++comment_page,loginUser);
     });
 }
 
 
 function loadmoreComments(feedData,comment_page,loginUser){
-
     let page = Math.ceil(feedData.totalComment/10);
 
     if(comment_page < page) { //아직 보여줄 댓글이 남음
@@ -71,7 +70,7 @@ function loadmoreComments(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(data.commentList[i].userResponse.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username)
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
@@ -103,10 +102,14 @@ function setDetailPage(feedData,comment_page,loginUser){
     feedCard.innerHTML = getDetailPage_Feed(feedData);
     feedBox.append(feedCard);
 
-    if(feedData.userResponse.id == loginUser.id)
-        feedReactCard.innerHTML = getReactButtonsMine(feedData); //남이 쓴 댓글은 안보임
+    if(feedData.userResponse.id == loginUser.id) {
+        if(feedData.delDate == null)
+            feedReactCard.innerHTML = getReactButtonsMine(feedData); //내가 쓴 글은 수정 삭제 보임
+        else
+            feedReactCard.innerHTML = getReactButtonsOthers(feedData);
+    }
     else
-        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 댓글은 안보임
+        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 글은 수정 삭제 버튼 없음
     feedReactBox.append(feedReactCard);
 
     replySubmitForm.innerHTML = reply_submit_form(feedData);
@@ -120,8 +123,9 @@ function setDetailPage(feedData,comment_page,loginUser){
             let replyBox = document.querySelector("#FeedReplycontent");
 
             let replyCard = document.createElement("div");
-            if(feedData.commentList[i].userResponse.username == loginUser.username)
+            if(feedData.commentList[i].userResponse.username == loginUser.username) {
                 replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
+            }
             else
                 replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
             replyBox.append(replyCard);
@@ -139,21 +143,6 @@ function getReactButtonsMine(data){
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
-                            </li>
-                            <!-- Card share action START -->
-                            <li class="nav-item dropdown ms-sm-auto">
-                                <a class="nav-link mb-0" href="#" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>(3)
-                                </a>
-                                <!-- Card share action dropdown menu -->
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
-                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
-                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
-                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
-                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
-                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a
@@ -214,13 +203,13 @@ function getReactButtonsOthers(data){
 
 function getDetailPage_Feed(data){
     return `<!-- Fees images --><!-- 함수에 넣을 부분 시작 -->
-                            <img class="card-img rounded" src="assets/images/post/16by9/big/01.jpg" alt="">
+                            <img class="card-img rounded" src="/assets/images/post/16by9/big/01.jpg" alt="">
                             <!-- Feed meta START -->
                             <div class="d-flex align-items-center justify-content-between my-3">
                                 <div class="d-flex align-items-center">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-story me-2">
-                                        <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""> </a>
+                                        <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt=""> </a>
                                     </div>
                                     <!-- Info -->
                                     <div>
@@ -278,7 +267,7 @@ function getDetailPage_comment_others(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
@@ -322,7 +311,7 @@ function getDetailPage_comment_mine(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">

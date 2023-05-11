@@ -21,57 +21,66 @@ public class CodeValidator {
 
     private final CodeGenerator codeGenerator;
 
-    private final int CODE_SIZE =  6;
-    private final String AUTH_FLAG="*";
-    private final String DELIMITER="/";
+    private final int CODE_SIZE = 6;
+    private final String AUTH_FLAG = "*";
+    private final String DELIMITER = "/";
 
 
-    public void validateCode(Integer codeId, String codeRequest) {
+    public CodeDto generateCodeForJoin(String email) {
+        String code = generateRandomString();
+        int key = keyGenerator.incrementAndGet();
+        storage.put(key, code + DELIMITER + email);
+        return CodeDto.of(key, code);
+    }
+
+    public void validateCodeForJoin(Integer codeId, String codeRequest) {
         String code_email = storage.get(codeId);
-        if(code_email==null){
+        if (code_email == null) {
             throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
         String[] split = code_email.split(DELIMITER);
-        if (split[0].equals(codeRequest)) {
-            storage.put(codeId, code_email + AUTH_FLAG);
-            return ;
+        String code = split[0];
+        if (codeRequest.equals(code)) {
+//            storage.put(codeId, code_email + AUTH_FLAG);
+            return;
         }
         throw new SnsApplicationException(ErrorCode.INVALID_CODE);
     }
 
-    public void validateAuthenticatedEmail(Integer codeId,String email){
+
+    public String validateCodeForJoinAgain(Integer codeId, String codeRequest, String emailRequest) {
+        String code_email = storage.get(codeId);
+        if (code_email == null) {
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID); //자바스크립트로 codeId 조작 안했으면 예외터질일은 없긴함
+        }
+        String[] split = code_email.split(DELIMITER);
+        String code = split[0];
+        String email = split[1];
+        if (!codeRequest.equals(code)) {
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE); //자바스크립트로 조작 안했으면 여기서 에외 터질일은 없긴함
+        }
+        if (!emailRequest.equals(email)) {
+            throw new SnsApplicationException(ErrorCode.INVALID_EMAIL); //이메일 인증후 이메일 바꿔서 회원가입 할려하면 예외발생
+        }
+        storage.remove(codeId);
+        return email;
+    }
+
+    public void validateAuthenticatedEmail(Integer codeId, String email) {
         String code_email_authFlag = storage.get(codeId);
-        if(code_email_authFlag==null){
+        if (code_email_authFlag == null) {
             throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
         }
         String[] split = code_email_authFlag.split(DELIMITER);
-        if(split[1].equals(email+AUTH_FLAG)){
+        String emailWithFlag = split[1];
+        if ((email + AUTH_FLAG).equals(emailWithFlag)) {
             storage.remove(codeId);
-            return ;
+            return;
         }
         throw new SnsApplicationException(ErrorCode.INVALID_EMAIL);
     }
 
-    public CodeUserDto validateCodeForPassword(Integer codeId, String codeRequest) {
-        String code_email_username = storage.get(codeId);
-        if (code_email_username == null) {
-            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
-        }
-        String[] split = code_email_username.split(DELIMITER);
-        if (split[0].equals(codeRequest)) {
-            storage.remove(codeId);
-            return CodeUserDto.of(split[1], split[2]);
-        }
-        throw new SnsApplicationException(ErrorCode.INVALID_CODE);
-    }
 
-
-    public CodeDto generateCode(String email) {
-        String code = generateRandomString();
-        int key = keyGenerator.incrementAndGet();
-        storage.put(key, code+DELIMITER+email);
-        return CodeDto.of(key, code);
-    }
 
     public CodeDto generateCodeForPassword(String emailAddress, String username) {
         String code = generateRandomString();
@@ -81,9 +90,53 @@ public class CodeValidator {
     }
 
 
-    private String generateRandomString(){
-        return codeGenerator.generateRandomString(CODE_SIZE);
+    //이메일이 DELIMITER 를 포함하면  UserService.initPassword()에서 user not found Exception ErrorCode 발생
+    public CodeUserDto validateCodeForPassword(Integer codeId, String codeRequest) {
+        String code_email_username = storage.get(codeId);
+        if (code_email_username == null) {
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
+        }
+        String[] split = code_email_username.split(DELIMITER);
+        String code = split[0];
+        String email = split[1];
+        String username = split[2];
+        if (codeRequest.equals(code)) {
+            storage.remove(codeId);
+            return CodeUserDto.of(email, username);
+        }
+        throw new SnsApplicationException(ErrorCode.INVALID_CODE);
     }
 
 
+
+
+    public CodeDto generateCodeForEmailUpdate(String email) {
+        String code = generateRandomString();
+        int key = keyGenerator.incrementAndGet();
+        storage.put(key, code + DELIMITER + email);
+        return CodeDto.of(key, code);
+    }
+
+    public String validateCodeForEmailUpdate(Integer codeId, String codeRequest) {
+        String code_email = storage.get(codeId);
+        if (code_email == null) {
+            throw new SnsApplicationException(ErrorCode.INVALID_CODE_ID);
+        }
+        String[] split = code_email.split(DELIMITER);
+        String code = split[0];
+        String email = split[1];
+        if (codeRequest.equals(code)) {
+            storage.remove(codeId);
+            return email;
+        }
+        throw new SnsApplicationException(ErrorCode.INVALID_CODE);
+    }
+
+
+
+
+
+    private String generateRandomString() {
+        return codeGenerator.generateRandomString(CODE_SIZE);
+    }
 }

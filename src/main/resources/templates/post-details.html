@@ -70,18 +70,18 @@
     </script>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
     <!-- Plugins CSS -->
-    <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
 
 </head>
@@ -144,7 +144,7 @@ Header END -->
                                     <span class="spinner-dot"></span>
                                     <span class="spinner-dot"></span>
                                 </div>
-                                Load more comments
+                                댓글 더보기
                             </a>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ Header END -->
             <div class="modal-content">
                 <!-- Modal feed header START -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabelCreateFeed">Create post</h5>
+                    <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
                     <button
                             type="button"
                             class="btn-close"
@@ -193,7 +193,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="1"
-                              placeholder="title..."
+                              placeholder="제목"
                               autofocus
                               id="title"
                       ></textarea>
@@ -202,7 +202,7 @@ Header END -->
                       <textarea
                               class="form-control pe-4 fs-3 lh-1 border-0"
                               rows="4"
-                              placeholder="Share your thoughts..."
+                              placeholder="내용"
                               autofocus
                               id="content"
                       ></textarea>
@@ -216,7 +216,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Photo"
+                                    title="사진"
                                     for="uploadFile"
                             >
                                 <i class="bi bi-image-fill"></i>
@@ -227,7 +227,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Video"
+                                    title="비디오"
                             >
                                 <i class="bi bi-camera-reels-fill"></i>
                             </a>
@@ -236,7 +236,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Events"
+                                    title="이벤트"
                             >
                                 <i class="bi bi-calendar2-event-fill"></i>
                             </a>
@@ -245,7 +245,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Feeling/Activity"
+                                    title="기분/활동"
                             >
                                 <i class="bi bi-emoji-smile-fill"></i>
                             </a>
@@ -254,7 +254,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Check in"
+                                    title="위치태그"
                             >
                                 <i class="bi bi-geo-alt-fill"></i>
                             </a>
@@ -263,7 +263,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Tag people on top"
+                                    title="회원태그"
                             >
                                 <i class="bi bi-tag-fill"></i>
                             </a>
@@ -283,8 +283,8 @@ Header END -->
                                         data-position="top"
                                         data-search-enabled="false"
                                 >
-                                    <option value=0>Public</option>
-                                    <option value=1>Friends</option>
+                                    <option value=0>공개</option>
+                                    <option value=1>친구 공개</option>
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -294,13 +294,13 @@ Header END -->
                                         data-position="top"
                                         data-search-enabled="false"
                                 >
-                                    <option value=0>MyPage</option>
+                                    <option value=0>마이페이지</option>
                                 </select>
                                 <!-- Button -->
                             </div>
 
                             <div class="col-sm-4 text-sm-end">
-                                <button type="button" id="posting-button" class="btn btn-success-soft">Post</button>
+                                <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
                             </div>
                         </div>
                     </div>
@@ -335,7 +335,7 @@ Header END -->
                 <!-- Modal feed header END -->
 
                 <!-- Modal feed body START -->
-                <h2>정말 삭제하시겠습니까?</h2>
+                <h5>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp정말 삭제하시겠습니까?</h5>
                 <!-- Modal feed body END -->
 
                 <!-- Modal feed footer -->
@@ -346,9 +346,9 @@ Header END -->
                             class="btn btn-danger-soft me-2"
                             data-bs-dismiss="modal"
                     >
-                        Cancel
+                        취소
                     </button>
-                    <button type="button" class="btn btn-success-soft" id="delete-button">Delete</button>
+                    <button type="button" class="btn btn-success-soft" id="delete-button">삭제</button>
                 </div>
                 <!-- Modal feed footer -->
             </div>
@@ -367,7 +367,7 @@ Header END -->
             <div class="modal-content">
                 <!-- Modal feed header START -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabelCreateFeeddemo">Create post</h5>
+                    <h5 class="modal-title" id="modalLabelCreateFeeddemo">게시물 수정하기</h5>
                     <button
                             type="button"
                             class="btn-close"
@@ -385,7 +385,7 @@ Header END -->
                             <div class="avatar avatar-xs me-2">
                                 <img
                                         class="avatar-img rounded-circle"
-                                        src="assets/images/albums/07.jpg"
+                                        src="/assets/images/albums/07.jpg"
                                         alt=""
                                 />
                             </div>
@@ -398,7 +398,7 @@ Header END -->
                                   <textarea
                                           class="form-control pe-4 fs-3 lh-1 border-0"
                                           rows="1"
-                                          placeholder="title..."
+                                          placeholder="제목"
                                           autofocus
                                           id="modify_title"
                                   ></textarea>
@@ -407,7 +407,7 @@ Header END -->
                                   <textarea
                                           class="form-control pe-4 fs-3 lh-1 border-0"
                                           rows="4"
-                                          placeholder="Share your thoughts..."
+                                          placeholder="내용"
                                           autofocus
                                           id="modify_content"
                                   ></textarea>
@@ -421,7 +421,7 @@ Header END -->
                                     >
                                         <div class="dz-message">
                                             <i class="bi bi-images display-3"></i>
-                                            <p>Drag here or click to upload photo.</p>
+                                            <p>드래그해서 사진 업로드하기</p>
                                         </div>
                                     </div>
                                 </div>
@@ -434,7 +434,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Photo"
+                                    title="사진"
                             >
                                 <i class="bi bi-image-fill"></i>
                             </a>
@@ -443,7 +443,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Video"
+                                    title="비디오"
                             >
                                 <i class="bi bi-camera-reels-fill"></i>
                             </a>
@@ -452,7 +452,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Events"
+                                    title="이벤트"
                             >
                                 <i class="bi bi-calendar2-event-fill"></i>
                             </a>
@@ -461,7 +461,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Feeling/Activity"
+                                    title="기분/활동"
                             >
                                 <i class="bi bi-emoji-smile-fill"></i>
                             </a>
@@ -470,7 +470,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Check in"
+                                    title="위치태그"
                             >
                                 <i class="bi bi-geo-alt-fill"></i>
                             </a>
@@ -479,7 +479,7 @@ Header END -->
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    title="Tag people on top"
+                                    title="회원태그"
                             >
                                 <i class="bi bi-tag-fill"></i>
                             </a>
@@ -499,8 +499,8 @@ Header END -->
                                         data-position="top"
                                         data-search-enabled="false"
                                 >
-                                    <option value=0>Public</option>
-                                    <option value=1>Friends</option>
+                                    <option value=0>공개</option>
+                                    <option value=1>친구 공개</option>
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -510,13 +510,13 @@ Header END -->
                                         data-position="top"
                                         data-search-enabled="false"
                                 >
-                                    <option value=0>MyPage</option>
+                                    <option value=0>마이페이지</option>
                                 </select>
                                 <!-- Button -->
                             </div>
 
                             <div class="col-sm-4 text-sm-end">
-                                <button type="button" id="modify-button" class="btn btn-success-soft">Post</button>
+                                <button type="button" id="modify-button" class="btn btn-success-soft">수정</button>
                             </div>
                         </div>
                     </div>
@@ -555,7 +555,7 @@ Header END -->
                             <div class="avatar avatar-xs me-2">
                                 <img
                                         class="avatar-img rounded-circle"
-                                        src="assets/images/albums/07.jpg"
+                                        src="/assets/images/albums/07.jpg"
                                         alt=""
                                 />
                             </div>
@@ -568,7 +568,7 @@ Header END -->
                                   <textarea
                                           class="form-control pe-4 fs-3 lh-1 border-0"
                                           rows="4"
-                                          placeholder="Share your thoughts..."
+                                          placeholder="내용"
                                           autofocus
                                           id="commentContent"
                                   ></textarea>
@@ -624,7 +624,7 @@ Header END -->
                 <input type="hidden" id="deleteId">
 
                 <!-- Modal feed body START -->
-                <h2>정말 삭제하시겠습니까?</h2>
+                <h5>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp정말 삭제하시겠습니까?</h5>
                 <!-- Modal feed body END -->
 
                 <!-- Modal feed footer -->
@@ -635,9 +635,9 @@ Header END -->
                             class="btn btn-danger-soft me-2"
                             data-bs-dismiss="modal"
                     >
-                        Cancel
+                        취소
                     </button>
-                    <button type="button" class="btn btn-success-soft" id="comment-delete-button">Delete</button>
+                    <button type="button" class="btn btn-success-soft" id="comment-delete-button">삭제</button>
                 </div>
                 <!-- Modal feed footer -->
             </div>
@@ -650,12 +650,12 @@ Header END -->
 JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Theme Functions -->
-<script src="assets/js/functions.js"></script>
-<script src="assets/js/Feed/feed-detail.js"></script>
-<script src="assets/js/Feed/feed-modify.js"></script>
-<script src="assets/js/header.js"></script>
+<script src="/assets/js/functions.js"></script>
+<script src="/assets/js/Feed/feed-detail.js"></script>
+<script src="/assets/js/Feed/feed-modify.js"></script>
+<script src="/assets/js/header.js"></script>
 </body>
 </html>

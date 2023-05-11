@@ -70,21 +70,21 @@
   </script>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
   <!-- Plugins CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/dropzone/dist/dropzone.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/flatpickr/dist/flatpickr.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/choices.js/public/assets/styles/choices.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/dropzone/dist/dropzone.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/flatpickr/dist/flatpickr.css">
 
   <!-- Theme CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
 </head>
 
@@ -99,11 +99,11 @@ Header START -->
     <div class="container">
       <!-- Logo START -->
       <a class="navbar-brand" href="/">
-        <img class="light-mode-item navbar-brand-item" src="assets/images/logo.svg" alt="logo">
-        <img class="dark-mode-item navbar-brand-item" src="assets/images/logo.svg" alt="logo">
+        <img class="light-mode-item navbar-brand-item" src="/assets/images/logo.svg" alt="logo">
+        <img class="dark-mode-item navbar-brand-item" src="/assets/images/logo.svg" alt="logo">
       </a>
 
-      <button class="btn btn-primary" onclick="history.back()">뒤로 가기</button>
+      <button class="btn btn-primary" onclick="window.location.href = document.referrer">뒤로 가기</button>
       <!-- Logo END -->
 
       <!--&lt;!&ndash; Responsive navbar toggler &ndash;&gt;
@@ -164,7 +164,7 @@ Header START -->
                   <li>
                     <div class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3">
                       <div class="avatar text-center d-none d-sm-inline-block">
-                        <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="">
+                        <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt="">
                       </div>
                       <div class="ms-sm-3">
                         <div class=" d-flex">
@@ -183,7 +183,7 @@ Header START -->
                     <div
                       class="list-group-item list-group-item-action rounded badge-unread d-flex border-0 mb-1 p-3 position-relative">
                       <div class="avatar text-center d-none d-sm-inline-block">
-                        <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt="">
+                        <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt="">
                       </div>
                       <div class="ms-sm-3 d-flex">
                         <div>
@@ -213,7 +213,7 @@ Header START -->
                   <li>
                     <a href="#" class="list-group-item list-group-item-action rounded d-flex border-0 p-3 mb-1">
                       <div class="avatar text-center d-none d-sm-inline-block">
-                        <img class="avatar-img rounded-circle" src="assets/images/logo/12.svg" alt="">
+                        <img class="avatar-img rounded-circle" src="/assets/images/logo/12.svg" alt="">
                       </div>
                       <div class="ms-sm-3 d-flex">
                         <p class="small mb-2"><b>Bootstrap in the news:</b> The search giant’s parent company, Alphabet,
@@ -235,7 +235,7 @@ Header START -->
         <li class="nav-item ms-2 dropdown">
           <a class="nav-link btn icon-md p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside"
              data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-            <img class="avatar-img rounded-2" src="assets/images/avatar/07.jpg" alt="">
+            <img class="avatar-img rounded-2" src="/assets/images/avatar/07.jpg" alt="">
           </a>
           <ul class="dropdown-menu dropdown-animation dropdown-menu-end pt-3 small me-md-n3"
               aria-labelledby="profileDropdown">
@@ -244,7 +244,7 @@ Header START -->
               <div class="d-flex align-items-center position-relative">
                 <!-- Avatar -->
                 <div class="avatar me-3">
-                  <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt="avatar">
+                  <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt="avatar">
                 </div>
                 <div>
                   <a class="h6 stretched-link" href="#">Lori Ferguson</a>
@@ -364,26 +364,26 @@ Header END -->
                   <ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0">
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                       <a class="nav-link d-flex mb-0 active" href="#nav-setting-tab-1" data-bs-toggle="tab"> <img
-                        class="me-2 h-20px fa-fw" src="/assets/images/icon/person-outline-filled.svg" alt=""><span>Account </span></a>
+                        class="me-2 h-20px fa-fw" src="/assets/images/icon/person-outline-filled.svg" alt=""><span>내 계정 </span></a>
                     </li>
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                       <a class="nav-link d-flex mb-0" href="#nav-setting-tab-2" data-bs-toggle="tab"> <img
                         class="me-2 h-20px fa-fw" src="/assets/images/icon/notification-outlined-filled.svg"
-                        alt=""><span>Notification </span></a>
+                        alt=""><span>알림 </span></a>
                     </li>
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                     </li>
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                       <a class="nav-link d-flex mb-0" href="#nav-setting-tab-4" data-bs-toggle="tab"> <img
-                        class="me-2 h-20px fa-fw" src="/assets/images/icon/handshake-outline-filled.svg" alt=""><span>Communications </span></a>
+                        class="me-2 h-20px fa-fw" src="/assets/images/icon/handshake-outline-filled.svg" alt=""><span>차단 관리 </span></a>
                     </li>
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                       <a class="nav-link d-flex mb-0" href="#nav-setting-tab-5" data-bs-toggle="tab"> <img
-                        class="me-2 h-20px fa-fw" src="/assets/images/icon/chat-alt-outline-filled.svg" alt=""><span>Messaging </span></a>
+                        class="me-2 h-20px fa-fw" src="/assets/images/icon/chat-alt-outline-filled.svg" alt=""><span>메시지 </span></a>
                     </li>
                     <li class="nav-item" data-bs-dismiss="offcanvas">
                       <a class="nav-link d-flex mb-0" href="#nav-setting-tab-6" data-bs-toggle="tab"> <img
-                        class="me-2 h-20px fa-fw" src="/assets/images/icon/trash-var-outline-filled.svg" alt=""><span>Close account </span></a>
+                        class="me-2 h-20px fa-fw" src="/assets/images/icon/trash-var-outline-filled.svg" alt=""><span>계정삭제 </span></a>
                     </li>
                   </ul>
                   <!-- Side Nav END -->
@@ -442,7 +442,7 @@ Header END -->
 
               <!-- Title START -->
               <div class="card-header border-0 pb-0">
-                <h1 class="h5 card-title">Account Settings</h1>
+                <h1 class="h5 card-title">계정 정보</h1>
                 <p class="mb-0"></p>
               </div>
               <!-- Card header START -->
@@ -453,32 +453,32 @@ Header END -->
                 <form class="row g-3" onsubmit="return false;">
                   <!-- First name -->
                   <div class="col-6">
-                    <label class="form-label">Username</label>
+                    <label class="form-label">아이디</label>
                     <input type="text" class="form-control" value="username" id="usernameInput" readonly>
                   </div>
                   <!-- Last name -->
                   <div class="col-6">
-                    <label class="form-label">nickname</label>
+                    <label class="form-label">닉네입</label>
                     <input type="text" class="form-control" name="nickname" placeholder="" value="nickname">
                   </div>
 
                   <!-- Birthday -->
                   <div class="col-6 ">
-                    <label class="form-label">Birthday </label>
+                    <label class="form-label">생일 </label>
                     <input type="text" class="form-control flatpickr" name="birthday" value="12/12/1990">
                   </div>
 
                   <!-- Additional name -->
                   <div class="col-6">
-                    <label class="form-label">Gender</label>
+                    <label class="form-label">성별</label>
                     <div>
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="FEMALE">
-                        <label class="form-check-label" for="femaleRadio">Female</label>
+                        <label class="form-check-label" for="femaleRadio">여성</label>
                       </div>
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="MALE">
-                        <label class="form-check-label" for="maleRadio">Male</label>
+                        <label class="form-check-label" for="maleRadio">남성</label>
                       </div>
                     </div>
                   </div>
@@ -493,7 +493,7 @@ Header END -->
 
                   <!-- Button  -->
                   <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-sm btn-primary mb-0" onclick="updateUserInfo()" >Save changes</button>
+                    <button type="submit" class="btn btn-sm btn-primary mb-0" onclick="updateUserInfo()" >설정 적용</button>
                   </div>
                 </form>
                 <!-- Settings END -->
@@ -506,8 +506,8 @@ Header END -->
             <div class="card mb-4">
               <!-- Title START -->
               <div class="card-header border-0 pb-0">
-                <h5 class="card-title">Change your password</h5>
-                <p class="mb-0">See resolved goodness felicity shy civility domestic had but.</p>
+                <h5 class="card-title">비밀번호 변경</h5>
+                <p class="mb-0">주기적으로 비밀번호를 변경해 주세요</p>
               </div>
               <!-- Title START -->
               <div class="card-body">
@@ -515,26 +515,26 @@ Header END -->
 
                 <form class="row g-3" onsubmit="return false;">
                   <div class="col-12">
-                    <label class="form-label">Current password</label>
+                    <label class="form-label">현재 비밀번호</label>
                     <!-- Input group -->
                     <div class="input-group">
                       <input class="form-control fakepassword" type="password" id="psw-input"
-                             placeholder="Enter current password">
+                             placeholder="현재 비밀번호를 입력해 주세요">
                       <span class="input-group-text p-0">
-                          <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px" data-target="psw-input"></i>
+                          <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px" ></i>
                         </span>
                     </div>
                   </div>
                   <!-- New password -->
                   <div class="col-12">
-                    <label class="form-label">New password</label>
+                    <label class="form-label">새로운 비밀번호</label>
                     <!-- Input group -->
                     <div class="input-group">
                       <input class="form-control fakepassword" type="password" id="new-psw-input"
-                             placeholder="Enter new password">
-                      <span class="input-group-text p-0">
-                          <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px" data-target="new-psw-input"></i>
-                        </span>
+                             placeholder="새로운 비밀번호를 입력해 주세요">
+<!--                      <span class="input-group-text p-0">-->
+<!--                        <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>-->
+<!--                      </span>-->
                     </div>
                     <!-- Pswmeter -->
 <!--                    <div id="pswmeter" class="mt-2"></div>-->
@@ -543,18 +543,16 @@ Header END -->
                   </div>
                   <!-- Confirm password -->
                   <div class="col-12">
-                    <label class="form-label">Confirm password</label>
+                    <label class="form-label">새로운 비밀번호 확인</label>
                     <div class="input-group">
                       <input class="form-control fakepassword" type="password" id="confirm-psw-input"
-                             placeholder="Confirm new password">
-                      <span class="input-group-text p-0">
-                          <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px" data-target="confirm-psw-input"></i>
-                        </span>
+                             placeholder="새로운 비밀번호를 한번 더 입력해 주세요" onkeyup="checkPassword();">
                     </div>
+                    <span id="password-message"></span>
                   </div>
                   <!-- Button  -->
                   <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-primary mb-0" onclick="updatePassword()">Update Password</button>
+                    <button type="submit" class="btn btn-primary mb-0" id="passwordButton" onclick="updatePassword()">비밀번호 변경하기</button>
                   </div>
                 </form>
                 <!-- Settings END -->
@@ -566,8 +564,8 @@ Header END -->
             <div class="card" >
               <!-- Title START -->
               <div class="card-header border-0 pb-0">
-                <h5 class="card-title">Change your Email</h5>
-                <p class="mb-0">See resolved goodness felicity shy civility domestic had but.</p>
+                <h5 class="card-title">이메일 변경</h5>
+                <p class="mb-0">이메일은 또 다른 자신의 인증 수단입니다.</p>
               </div>
               <!-- Title START -->
               <div class="card-body">
@@ -576,17 +574,19 @@ Header END -->
                 <form class="row g-3" onsubmit="return false;">
                   <!-- Current password -->
                   <div class="col-6">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" value="" class="form-control" placeholder="">
-<!--                    <div class="col-6 mt-3">-->
-<!--                      <button type="submit" class="btn btn-primary mb-0" onclick="authEmail()">이메일 인증후 업데이트</button>-->
-<!--                    </div>-->
+                    <label class="form-label">이메일</label>
+                    <input type="email" name="email" id="email" value="" class="form-control" placeholder="">
+                  </div>
+
+                  <div class="col-6">
+                    <label class="form-label">현재 비밀번호</label>
+                    <input type="password" name="password" id= "email-password" class="form-control" placeholder="현재 비밀번호를 입력해 주세요">
                   </div>
 
 
                   <!-- Button  -->
                   <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-primary mb-0" onclick="authEmail()">이메일 인증후 업데이트</button>
+                    <button type="submit" class="btn btn-primary mb-0" id="emailButton" onclick="sendCode()">이메일 인증 후 변경</button>
                   </div>
                 </form>
                 <!-- Settings END -->
@@ -1222,6 +1222,7 @@ JS libraries, plugins and custom scripts -->
     let codeId;
     let authModal;
     let email;
+    let password;
 
 
     initMyUserInfo();
@@ -1265,7 +1266,6 @@ JS libraries, plugins and custom scripts -->
     }
 
 
-
     function updateUserInfo() {
         if (!validateUserInfo()) {
             return;
@@ -1303,7 +1303,6 @@ JS libraries, plugins and custom scripts -->
     }
 
 
-
     function validateUserInfo(){
         return true;
 
@@ -1327,99 +1326,147 @@ JS libraries, plugins and custom scripts -->
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/users/me/password',true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-            const response = JSON.parse(xhr.responseText);
-            console.log(response);
-            if (xhr.status === 200) {
-                console.log('비밀번호 수정 완료')
-                alert('비밀번호 수정이 완료 되었습니다.')
+        xhr.onreadystatechange=function(){
+            if (this.readyState === XMLHttpRequest.DONE) {
+                const response = JSON.parse(this.responseText);
+                if(response.resultCode==='SUCCESS'){
+                    alert('비밀번호 수정완료');
+                    clearPassword();
+                    checkPasswordInputs();
+                }
+                else if(response.resultCode==='INVALID_PASSWORD'){
+                    alert('비밀번호가 틀렸습니다.');
+                }
+                else{
+                    alert('비밀번호 수정에 실패 했습니다.');
+                }
 
-            } else {
-                alert('비밀번호 수정에 실패 하였습니다')
             }
-            clearPassword();
-        };
+        }
         xhr.send(json);
     }
-
 
     function clearPassword(){
         document.getElementById("psw-input").value="";
         document.getElementById("new-psw-input").value="";
         document.getElementById("confirm-psw-input").value="";
+        document.getElementById("email-password").value="";
     }
 
+    function sendCode(){
 
-    function authEmail(){
+        password = document.querySelector('input[name="password"]').value;
         email = document.querySelector('input[name="email"]').value;
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/anonymous/join/send-code', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function () {
+
+        const xhrPassword = new XMLHttpRequest();
+        xhrPassword.open('POST','/api/users/me/validate-password',true); //todo
+        xhrPassword.setRequestHeader('Content-Type','application/json');
+        xhrPassword.onreadystatechange=function(){
             if (this.readyState === XMLHttpRequest.DONE) {
                 const response = JSON.parse(this.responseText);
-                if (response.resultCode === 'SUCCESS') {
+                if(response.resultCode==='SUCCESS'){
                     codeId = response.result.codeId;
                     authModal = new bootstrap.Modal(document.getElementById('authModal'))
                     console.log('모달');
                     authModal.show();
                     console.log('모달');
-                } else {
-                    alert('이메일전송에 실패했습니다 다시 시도해주세요')
+                }
+                else if(response.resultCode==='INVALID_PASSWORD'){
+                    alert('비밀번호가 틀렸습니다.');
+                }
+                else{
+                    alert('이메일이 올바른지 확인해주세요.');
                 }
             }
         }
-        xhr.send(JSON.stringify({email: email}));
+        xhrPassword.send(JSON.stringify({password: password,email:email}))
+
     }
 
+    let email_password = document.getElementById("email-password");
     function checkCode() {
         console.log('인증코드검사함수')
         const code = document.querySelector('#authCodeInput').value;
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/anonymous/join/validate-code', true);
+        xhr.open('POST', '/api/users/me/email', true); //todo
         xhr.setRequestHeader('content-Type', 'application/json');
         xhr.onreadystatechange = function () {
             if (this.readyState === XMLHttpRequest.DONE) {
                 const response = JSON.parse(this.responseText);
                 if (response.resultCode === 'SUCCESS') {
 
-                    updateEmail();
+                    // email_password.value="";
 
+                    alert('이메일이 변경되었습니다');
+                    clearPassword();
+                    checkEmailInputs();
                     authModal.hide();
 
-                } else {
+
+                } else if(response.resultCode==='INVALID_PASSWORD'){
+                    alert('비밀번호가 틀렸습니다.')
+
+                }else{
                     alert('잘못된 코드를 입력 하셨습니다.')
-                    console.log("실패");
                 }
             }
         }
-        xhr.send(JSON.stringify({codeId: codeId, code: code}))
+        xhr.send(JSON.stringify({password:password,codeId: codeId, code: code}))
     }
 
-    function updateEmail(){
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST','/api/users/me/email',true);
-        xhr.setRequestHeader('content-Type', 'application/json');
-        xhr.onreadystatechange= function(){
-            if (this.readyState === XMLHttpRequest.DONE) {
-                const response = JSON.parse(this.responseText);
-                if (response.resultCode === 'SUCCESS') {
-                    alert('이메일 변경이 완료되었습니다.');
-                } else {
-                    alert('이메일 변경에 실패하였습니다.');
-                    console.log("실패");
-                }
-                userInfoRender(response);
-            }
+    function checkPassword(){
+        const newPassword = document.getElementById("new-psw-input").value;
+        const confirmPassword = document.getElementById("confirm-psw-input").value; //confirmPassword의 입력값을 반환
+        const passwordMessage = document.getElementById("password-message");//객체 자체를 반환
+        if (newPassword !== confirmPassword) {
+            passwordMessage.innerHTML = "비밀번호가 일치하지 않습니다.";
+        } else {
+            passwordMessage.innerHTML = "비밀번호가 일치합니다.";
         }
-        console.log('이메일이 왜 널이냐 ');
-        console.log(email);
-        xhr.send(JSON.stringify({codeId:codeId,email: email}))
-
     }
 
+    const currentPasswordInput = document.getElementById('psw-input');
+    const newPasswordInput = document.getElementById('new-psw-input');
+    const confirmPasswordInput = document.getElementById('confirm-psw-input');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('email-password');
+
+
+    const passwordButton = document.getElementById('passwordButton');
+    passwordButton.disabled=true;
+    const emailButton = document.getElementById('emailButton');
+    emailButton.disabled=true;
+
+    currentPasswordInput.addEventListener('input',checkPasswordInputs);
+    newPasswordInput.addEventListener('input',checkPasswordInputs);
+    confirmPasswordInput.addEventListener('input',checkPasswordInputs);
+    emailInput.addEventListener('input',checkEmailInputs);
+    passwordInput.addEventListener('input',checkEmailInputs);
+
+    function checkPasswordInputs() {
+
+        const currentPassword = currentPasswordInput.value.trim();
+        const newPassword = newPasswordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        if (currentPassword === '' || newPassword === '' || confirmPassword === '' ) {
+            passwordButton.disabled=true;
+        }else{
+            passwordButton.disabled =false;
+        }
+    }
+    function checkEmailInputs() {
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (email === '' || password === '' ) {
+            emailButton.disabled=true;
+        }else{
+            emailButton.disabled =false;
+        }
+    }
 
 
 </script>

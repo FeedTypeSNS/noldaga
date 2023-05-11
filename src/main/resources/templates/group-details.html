@@ -70,21 +70,21 @@
   </script>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap">
 
   <!-- Plugins CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/dropzone/dist/dropzone.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/flatpickr/dist/flatpickr.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/choices.js/public/assets/styles/choices.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/dropzone/dist/dropzone.css">
+  <link rel="stylesheet" type="text/css" href="/assets/vendor/flatpickr/dist/flatpickr.css">
 
   <!-- Theme CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
 
 </head>
@@ -132,7 +132,7 @@ Header END -->
               <div class="mb-2">
                 &lt;!&ndash; Avatar &ndash;&gt;
                 <div class="avatar avatar-xl">
-                  <img class="avatar-img border-0" src="assets/images/logo/13.svg" alt="">
+                  <img class="avatar-img border-0" src="/assets/images/logo/13.svg" alt="">
                 </div>
               </div>
               <div class="ms-md-4 mt-3">
@@ -172,7 +172,7 @@ Header END -->
               <div class="col-md-8 col-lg-6 vstack gap-4" id="feedBox">
 
                 <!-- Share feed START -->
-                <div class="card card-body">
+                <div class="card card-body" id="groupPostBox">
                   <div class="d-flex mb-3">
                     <!-- Avatar -->
                     <div class="avatar avatar-xs me-2" id="profileDiv">
@@ -309,14 +309,11 @@ Header END -->
 
           <!-- Gruop About tab END -->
           <div class="tab-pane fade show" id="group-tab-2">
-            <div class="card card-body">
-              <div class="my-sm-5 py-sm-5 text-center">
-                <!-- Icon -->
-                <i class="display-1 text-muted bi bi-person"> </i>
-                <!-- Title -->
-                <h4 class="mt-2 mb-3 text-body">No about details</h4>
-                <button class="btn btn-primary-soft btn-sm"> Click here to add </button>
-              </div>
+            <div id="group-master-info" class="card card-body">
+
+            </div>
+            <div id="group-member-info" class="card card-body">
+
             </div>
           </div>
           <!-- Gruop About tab END -->
@@ -347,7 +344,7 @@ Header END -->
         <div class="d-flex mb-3">
           <!-- Avatar -->
           <div class="avatar avatar-xs me-2">
-            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="">
+            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="">
           </div>
           <!-- Feed box  -->
           <form class="w-100">
@@ -408,7 +405,7 @@ Header END -->
         <div class="d-flex mb-3">
           <!-- Avatar -->
           <div class="avatar avatar-xs me-2">
-            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="">
+            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="">
           </div>
           <!-- Feed box  -->
           <form class="w-100">
@@ -599,7 +596,19 @@ Header END -->
   </div>
 </div>
 <!-- Modal create events END -->
-
+<div id="passwordModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <label for="passwordInput" style="margin-bottom: 10px;">비밀번호 입력</label>
+        <input type="password" id="passwordInput" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button id="passwordSubmit" class="btn btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- =======================
 JS libraries, plugins and custom scripts -->
@@ -618,8 +627,12 @@ JS libraries, plugins and custom scripts -->
 <script src="/assets/js/Group/group-modify.js"></script>
 <script src="/assets/js/Group/group-member-register.js"></script>
 <script src="/assets/js/Group/group-member-unregister.js"></script>
+<script src="/assets/js/Group/group-member-expel.js"></script>
+
 <script src="/assets/js/Group/group-feed-posting.js"></script>
 <script src="/assets/js/Group/group-feed-list.js"></script>
+<script src="/assets/js/Group/group-member-view.js"></script>
+
 <script src="assets/js/header.js"></script>
 
 

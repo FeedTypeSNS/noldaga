@@ -1,6 +1,5 @@
 package com.noldaga.service;
 
-import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.entity.Feed;
 import com.noldaga.domain.entity.FeedTag;
 import com.noldaga.domain.entity.HashTag;
@@ -8,7 +7,7 @@ import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.Feed.FeedRepository;
 import com.noldaga.repository.FeedTagRepository;
-import com.noldaga.repository.HashTagRepository;
+import com.noldaga.repository.HashTag.HashTagRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

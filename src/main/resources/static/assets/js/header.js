@@ -14,10 +14,8 @@ function init() {
 
     $("#search-content").on("keydown",(e)=>{
         if (e.keyCode === 13) {
-            let data={
-                content: $("#search-content").val(),
-            };
-            search(data.content);
+            let data= $("#search-content").val();
+            window.location.href = "/searchfeed?q="+data;
         }
     })
 }
@@ -36,12 +34,12 @@ function headerContent(data) {
       <a class="navbar-brand" href="/">
         <img
                 class="light-mode-item navbar-brand-item"
-                src="assets/images/logo.svg"
+                src="/assets/images/logo.svg"
                 alt="logo"
         />
         <img
                 class="dark-mode-item navbar-brand-item"
-                src="assets/images/logo.svg"
+                src="/assets/images/logo.svg"
                 alt="logo"
         />
       </a>
@@ -71,21 +69,19 @@ function headerContent(data) {
                 class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
         >
           <div class="nav-item w-100">
-            <form class="rounded position-relative">
-              <input
-                      class="form-control ps-5 bg-light"
-                      type="search"
-                      placeholder="Search..."
-                      aria-label="Search"
-                      id="search-content"
-              />
               <button
-                      class="btn bg-transparent px-2 py-0 position-absolute top-50 start-0 translate-middle-y"
+                      class="btn bg-transparent px-2 py-1 position-absolute"
                       type="button"
               >
                 <i class="bi bi-search fs-5"> </i>
               </button>
-            </form>
+              <input
+                      class="form-control ps-5 bg-light"
+                      type="search"
+                      placeholder="검색할 내용을 입력해주세요"
+                      aria-label="Search"
+                      id="search-content"
+              />
           </div>
         </div>
         <!-- Nav Search END -->
@@ -158,7 +154,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/avatar/01.jpg"
+                                src="/assets/images/avatar/01.jpg"
                                 alt=""
                         />
                       </div>
@@ -190,7 +186,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/avatar/02.jpg"
+                                src="/assets/images/avatar/02.jpg"
                                 alt=""
                         />
                       </div>
@@ -247,7 +243,7 @@ function headerContent(data) {
                       >
                         <img
                                 class="avatar-img rounded-circle"
-                                src="assets/images/logo/12.svg"
+                                src="/assets/images/logo/12.svg"
                                 alt=""
                         />
                       </div>
@@ -286,7 +282,7 @@ function headerContent(data) {
           >
             <img
                     class="avatar-img rounded-2"
-                    src="assets/images/albums/07.jpg"
+                    src="/assets/images/albums/07.jpg"
                     alt=""
             />
           </a>
@@ -301,7 +297,7 @@ function headerContent(data) {
                 <div class="avatar me-3">
                   <img
                           class="avatar-img rounded-circle"
-                          src="assets/images/avatar/07.jpg"
+                          src="/assets/images/avatar/07.jpg"
                           alt="avatar"
                   />
                 </div>
@@ -318,7 +314,7 @@ function headerContent(data) {
             </li>
             <!-- Links -->
             <li>
-              <a class="dropdown-item" href="settings.html"
+              <a class="dropdown-item" href="settings"
               ><i class="bi bi-gear fa-fw me-2"></i>내 정보 & 알림 범위 수정</a
               >
             </li>
@@ -456,7 +452,7 @@ function leftNavContent(data) {
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="notifications.html">
+              <a class="nav-link" href="/notifications">
                 <i class="bi bi-bell-fill nav-icon"></i>
                 <span class="nav-text">Notifications </span></a
               >
@@ -479,7 +475,7 @@ function leftNavContent(data) {
                   <div class="avatar avatar-xxs me">
                     <img
                             class="avatar-img rounded-circle"
-                            src="assets/images/albums/07.jpg"
+                            src="/assets/images/albums/07.jpg"
                             alt=""
                     />
                   </div>
@@ -541,8 +537,4 @@ function sidebarToggleEnd() {
             mode.classList.toggle("sidebar-end-enabled");
         });
     }
-}
-
-function search(data){
-    window.location.assign("http://localhost:8800/search?query");
 }

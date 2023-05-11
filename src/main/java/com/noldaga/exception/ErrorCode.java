@@ -18,7 +18,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),//토큰필터개발에서 추가됨
 
     FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "Feed not founded"),//피드수정개발할때 추가됨
-    INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "Permission is invalid"),//피드수정개발할때 추가됨.
+    INVALID_PERMISSION(HttpStatus.FORBIDDEN, "Permission is invalid"),//피드수정개발할때 추가됨.
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),//런타임 예외등(UserService 회원가입 트랜잭션 런타임예외 하면서 추가한듯.?)
 
@@ -45,7 +45,7 @@ public enum ErrorCode {
 
     UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
 
-    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Sending invalid data value"), //@Validated 실패시
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Invalid data value"), //@Validated 실패시
 
 
     ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
@@ -59,6 +59,11 @@ public enum ErrorCode {
     FILE_NOT_EXIST(HttpStatus.BAD_REQUEST, "This file does not exist."),
     FILE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "Wrong image format. (Must be jpg,jpeg,png format)"),
 
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "No Account associated with this email"),
+
+    EMAIL_LIMIT_EXCEEDED(HttpStatus.CONFLICT,"This Email has exceeded the limit"),
+
+    ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "Alarm not founded"),
     ;
 
     private HttpStatus status;

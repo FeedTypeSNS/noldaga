@@ -25,12 +25,20 @@ public class GroupMember {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public GroupMember(Group group, User user) {
+    @Column(name = "group_member_favor", nullable = false, columnDefinition = "int default 0")
+    private int favor; // 즐겨찾기 : 1
+
+    public GroupMember(Group group, User user, int favor) {
         this.group = group;
         this.user = user;
+        this.favor = favor;
     }
 
-    public static GroupMember of(Group group, User user) {
-        return new GroupMember(group, user);
+    public static GroupMember of(Group group, User user, int favor) {
+        return new GroupMember(group, user, favor);
+    }
+
+    public void favorChange(int favor){
+        this.favor = favor;
     }
 }

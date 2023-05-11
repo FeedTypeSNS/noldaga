@@ -22,8 +22,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,15 +67,17 @@ public class FeedController {
 
     //상세 페이지 피드 가져오기
     @GetMapping(value="/api/feed")
-    public Response<FeedResponse> getFeed(Long id, Authentication authentication){
+    public Response<FeedResponse> getFeed(Long id, Authentication authentication, HttpServletRequest request, HttpServletResponse response){
         FeedDto feedDto = feedService.getDetailFeed(id,authentication.getName());
+
+        plusViewCount(id, authentication.getName(), request, response);
 
         return Response.success(FeedResponse.fromFeedDto(feedDto));
     }
 
     //메인 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/{page}")
-    public Response<List<FeedResponse>> getmainFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getmainFeeds(@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getMainFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -83,7 +90,7 @@ public class FeedController {
 
     //그룹 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/group/{group_id}/{page}")
-    public Response<List<FeedResponse>> getGroupPageFeeds(@PathVariable Long group_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getGroupPageFeeds(@PathVariable Long group_id,@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getGroupFeed(page,authentication.getName(),group_id);
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -96,7 +103,7 @@ public class FeedController {
 
     //마이 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/mypage/{page}")
-    public Response<List<FeedResponse>> getMypageFeeds(Long user_id,@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getMypageFeeds(Long user_id,@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getMyPageFeed(page,user_id,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -109,7 +116,7 @@ public class FeedController {
 
     //탐색 페이지 피드 가져오기
     @GetMapping(value="/api/feeds/explore/{page}")
-    public Response<List<FeedResponse>> getExplorePageFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getExplorePageFeeds(@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getExploreFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -122,7 +129,7 @@ public class FeedController {
 
     //저장한 피드 가져오기 - 본인만 볼 수 있음
     @GetMapping("/api/feeds/save/{page}")
-    public Response<List<FeedResponse>> getMySavedFeeds(@PathVariable int page, Authentication authentication){//Authentication authentication
+    public Response<List<FeedResponse>> getMySavedFeeds(@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getMySavedFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
@@ -132,6 +139,33 @@ public class FeedController {
 
         return Response.success(feedResponseList);
     }
+
+    //좋아요한 피드 가져오기 - 본인만 볼 수 있음
+    @GetMapping("/api/feeds/like/{page}")
+    public Response<List<FeedResponse>> getMyLikedFeeds(@PathVariable int page, Authentication authentication){
+        List<FeedDto> feedDtoList = feedService.getMyLikedFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    //해시태그별 피드 가져오기
+    @GetMapping("/api/feeds/hashTag/{hashTagId}/{page}")
+    public Response<List<FeedResponse>> getHashTagFeeds(@PathVariable Long hashTagId,@PathVariable int page, Authentication authentication){
+        List<FeedDto> feedDtoList = feedService.getHashTagFeed(hashTagId,page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
 
     @PutMapping("/api/feed")
     public Response<FeedResponse> modifyFeed(@RequestBody FeedModifyRequest request, Long id, Authentication authentication){
@@ -146,41 +180,62 @@ public class FeedController {
         return Response.success();
     }
 
-    @PostMapping("/api/upload")
-    public Response<List<UploadDto>> imageUpload(@RequestParam("images") List<MultipartFile> files) throws IOException {
+//    @PostMapping("/api/upload")
+//    public Response<List<UploadDto>> imageUpload(@RequestParam("images") List<MultipartFile> files) throws IOException {
+//
+//        log.info("업로드 시작");
+//        List<UploadDto> uploadDtoList = new ArrayList<>();
+//
+//        files.forEach(file -> {
+//            String originalName = file.getOriginalFilename();
+//            String uuid = UUID.randomUUID().toString();
+//            Path savePath = Paths.get(path,uuid+"_"+originalName);
+//            boolean img = false;
+//
+//            try {
+//                file.transferTo(savePath);
+//
+//                if(Files.probeContentType(savePath).startsWith("image")){
+//                    img = true;
+//                    File thumbFile = new File(path,"s_"+uuid+"_"+originalName);
+//                    Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            UploadDto uploadDto = UploadDto.builder()
+//                    .uuid(uuid)
+//                    .filename(originalName)
+//                    .img(img)
+//                    .build();
+//
+//            log.info(uploadDto);
+//            log.info(uploadDto.getLink());
+//            uploadDtoList.add(uploadDto);
+//        });
+//        log.info(uploadDtoList);
+//        return Response.success(uploadDtoList);
+//    }
 
-        log.info("업로드 시작");
-        List<UploadDto> uploadDtoList = new ArrayList<>();
+    private void plusViewCount(Long feedId, String username, HttpServletRequest request, HttpServletResponse response){
+        Cookie userViewCookie = null;
 
-        files.forEach(file -> {
-            String originalName = file.getOriginalFilename();
-            String uuid = UUID.randomUUID().toString();
-            Path savePath = Paths.get(path,uuid+"_"+originalName);
-            boolean img = false;
-
-            try {
-                file.transferTo(savePath);
-
-                if(Files.probeContentType(savePath).startsWith("image")){
-                    img = true;
-                    File thumbFile = new File(path,"s_"+uuid+"_"+originalName);
-                    Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                log.info("쿠키 이름: " + cookie.getName());
+                if(cookie.getName().equals("userView"+feedId))
+                    userViewCookie = cookie;
             }
-            UploadDto uploadDto = UploadDto.builder()
-                    .uuid(uuid)
-                    .filename(originalName)
-                    .img(img)
-                    .build();
+        }
 
-            log.info(uploadDto);
-            log.info(uploadDto.getLink());
-            uploadDtoList.add(uploadDto);
-        });
-        log.info(uploadDtoList);
-        return Response.success(uploadDtoList);
+        if(userViewCookie == null){
+            log.info("처음 읽음");
+            feedService.plusViewCount(feedId);
+            Cookie newViewCookie = new Cookie("userView"+feedId, feedId+username);
+            newViewCookie.setPath("/");
+            newViewCookie.setMaxAge(60*60*72); //3일에 한번?
+            response.addCookie(newViewCookie);
+        }
     }
-
 }
