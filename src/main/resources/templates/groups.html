@@ -207,20 +207,26 @@ Header END -->
             <!-- Avatar upload START -->
             <div class="d-flex align-items-center">
               <div class="avatar-uploader me-3">
+                <div class="mb-3">
+                  <img id="groupImg" alt="사진 없음" src="assets/images/avatar/placeholder.jpg" class="rounded-circle" style="width: 100px; height: 100px;">
+                </div>
+                <div>
+                  <input type="file" accept=".png, .jpg, .jpeg" name="profile_url" id="fileInput">
+                </div>
+              </div>
+
                 <!-- Avatar edit -->
-                <div class="avatar-edit">
-                  <input name="profile_url" type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
-                  <label for="avatarUpload"></label>
-                </div>
-                <!-- Avatar preview -->
-                <div class="avatar avatar-xl position-relative">
-                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/avatar/placeholder.jpg" alt="">
-                </div>
-              </div>
-              <!-- Avatar remove button -->
-              <div class="avatar-remove">
-                <button type="button" id="avatar-reset-img" class="btn btn-light">사진 삭제</button>
-              </div>
+<!--                <div class="avatar-edit">-->
+<!--                  <input name="profile_url" type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />-->
+<!--                  <label for="avatarUpload"></label>-->
+<!--                </div>-->
+<!--                <div class="avatar avatar-xl position-relative">-->
+<!--                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/avatar/placeholder.jpg" alt="">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="avatar-remove">-->
+<!--                <button type="button" id="avatar-reset-img" class="btn btn-light">사진 삭제</button>-->
+<!--              </div>-->
             </div>
             <!-- Avatar upload END -->
           </div>
@@ -292,6 +298,25 @@ JS libraries, plugins and custom scripts -->
             passwordField.style.display = "none";
         }
     }
+</script>
+
+<script>
+  imageViewer();
+  function imageViewer() {
+    const fileInput = document.getElementById('fileInput');
+    const imgPreview = document.getElementById('groupImg');
+
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        imgPreview.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
 </script>
 
 </body>
