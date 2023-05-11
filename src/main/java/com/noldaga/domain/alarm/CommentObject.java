@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 public class CommentObject implements AlarmObject{
 
     private Long id;
-    private String content;
+    private String comment;
 
     private String feedTitle;
     private final String OBJECT_TYPE = "COMMENT";
@@ -22,8 +22,11 @@ public class CommentObject implements AlarmObject{
 
     @Override
     public String getNameOnAlarm() {
-        return feedTitle + "  -  " + content;
+        String f = AlarmObject.shortenString(feedTitle);
+        String c = AlarmObject.shortenString(comment);
+        return String.format("피드 : %s      댓글 : %s", f, c);
     }
+
 
 
     @Override

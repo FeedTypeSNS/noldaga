@@ -18,7 +18,7 @@ public class GroupObject implements AlarmObject{
 
     @Override
     public String getNameOnAlarm() {
-        return this.name;
+        return String.format("그룹 : %s", this.name);
     }
 
     @Override

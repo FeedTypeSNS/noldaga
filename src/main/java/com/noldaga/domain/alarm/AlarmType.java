@@ -18,11 +18,11 @@ public enum AlarmType {
 
     NEW_LIKE_ON_COMMENT("댓글에 좋아요가 눌렸습니다."),
 
-    BANNED("신화그룹에서 강퇴 당했습니다"),
+    BANNED("그룹에서 강퇴 되었습니다"),
 
-    NEW_FOLLOWER("A가 당신을 팔로우 했습니다"),
+    NEW_FOLLOWER("다른 회원이 나를 팔로우 했습니다"),
 
-    NEW_MEMBER("A가 신화그룹에 가입 했습니다"),
+    NEW_MEMBER("새로운 멤버가 그룹에 가입 했습니다"),
     ;
 
     private final String alarmText;

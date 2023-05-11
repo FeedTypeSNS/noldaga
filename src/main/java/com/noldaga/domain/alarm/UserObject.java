@@ -22,7 +22,8 @@ public class UserObject implements AlarmObject{
 
     @Override
     public String getNameOnAlarm() {
-        return this. nickname + " (" + this. username + ")";
+        String viewText = String.format("%s  (%s)", this.nickname, this.username);
+        return String.format("사용자 : %s", viewText);
 
     }
 
