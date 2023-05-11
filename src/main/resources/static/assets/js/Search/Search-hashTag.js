@@ -1,3 +1,5 @@
+var fpage = 0;
+
 function makeSearchMenu(query){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -12,29 +14,24 @@ function makeSearchMenu(query){
 
 makeSearchMenu();
 
-function searchMenuContent(query){
+function searchMenuContent(queryString){
     return `<ul class="nav nav-bottom-line align-items-center justify-content-center mb-0 border-0">
-              <li class="nav-item"> <a class="nav-link" href="/searchfeed${query}"> 게시글 </a> </li>
-              <li class="nav-item"> <a class="nav-link active" href="/searchhash${query}"> 해시태그 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchpeople${query}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchfeed${queryString}"> 게시글 </a> </li>
+              <li class="nav-item"> <a class="nav-link active" href="/searchhash${queryString}"> 해시태그 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchpeople${queryString}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/searchgroup${queryString}"> 그룹 </a> </li>
             </ul>`;
 }
 
 function getSearchHashTags(searchQuery){
-    var page = 0;
-
     $.ajax({
         type: "GET",
-        url: "/api/search/hashTag/"+searchQuery+"/"+page,
+        url: "/api/search/hashTag/"+searchQuery+"/"+fpage,
         dataType: "json"
     }).done(function(resp){
         setSearchHashTags(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
-    });
-
-    $("#loadmore-button").on("click",()=>{
-        loadmore(++page);
     });
 }
 
@@ -70,12 +67,28 @@ function setHashTagCardContent(hashTag) {
 }
 
 function setLoadMoreButton(){
-    return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true">
-                <span class="load-text"> Load more connections </span>
+    return `<a href="#!" role="button" class="btn btn-sm btn-loader btn-primary-soft" data-bs-toggle="button" aria-pressed="true" onclick="loadmoreSearchHashTag(++fpage)">
+                <span class="load-text"> 더보기 </span>
                 <div class="load-icon">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
                 </div>
               </a>`;
+}
+
+function loadmoreSearchHashTag(changedPage){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const searchQuery = urlParams.get('q');
+
+    $.ajax({
+        type: "GET",
+        url: "/api/search/hashTag/"+searchQuery+"/"+changedPage,
+        dataType: "json"
+    }).done(function(resp){
+        setSearchHashTags(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
 }

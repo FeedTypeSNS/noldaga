@@ -38,7 +38,7 @@ function getSavedFeeds() {
 
     $.ajax({
         type: "GET",
-        url: "/api/feeds/save/"+page,
+        url: "/api/feeds/like/"+page,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         insertPhotoCards(resp.result);
@@ -136,8 +136,8 @@ function profileContentMine(data) {
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
                   <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
-                  <li class="nav-item"> <a class="nav-link active" href="/save" > 저장됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/like" > 좋아요한</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/save" > 저장됨</a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/like" > 좋아요한</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>

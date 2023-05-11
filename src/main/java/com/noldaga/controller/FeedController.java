@@ -22,8 +22,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,8 +67,10 @@ public class FeedController {
 
     //상세 페이지 피드 가져오기
     @GetMapping(value="/api/feed")
-    public Response<FeedResponse> getFeed(Long id, Authentication authentication){
+    public Response<FeedResponse> getFeed(Long id, Authentication authentication, HttpServletRequest request, HttpServletResponse response){
         FeedDto feedDto = feedService.getDetailFeed(id,authentication.getName());
+
+        plusViewCount(id, authentication.getName(), request, response);
 
         return Response.success(FeedResponse.fromFeedDto(feedDto));
     }
@@ -124,6 +131,19 @@ public class FeedController {
     @GetMapping("/api/feeds/save/{page}")
     public Response<List<FeedResponse>> getMySavedFeeds(@PathVariable int page, Authentication authentication){
         List<FeedDto> feedDtoList = feedService.getMySavedFeed(page,authentication.getName());
+
+        List<FeedResponse> feedResponseList = new ArrayList<>();
+        feedDtoList.forEach(feedDto->{
+            feedResponseList.add(FeedResponse.fromFeedDto(feedDto));
+        });
+
+        return Response.success(feedResponseList);
+    }
+
+    //좋아요한 피드 가져오기 - 본인만 볼 수 있음
+    @GetMapping("/api/feeds/like/{page}")
+    public Response<List<FeedResponse>> getMyLikedFeeds(@PathVariable int page, Authentication authentication){
+        List<FeedDto> feedDtoList = feedService.getMyLikedFeed(page,authentication.getName());
 
         List<FeedResponse> feedResponseList = new ArrayList<>();
         feedDtoList.forEach(feedDto->{
@@ -197,4 +217,25 @@ public class FeedController {
 //        return Response.success(uploadDtoList);
 //    }
 
+    private void plusViewCount(Long feedId, String username, HttpServletRequest request, HttpServletResponse response){
+        Cookie userViewCookie = null;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                log.info("쿠키 이름: " + cookie.getName());
+                if(cookie.getName().equals("userView"+feedId))
+                    userViewCookie = cookie;
+            }
+        }
+
+        if(userViewCookie == null){
+            log.info("처음 읽음");
+            feedService.plusViewCount(feedId);
+            Cookie newViewCookie = new Cookie("userView"+feedId, feedId+username);
+            newViewCookie.setPath("/");
+            newViewCookie.setMaxAge(60*60*72); //3일에 한번?
+            response.addCookie(newViewCookie);
+        }
+    }
 }

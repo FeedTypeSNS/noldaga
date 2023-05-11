@@ -80,7 +80,7 @@ function headerContent(data) {
               <input
                       class="form-control ps-5 bg-light"
                       type="search"
-                      placeholder="Search..."
+                      placeholder="검색할 내용을 입력해주세요"
                       aria-label="Search"
                       id="search-content"
               />

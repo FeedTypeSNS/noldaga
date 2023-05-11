@@ -6,6 +6,7 @@ import com.noldaga.domain.FeedTagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -21,6 +22,7 @@ public class FeedResponse {
     private int range;
     private String ModDate;
     private String RegDate;
+    private LocalDateTime DelDate;
     private Long totalView;
     private Long totalLike;
     private Long totalComment;
@@ -37,6 +39,7 @@ public class FeedResponse {
                 feedDto.getRange(),
                 feedDto.getModDate(),
                 feedDto.getRegDate(),
+                feedDto.getDelDate(),
                 feedDto.getTotalView(),
                 feedDto.getTotalLike(),
                 feedDto.getTotalComment(),

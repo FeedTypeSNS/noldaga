@@ -20,9 +20,18 @@ let post = {
       groupId: $("#group_id").val()
     };
 
-    if(data.title.length>20) alert('제목이 너무 길어요. 20자 이하로 입력해주세요');
-    if(data.title.length<=0) alert('제목을 입력해주세요');
-    if(data.content.length<=0) alert('내용을 입력해주세요');
+    if(data.title.length>20) {
+      alert('제목이 너무 길어요. 20자 이하로 입력해주세요');
+      return;
+    }
+    if(data.title.length==0){
+      alert('제목을 입력해주세요');
+      return;
+    }
+    if(data.content.length==0){
+      alert('내용을 입력해주세요');
+      return;
+    }
 
     $.ajax({
       type: "POST",

@@ -1,92 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Social - Network, Community and Event Theme</title>
+	<title>Social - Network, Community and Event Theme</title>
 
-  <!-- Meta Tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Webestica.com">
-  <meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Webestica.com">
+	<meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
 
-  <!-- Dark mode -->
-  <script>
-    const storedTheme = localStorage.getItem('theme')
+	<!-- Dark mode -->
+	<script>
+		const storedTheme = localStorage.getItem('theme')
+ 
+		const getPreferredTheme = () => {
+			if (storedTheme) {
+				return storedTheme
+			}
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		}
 
-    const getPreferredTheme = () => {
-      if (storedTheme) {
-        return storedTheme
-      }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    }
+		const setTheme = function (theme) {
+			if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.setAttribute('data-bs-theme', 'dark')
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', theme)
+			}
+		}
 
-    const setTheme = function (theme) {
-      if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.setAttribute('data-bs-theme', 'dark')
-      } else {
-        document.documentElement.setAttribute('data-bs-theme', theme)
-      }
-    }
+		setTheme(getPreferredTheme())
 
-    setTheme(getPreferredTheme())
+		window.addEventListener('DOMContentLoaded', () => {
+		    var el = document.querySelector('.theme-icon-active');
+			if(el != 'undefined' && el != null) {
+				const showActiveTheme = theme => {
+				const activeThemeIcon = document.querySelector('.theme-icon-active use')
+				const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+				const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
 
-    window.addEventListener('DOMContentLoaded', () => {
-      var el = document.querySelector('.theme-icon-active');
-      if(el != 'undefined' && el != null) {
-        const showActiveTheme = theme => {
-          const activeThemeIcon = document.querySelector('.theme-icon-active use')
-          const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
-          const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+				document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+					element.classList.remove('active')
+				})
 
-          document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
-            element.classList.remove('active')
-          })
+				btnToActive.classList.add('active')
+				activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+			}
 
-          btnToActive.classList.add('active')
-          activeThemeIcon.setAttribute('href', svgOfActiveBtn)
-        }
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+				if (storedTheme !== 'light' || storedTheme !== 'dark') {
+					setTheme(getPreferredTheme())
+				}
+			})
 
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-          if (storedTheme !== 'light' || storedTheme !== 'dark') {
-            setTheme(getPreferredTheme())
-          }
-        })
+			showActiveTheme(getPreferredTheme())
 
-        showActiveTheme(getPreferredTheme())
+			document.querySelectorAll('[data-bs-theme-value]')
+				.forEach(toggle => {
+					toggle.addEventListener('click', () => {
+						const theme = toggle.getAttribute('data-bs-theme-value')
+						localStorage.setItem('theme', theme)
+						setTheme(theme)
+						showActiveTheme(theme)
+					})
+				})
 
-        document.querySelectorAll('[data-bs-theme-value]')
-                .forEach(toggle => {
-                  toggle.addEventListener('click', () => {
-                    const theme = toggle.getAttribute('data-bs-theme-value')
-                    localStorage.setItem('theme', theme)
-                    setTheme(theme)
-                    showActiveTheme(theme)
-                  })
-                })
+			}
+		})
+		
+	</script>
 
-      }
-    })
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="assets/images/favicon.ico">
 
-  </script>
+	<!-- Google Font -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap">
 
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+	<!-- Plugins CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
 
-  <!-- Google Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-
-  <!-- Plugins CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/dropzone/dist/dropzone.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/glightbox-master/dist/css/glightbox.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
-
-  <!-- Theme CSS -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
+	<!-- Theme CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
 
 </head>
 
@@ -95,83 +92,78 @@
 <!-- =======================
 Header START -->
 <header class="navbar-light fixed-top header-static bg-mode">
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid" id="header">
-      <!-- SideNav button -->
-      <!-- Logo START -->
+  <!-- Logo Nav START -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid" id="header">
+            <!-- SideNav button -->
+            <!-- Logo START -->
 
-      <!-- Logo Nav END -->
-      <!-- Nav right END -->
-    </div>
-  </nav>
-  <!-- Logo Nav END -->
+            <!-- Logo Nav END -->
+            <!-- Nav right END -->
+        </div>
+    </nav>
+    <!-- Logo Nav END -->
 </header>
 <!-- =======================
 Header END -->
 
 <!-- **************** MAIN CONTENT START **************** -->
 <main>
-
+  
   <!-- Container START -->
   <div class="container">
     <div class="row g-4">
 
-      <div class="col-md-2 col-lg-2 col-xxl-2 mt-n4" id="leftNav">
+      <!-- Sidenav START -->
+        <div class="col-md-2 col-lg-2 col-xxl-2 mt-n4" id="leftNav">
 
-      </div>
+        </div>
+      <!-- Sidenav END -->
+
       <!-- Main content START -->
-      <div class="col-lg-8 vstack gap-4">
-        <!-- Card START -->
-        <div class="card">
-          <!-- Card body END -->
-          <div
-                  class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
-          >
-            <div class="nav-item w-100">
-              <button
-                      class="btn bg-transparent px-2 py-1 position-absolute"
-                      type="button"
-              >
-                <i class="bi bi-search fs-5"> </i>
-              </button>
-              <input
-                      class="form-control ps-5 bg-light"
-                      type="search"
-                      placeholder="Search..."
-                      aria-label="Search"
-                      id="search-content-second"
-              />
+      <div class="col-md-8 col-lg-6 vstack gap-4">
+          <!-- Card START -->
+          <div class="card">
+            <!-- Card header START -->
+            <div
+                    class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
+            >
+              <div class="nav-item w-100" id="search-bar">
+                <button
+                        class="btn bg-transparent px-2 py-1 position-absolute"
+                        type="button"
+                >
+                  <i class="bi bi-search fs-5"> </i>
+                </button>
+                <input
+                        class="form-control ps-5 bg-light"
+                        type="search"
+                        placeholder="Search..."
+                        aria-label="Search"
+                        id="search-content-second"
+                />
+              </div>
+            </div>
+            <div class="card-footer pt-2 pb-0" id="cardFooter">
+              <!-- 게시글, 해시태그, 사람 -->
             </div>
           </div>
-          <div class="card-footer pt-2 pb-0" id="cardFooter">
-            <!-- Nav profile pages -->
+            <!-- Card header START -->
+            <!-- Card body START -->
+          <div class="col-lg">
+            <div class="bg-mode p-4">
+              <div id="search-group-content" class="row g-4">
+<!--------------------------------------------------------------------------------------------------->
+              </div>
+              <div class="d-grid" id="load-more-button">
+
+              </div>
+            </div>
           </div>
+          <!-- Card body END -->
         </div>
         <!-- Card END -->
-
-        <!-- Card Connections START -->
-        <div class="card">
-          <!-- Card header START -->
-          <!-- Card header END -->
-          <!-- Card body START -->
-          <div class="card-body" id="search-user-content">
-            <!-- Connections Item -->
-            <!-- Connections Item -->
-
-            <div class="d-grid" id="load-more-button">
-
-            </div>
-
-          </div>
-          <!-- Card body END -->
-        </div>
-        <!-- Card Connections END -->
-
-      </div>
-      <!-- Main content END -->
-
-
-
+      <!-- Right sidebar END -->
     </div> <!-- Row END -->
   </div>
   <!-- Container END -->
@@ -334,6 +326,7 @@ Header END -->
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
 
+
 <!-- =======================
 JS libraries, plugins and custom scripts -->
 
@@ -342,12 +335,29 @@ JS libraries, plugins and custom scripts -->
 
 <!-- Vendors -->
 <script src="assets/vendor/glightbox-master/dist/js/glightbox.min.js"></script>
+<script src="assets/vendor/dropzone/dist/dropzone.js"></script>
+<script src="assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 
 <!-- Theme Functions -->
-<script src="assets/js/functions.js"></script>
-<script src="assets/js/Feed/feed-posting.js"></script>
-<script src="assets/js/Feed/main-page.js"></script>
+<script src="/assets/js/functions.js"></script>
+<script src="/assets/js/Search/Search-group.js"></script>
+<script src="/assets/js/Group/group-member-register.js"></script>
+<script src="/assets/js/Feed/feed-posting.js"></script>
+
 <script src="assets/js/header.js"></script>
-<script src="assets/js/Search/Search-people.js"></script>
+
+
+
+<script th:inline="javascript">
+    function togglePassword() {
+        var passwordField = document.getElementById("passwordDiv");
+        if (document.getElementById("private").checked) {
+            passwordField.style.display = "block";
+        } else {
+            passwordField.style.display = "none";
+        }
+    }
+</script>
+
 </body>
 </html>
