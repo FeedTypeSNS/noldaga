@@ -54,6 +54,11 @@ public class PageController {
         return "my-profile-like";
     }
 
+    @GetMapping("/friend")
+    public String mypageFriend(){
+        return "my-profile-friends";
+    }
+
     @GetMapping("/searchfeed")
     public String searchFeed() {
         return "search-feed";

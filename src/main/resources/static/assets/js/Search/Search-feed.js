@@ -10,6 +10,13 @@ function makeSearchMenu(query){
     let cardFooterDiv = document.querySelector("#cardFooter");
     cardFooterDiv.innerHTML = searchMenuContent(queryString);
     getSearchFeeds(searchQuery);
+
+    $("#search-content-second").on("keydown",(e)=>{
+        if (e.keyCode === 13) {
+            let data= $("#search-content-second").val();
+            window.location.href = "/searchfeed?q="+data;
+        }
+    })
 }
 
 makeSearchMenu();
