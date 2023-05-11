@@ -238,7 +238,7 @@ function insertPhotoCards(data){
 
 function photoCardContent(data) {
     return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
-                              <img class="rounded img-fluid" src="/assets/images/albums/01.jpg" alt="">
+                              <img class="thumbnailimage" src=${data.imageDtoList[0].url} alt="">
                           </a>
                           <!-- likes -->
                           <ul class="nav nav-stack py-2 small">

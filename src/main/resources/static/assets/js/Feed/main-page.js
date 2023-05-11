@@ -1,3 +1,7 @@
+let curPos = 0;
+let postion = 0;
+const IMAGE_WIDTH = 600;
+
 function getUser() {
     $.ajax({
         type: "GET",
@@ -9,7 +13,6 @@ function getUser() {
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
-
 }
 
 getUser();
@@ -89,7 +92,6 @@ function profileContent(data) {
 }
 
 function setFeedsContent(data) {
-
     for(let i=0; i<data.length; i++){
         let feedsBox = document.querySelector("#feed");
 
@@ -114,6 +116,149 @@ function setFeedsContent(data) {
         feedsBox.append(feedCard); //그걸 feedsBox에 붙임
     }
 }
+
+function feedContentPlusImage(data) {
+    return `<div class="card-header border-0 pb-0">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-story me-2">
+                      <a href="/mypage?user_id=${data.userResponse.id}">
+                        <img
+                          class="avatar-img rounded-circle"
+                          src="/assets/images/avatar/04.jpg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <!-- Info -->
+                    <div>
+                      <div class="nav nav-divider">
+                        <h6 class="nav-item card-title mb-0">
+                          ${data.userResponse.username}
+                        </h6>
+                        <span class="nav-item small"> ${data.modDate} </span>
+                      </div>
+                      <h6 class="nav-item card-title mb-0">
+                          <a href="/feed?id=${data.id}">${data.title}  </a>
+                        </h6>
+                    </div>
+                  </div>
+                  <!-- Card feed action dropdown START -->
+                  <div class="dropdown">
+                    <a
+                      href="#"
+                      class="text-secondary btn btn-secondary-soft-hover py-1 px-2"
+                      id="cardFeedAction"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="bi bi-three-dots"></i>
+                    </a>
+                    <!-- Card feed action dropdown menu -->
+                
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="cardFeedAction"
+                    >
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori
+                          ferguson
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a
+                        >
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a
+                        >
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-flag fa-fw pe-2"></i>Report post</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Card feed action dropdown END -->
+                </div>
+             </div>
+              <!-- Card header END -->
+              <!-- Card body START -->
+              <div class="card-body">
+                <p>
+                  ${data.content} 
+                </p>
+                <!-- Card img -->
+                <div class="imagecontainer">
+                  <div class="album">
+                    <div class="images">
+                      ${getImageUrl(data.imageDtoList)}
+                    </div>
+                  </div>
+                </div>
+                <!-- Feed react START -->
+                <ul class="nav nav-stack py-3 small">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link like"
+                      href="#!"
+                      data-bs-container="body"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-html="true"
+                      data-bs-custom-class="tooltip-text-start"
+                      data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
+                      onclick="like(${data.id})"
+                      id="like-button-zzzzz"
+                    >
+                    <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#!">
+                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link save" href="#!" onclick="save(${data.id})">
+                      <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a>
+                  </li>
+                </ul>
+                <!-- Feed react END -->
+
+                <!-- Add comment -->
+                
+                <!-- Comment wrap START -->
+                
+                <!-- Comment wrap END -->
+              </div>
+              <!-- Card body END -->
+              <!-- Card footer START -->
+              <div class="card-footer border-0 pt-0>
+               </div>`;
+}
+
+function getImageUrl(data){
+    let result = "";
+    for(let i=0; i<data.length; i++) {
+        result += `<img
+            className="card-img"
+            src=${data[i].url}
+            alt="Post"
+        />`;
+    }
+    return result;
+}
+
 
 function feedContent(data) {
     return `<div class="card-header border-0 pb-0">
@@ -200,8 +345,8 @@ function feedContent(data) {
                 <!-- Card img -->
                 <img
                   class="card-img"
-                  src="/assets/images/post/3by2/01.jpg"
-                  alt="Post"
+                  src=${data.imageDtoList[0].url} 
+                  alt=""
                 />
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
@@ -218,7 +363,7 @@ function feedContent(data) {
                       onclick="like(${data.id})"
                       id="like-button-zzzzz"
                     >
-                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
+                    <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#!">
@@ -241,23 +386,6 @@ function feedContent(data) {
               <!-- Card footer START -->
               <div class="card-footer border-0 pt-0>
                </div>`;
-}
-
-function like2(data) {
-    let result = "";
-
-    $.ajax({
-        type: "GET",
-        url: "api/like/feed/"+data,
-        dataType: "json",
-        async: false
-    }).done(function(resp){
-        if(resp) result = "true";
-        else result = "false";
-        return result;
-    }).fail(function(error){
-        alert(JSON.stringify(error));
-    });
 }
 
 function like(data) {
@@ -296,17 +424,6 @@ function like_register(data) {
     });
 }
 
-function make_like_active() {
-    //$("#like-button-zzzzz").classList.remove("nav-link", "like");
-    //$("#like-button-zzzzz").classList.add("nav-link", "active");
-    //const navLinkLike = document.querySelector(".nav-link.like");
-    //navLinkLike.classList.remove("nav-link", "like");
-    //navLinkLike.classList.add("nav-link", "active");
-    const navLinkLike = document.querySelector('#like-button-zzzzz');
-    navLinkLike.classList.remove("nav-link", "like");
-    navLinkLike.classList.add("nav-link", "active");
-}
-
 function like_delete(data) {
 
     $.ajax({
@@ -318,14 +435,6 @@ function like_delete(data) {
         alert(JSON.stringify(error));
         window.location.href = "/";
     });
-}
-
-function make_like_inactive() {
-    const navLinkLike = document.querySelector('.nav-link.like');
-    const cList =  navLinkLike.classList;
-    navLinkLike.classList.remove("nav-link", "like");
-    navLinkLike.classList.add("nav-link", "active");
-
 }
 
 function save(data) {

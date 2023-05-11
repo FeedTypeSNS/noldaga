@@ -34,7 +34,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
                 .where(follow.following.id.eq(id))
                 .where(feed.groupId.eq(0L))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -49,7 +49,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
                 .where(feed.user.id.eq(userId))
                 .where(feed.groupId.eq(0L))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -65,7 +65,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
                 .where(feed.groupId.eq(0L))
                 .where(feed.range.eq(0))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -79,7 +79,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
         JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
                 .where(feed.groupId.eq(id))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -93,7 +93,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
         JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
                 .where(feed.range.eq(0))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -121,7 +121,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
         JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
                 .join(feedLike).on(feed.id.eq(feedLike.feed.id))
                 .where(feedLike.user.id.eq(userId))
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
@@ -150,7 +150,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
                 .join(feedTag).on(feed.id.eq(feedTag.feed.id))
                 .where(feedTag.hashTag.id.eq(hashTagId))
                 .where(feed.delDate.isNull())
-                .orderBy(feed.modDate.desc());
+                .orderBy(feed.regDate.desc());
 
         this.getQuerydsl().applyPagination(pageable,query);
         List<Feed> feedList = query.fetch();
