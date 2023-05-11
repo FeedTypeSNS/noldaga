@@ -23,4 +23,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     void deleteById(Long id);
 
 
+
+
 }

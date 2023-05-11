@@ -64,8 +64,15 @@ public class LikeService {
         feed.plusLikeCount();
 
 
-        alarmRepository.save(Alarm.of(feed.getUser().getId(), AlarmType.NEW_LIKE_ON_FEED,
-                AlarmArgs.of(UserObject.from(user), FeedObject.from(feed))));
+        Long likerId = user.getId();
+        Long feedWriterId = feed.getUser().getId();
+        if (likerId != feedWriterId) {// 내가 내피드 좋아요는 알림안함
+            Alarm alarm =Alarm.of(feedWriterId, AlarmType.NEW_LIKE_ON_FEED,
+                    AlarmArgs.of(UserObject.from(user), FeedObject.from(feed)),
+                    user);
+            alarmRepository.save(alarm);
+        }
+
 
         return FeedLikeDto.fromEntity(feedLiked);
     }
@@ -99,6 +106,16 @@ public class LikeService {
 
         //댓글 좋아요+1
         comment.plusLikeCount();
+
+
+        Long likerId= user.getId();
+        Long commentWriterId = comment.getId();
+        if (likerId != commentWriterId) {//내가 내꺼 좋아요할때는 알림 안보냄
+            Alarm alarm =Alarm.of(commentWriterId, AlarmType.NEW_LIKE_ON_COMMENT,
+                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment, comment.getFeedTitle())),
+                    user);
+            alarmRepository.save(alarm);
+        }
 
         return CommentLikeDto.fromEntity(commentLiked);
     }

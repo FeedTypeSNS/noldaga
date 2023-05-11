@@ -60,6 +60,16 @@ public class Alarm {
     //AlarmType 의 필드들이 나중에 바뀔수도 있지만 , json 이라는 문자열 형태로 db에 저장되면 db 컬럼들은 변경될 필요가 없음
 
 
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="group_id")
+    private Group fromGroup;
+
+    @ManyToOne(fetch =FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    private User fromUser;
+
+
     @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
     @Column(nullable = false , updatable = false)
@@ -75,22 +85,22 @@ public class Alarm {
 
     protected Alarm(){}
 
-//    private Alarm(Long id, AlarmType alarmType, User toUser, AlarmArgs alarmArgs) {
-//        this.id = id;
-//        this.alarmType = alarmType;
-//        this.toUser = toUser;
-//        this.alarmArgs = alarmArgs;
-//    }
 
-    private Alarm(Long id, AlarmType alarmType, Long toUserId, AlarmArgs alarmArgs) {
+    private Alarm(Long id, AlarmType alarmType, Long toUserId, AlarmArgs alarmArgs,Group fromGroup,User fromUser) {
         this.id = id;
         this.alarmType = alarmType;
         this.toUserId = toUserId;
         this.alarmArgs = alarmArgs;
+        this.fromGroup = fromGroup;
+        this.fromUser = fromUser;
     }
 
-    public static Alarm of(Long toUserId, AlarmType alarmType, AlarmArgs alarmArgs){
-        return new Alarm(null, alarmType, toUserId, alarmArgs);
+    public static Alarm of(Long toUserId, AlarmType alarmType, AlarmArgs alarmArgs,Group fromGroup){
+        return new Alarm(null, alarmType, toUserId, alarmArgs,fromGroup,null);
+    }
+
+    public static Alarm of(Long toUserId, AlarmType alarmType, AlarmArgs alarmArgs,User fromUser){
+        return new Alarm(null, alarmType, toUserId, alarmArgs,null,fromUser);
     }
 
     public String getFromType(){

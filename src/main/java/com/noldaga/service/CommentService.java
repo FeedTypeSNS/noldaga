@@ -64,7 +64,8 @@ public class CommentService {
         Long feedWriterId = feed.getUser().getId();
         if (commentWriterId != feedWriterId) { //내가 내 피드 댓글 할때는 알람 x
             Alarm alarm = Alarm.of(feedWriterId, AlarmType.NEW_COMMENT_ON_FEED,
-                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment,feed.getTitle())));
+                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment,feed.getTitle())),
+                    user);
             alarmRepository.save(alarm);
         }
 

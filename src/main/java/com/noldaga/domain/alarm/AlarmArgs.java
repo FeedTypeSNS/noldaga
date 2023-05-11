@@ -29,6 +29,13 @@ public class AlarmArgs {
 
     }
 
+    public static AlarmArgs of(AlarmObject fromObject){
+        return new AlarmArgs(
+                fromObject.getObjectType(), fromObject.getId(), fromObject.getNameOnAlarm(),
+                null,null,null
+        );
+    }
+
 
 //    mysql 에서는 없어도 되고 h2에서는 있어야하고
 //    db에서 json 데이터가 넘어오면 자바객체로 바꿀때 필요함 ( 스프링MVC 쪽에는 이게 자동으로 적용되는듯?)

@@ -2,11 +2,17 @@ package com.noldaga.service;
 
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.GroupMemberDto;
+import com.noldaga.domain.alarm.AlarmArgs;
+import com.noldaga.domain.alarm.AlarmType;
+import com.noldaga.domain.alarm.GroupObject;
+import com.noldaga.domain.alarm.UserObject;
+import com.noldaga.domain.entity.Alarm;
 import com.noldaga.domain.entity.Group;
 import com.noldaga.domain.entity.GroupMember;
 import com.noldaga.domain.entity.User;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.GroupMemberRepository;
 import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.UserRepository;
@@ -26,6 +32,8 @@ public class GroupMemberService {
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
 
+    private final AlarmRepository alarmRepository;
+
     @Transactional
     public GroupMemberDto registerGroup(Long groupId, String username) {
         // 유저 정보
@@ -39,6 +47,13 @@ public class GroupMemberService {
         //그룹 가입
         GroupMember groupMember = groupMemberRepository.save(GroupMember.of(group, user));
         GroupMemberDto groupMemberDto = GroupMemberDto.fromEntity(groupMember);
+
+
+        Long groupMasterId = group.getUser().getId();
+        Alarm alarm = Alarm.of(groupMasterId, AlarmType.NEW_MEMBER,
+                AlarmArgs.of(UserObject.from(user)),
+                user);
+        alarmRepository.save(alarm);
 
         return groupMemberDto;
 
@@ -113,5 +128,15 @@ public class GroupMemberService {
                 new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", group_id)));
 
         groupMemberRepository.deleteById(groupMember.getId());
+
+
+
+        Long bannedUserId = groupMember.getUser().getId();
+        Alarm alarm = Alarm.of(bannedUserId, AlarmType.BANNED,
+                AlarmArgs.of(GroupObject.from(group)),
+                group);
+
+        alarmRepository.save(alarm);
+
     }
 }
