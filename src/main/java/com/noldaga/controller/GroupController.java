@@ -5,9 +5,14 @@ import com.noldaga.controller.response.Response;
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.entity.Group;
 import com.noldaga.service.GroupService;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -18,8 +23,8 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping("/group")
-    public Response<GroupDto> createGroup(@RequestBody GroupDto groupDto, Authentication authentication) {
-        GroupDto registeredGroup = groupService.createGroup(groupDto, authentication.getName());
+    public Response<GroupDto> createGroup(@ModelAttribute GroupDto groupDto, @RequestParam(required = false) MultipartFile profileUrl, Authentication authentication) throws IOException {
+        GroupDto registeredGroup = groupService.createGroup(groupDto, profileUrl, authentication.getName());
         return Response.success(registeredGroup);
     }
 
@@ -37,15 +42,15 @@ public class GroupController {
     }
 
     @PutMapping("/group/{group_id}")
-    public Response<GroupDto> updateGroup(@PathVariable Long group_id, @RequestBody GroupDto groupDto, Authentication authentication) {
-        GroupDto updatedGroup = groupService.updateGroup(group_id, groupDto, authentication.getName());
+    public Response<GroupDto> updateGroup(@PathVariable Long group_id, @ModelAttribute GroupDto groupDto, @RequestParam(required = false) MultipartFile profileUrl, Authentication authentication) throws IOException {
+        GroupDto updatedGroup = groupService.updateGroup(group_id, groupDto, profileUrl, authentication.getName());
 
         return Response.success(updatedGroup);
     }
 
 
     @DeleteMapping("/group/{group_id}")
-    public Response<Void> deleteGroup(@PathVariable Long group_id,  Authentication authentication) {
+    public Response<Void> deleteGroup(@PathVariable Long group_id,  Authentication authentication) throws UnsupportedEncodingException {
         groupService.deleteGroup(group_id, authentication.getName());
 
         return Response.success();
