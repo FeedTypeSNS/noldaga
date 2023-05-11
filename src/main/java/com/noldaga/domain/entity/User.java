@@ -3,6 +3,7 @@ package com.noldaga.domain.entity;
 
 import com.noldaga.domain.userdto.Gender;
 import com.noldaga.domain.userdto.UserRole;
+import com.noldaga.util.ConstUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -75,6 +76,7 @@ public class User {
 
 
     private User(String username, String password, String nickname, String email) {
+        this.profileImageUrl = ConstUtil.USER_DEFAULT_IMG_URL;
         this.username = username;
         this.nickname = nickname;
         this.password = password;

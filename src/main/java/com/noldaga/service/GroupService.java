@@ -12,6 +12,7 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.GroupMemberRepository;
 import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.UserRepository;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,14 +34,22 @@ public class GroupService {
     private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public GroupDto createGroup(GroupDto groupDto, String username) {
+    public GroupDto createGroup(GroupDto groupDto, MultipartFile img, String username) throws IOException {
+        String url = "";
+        if(img == null) {
+            url = "";
+        } else {
+            url = s3Uploader.upload(img, "/group/img");
+        }
+
         //저장정보
         String name = groupDto.getName();
         String intro = groupDto.getIntro();
         int open = groupDto.getOpen();
-        String profile_url = groupDto.getProfile_url();
+        String profile_url = url;
         String pw = groupDto.getPw();
 
         //회원가입된 user인지 확인
@@ -76,7 +88,7 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupDto updateGroup(Long id, GroupDto groupDto, String username) {
+    public GroupDto updateGroup(Long id, GroupDto groupDto, MultipartFile img, String username) throws IOException {
 
         //유저확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -91,8 +103,21 @@ public class GroupService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
         }
 
+        //s3스토리지에 있는 사진 삭제
+        if(group.getProfile_url().equals("")) {
 
-        group.change(groupDto.getName(), groupDto.getProfile_url(), groupDto.getPw(), groupDto.getIntro(), groupDto.getOpen());
+        } else {
+            s3Uploader.deleteImage(group.getProfile_url());
+        }
+
+        String url = "";
+        if(img == null) {
+            url = "";
+        } else {
+            url = s3Uploader.upload(img, "/group/img");
+        }
+
+        group.change(groupDto.getName(), url, groupDto.getPw(), groupDto.getIntro(), groupDto.getOpen());
         groupRepository.save(group);
 
         GroupDto updatedGroup = GroupDto.fromEntity(group);
@@ -101,7 +126,7 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteGroup(Long id, String username) {
+    public void deleteGroup(Long id, String username) throws UnsupportedEncodingException {
         //유저확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
@@ -113,6 +138,13 @@ public class GroupService {
         //그룹장 여부 확인
         if (group.getUser() != user) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
+        }
+
+        //s3스토리지에 있는 사진도 함께 삭제
+        if(group.getProfile_url().equals("")) {
+
+        } else {
+            s3Uploader.deleteImage(group.getProfile_url());
         }
 
         //그룹에 속한 멤버들 가져오기

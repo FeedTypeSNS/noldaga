@@ -1,5 +1,5 @@
 function registerCheck(GroupPw) {
-    if (GroupPw !== "" && GroupPw !== null) {
+    if (GroupPw != "" && GroupPw != null) {
         $('#passwordModal').modal('show');
         $('#passwordSubmit').on('click', function() {
             const insertPw = $('#passwordInput').val();
