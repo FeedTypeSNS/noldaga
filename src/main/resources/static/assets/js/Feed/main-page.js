@@ -77,7 +77,7 @@ function setProfile(data){
     let profileBox = document.querySelector("#profileDiv");
 
     let profileCard = document.createElement("a");
-    profileCard.href = "/mypage?user_id="+data.id;
+    profileCard.href = "/nol/mypage?user_id="+data.id;
     profileCard.innerHTML = profileContent(data);
 
     profileBox.append(profileCard);
@@ -86,7 +86,7 @@ function setProfile(data){
 function profileContent(data) {
     return `<img
                         class="avatar-img rounded-circle"
-                        src="/assets/images/albums/07.jpg"
+                        src=${data.profileImageUrl}
                         alt=""
                 />`;
 }
@@ -123,10 +123,10 @@ function feedContentPlusImage(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="/mypage?user_id=${data.userResponse.id}">
+                      <a href="/nol/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
-                          src="/assets/images/avatar/04.jpg"
+                          src=${data.userResponse.profileImageUrl}
                           alt=""
                         />
                       </a>
@@ -266,10 +266,10 @@ function feedContent(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="/mypage?user_id=${data.userResponse.id}">
+                      <a href="/nol/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
-                          src="/assets/images/avatar/04.jpg"
+                          src=${data.userResponse.profileImageUrl}
                           alt=""
                         />
                       </a>
@@ -288,7 +288,7 @@ function feedContent(data) {
                     </div>
                   </div>
                   <!-- Card feed action dropdown START -->
-                  <div class="dropdown">
+                  <!--<div class="dropdown">
                     <a
                       href="#"
                       class="text-secondary btn btn-secondary-soft-hover py-1 px-2"
@@ -298,7 +298,7 @@ function feedContent(data) {
                     >
                       <i class="bi bi-three-dots"></i>
                     </a>
-                    <!-- Card feed action dropdown menu -->
+                    &lt;!&ndash; Card feed action dropdown menu &ndash;&gt;
                 
                     <ul
                       class="dropdown-menu dropdown-menu-end"
@@ -332,7 +332,7 @@ function feedContent(data) {
                         >
                       </li>
                     </ul>
-                  </div>
+                  </div>-->
                   <!-- Card feed action dropdown END -->
                 </div>
              </div>

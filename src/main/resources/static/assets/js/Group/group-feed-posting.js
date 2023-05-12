@@ -12,12 +12,14 @@ let post = {
     },
 
     posting:function(){
-
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const group_id = urlParams.get('id');
         let data={
             title: $("#title").val(),
             content: $("#content").val(),
             range: $("#open_range").val(),
-            groupId: $("#group_id").val()
+            groupId: group_id
         };
 
         if(data.title.length>20) alert('제목이 너무 길어요. 20자 이하로 입력해주세요');
@@ -32,7 +34,7 @@ let post = {
             dataType: "json"
         }).done(function(resp){
             alert('포스팅 완료');
-            location.href = "/";
+            location.reload();
         }).fail(function(error){
             alert('포스팅 실패');
             alert(JSON.stringify(error));
@@ -41,11 +43,14 @@ let post = {
     },
 
     posting_demo:function(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const group_id = urlParams.get('id');
         let data={
             title: $("#titledemo").val(),
             content: $("#contentdemo").val(),
             range: $("#open_range_demo").val(),
-            groupId: $("#group_id_demo").val()
+            groupId: group_id
         };
 
         $.ajax({
@@ -56,7 +61,7 @@ let post = {
             dataType: "json"
         }).done(function(resp){
             this.image_save(resp);
-            location.href = "/";
+            location.reload();
         }).fail(function(error){
             alert('포스팅 실패');
             alert(JSON.stringify(error));

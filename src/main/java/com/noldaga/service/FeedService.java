@@ -61,7 +61,7 @@ public class FeedService {
         hashTagService.extractHashTag(feedDto.getContent(), feedDto.getId());
 
         //url 저장
-        if(urls.size() == 0){
+        if(urls == null){
             imageRepository.save(Image.of("https://kr.object.ncloudstorage.com/noldaga-s3/feed/img/fbb1b30d-1079-4d4c-b15b-008ca55affc4.jpg",feed,0));
         }
         else{

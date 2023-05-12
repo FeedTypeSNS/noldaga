@@ -29,87 +29,87 @@ public class PageController {
         return "find-password";
     }
 
-    @GetMapping("/")
+    @GetMapping("/nol")
     public String home() {
-        return "index";
+        return "home";
     }
 
-    @GetMapping("/feed")
+    @GetMapping("/nol/feed")
     public String detail() {
         return "post-details";
     }
 
-    @GetMapping("/mypage")
+    @GetMapping("/nol/mypage")
     public String mypage() {
         return "my-profile";
     }
 
-    @GetMapping("/save")
+    @GetMapping("/nol/save")
     public String mypageSave() {
         return "my-profile-save";
     }
 
-    @GetMapping("/like")
+    @GetMapping("/nol/like")
     public String mypageLiked(){
         return "my-profile-like";
     }
 
-    @GetMapping("/friend")
+    @GetMapping("/nol/friend")
     public String mypageFriend(){
         return "my-profile-friends";
     }
 
-    @GetMapping("/searchfeed")
+    @GetMapping("/nol/searchfeed")
     public String searchFeed() {
         return "search-feed";
     }
 
-    @GetMapping("/searchhash")
+    @GetMapping("/nol/searchhash")
     public String searchHashTag() {
         return "search-hashTag";
     }
 
-    @GetMapping("/hashtag")
+    @GetMapping("/nol/hashtag")
     public String hashtagFeeds() {
         return "search-hashTag-detail";
     }
 
-    @GetMapping("/searchpeople")
+    @GetMapping("/nol/searchpeople")
     public String searchPeople() {
         return "search-people";
     }
 
-    @GetMapping("/searchgroup")
+    @GetMapping("/nol/searchgroup")
     public String searchGroup(){
         return "search-group";
     }
 
-    @GetMapping("/chat")
+    @GetMapping("/nol/chat")
     public String chatMain() {
         return "messaging";
     }
 
-    @GetMapping("/groups")
+    @GetMapping("/nol/groups")
     public String groupList() {
         return "groups";
     }
 
-    @GetMapping("/group")
+    @GetMapping("/nol/group")
     public String groupView() {
         return "group-details";
     }
 
-    @GetMapping("/settings")
+    @GetMapping("/nol/settings")
     public String settings() {
         return "settings";
     }
 
-    @GetMapping("/editProfile")
+    @GetMapping("/nol/editProfile")
     public String editProfile() {
         return "edit-profile-picture";
     }
 
-    @GetMapping("/notifications")
+    @GetMapping("/nol/notifications")
     public String notifications(){
         return "notifications";
     }

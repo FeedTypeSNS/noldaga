@@ -196,78 +196,11 @@ Header END -->
                               class="nav-link bg-light py-1 px-2 mb-0"
                               href="#!"
                               data-bs-toggle="modal"
-                              data-bs-target="#feedActionPhoto"
-                      >
-                        <i class="bi bi-image-fill text-success pe-2"></i>Photo</a
-                      >
-                    </li>
-                    <li class="nav-item">
-                      <a
-                              class="nav-link bg-light py-1 px-2 mb-0"
-                              href="#!"
-                              data-bs-toggle="modal"
-                              data-bs-target="#feedActionVideo"
-                      >
-                        <i class="bi bi-camera-reels-fill text-info pe-2"></i
-                        >Video</a
-                      >
-                    </li>
-                    <li class="nav-item">
-                      <a
-                              href="#"
-                              class="nav-link bg-light py-1 px-2 mb-0"
-                              data-bs-toggle="modal"
-                              data-bs-target="#modalCreateEvents"
-                      >
-                        <i class="bi bi-calendar2-event-fill text-danger pe-2"></i
-                        >Event
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a
-                              class="nav-link bg-light py-1 px-2 mb-0"
-                              href="#!"
-                              data-bs-toggle="modal"
                               data-bs-target="#modalCreateFeed"
                       >
                         <i class="bi bi-emoji-smile-fill text-warning pe-2"></i
-                        >Feeling /Activity</a
+                        >포스팅하기</a
                       >
-                    </li>
-                    <li class="nav-item dropdown ms-lg-auto">
-                      <a
-                              class="nav-link bg-light py-1 px-2 mb-0"
-                              href="#"
-                              id="feedActionShare"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                      >
-                        <i class="bi bi-three-dots"></i>
-                      </a>
-                      <!-- Dropdown menu -->
-                      <ul
-                              class="dropdown-menu dropdown-menu-end"
-                              aria-labelledby="feedActionShare"
-                      >
-                        <li>
-                          <a class="dropdown-item" href="#">
-                            <i class="bi bi-envelope fa-fw pe-2"></i>Create a
-                            poll</a
-                          >
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="#">
-                            <i class="bi bi-bookmark-check fa-fw pe-2"></i>Ask a
-                            question
-                          </a>
-                        </li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li>
-                          <a class="dropdown-item" href="#">
-                            <i class="bi bi-pencil-square fa-fw pe-2"></i>Help</a
-                          >
-                        </li>
-                      </ul>
                     </li>
                   </ul>
                   <!-- Share feed toolbar END -->
@@ -328,61 +261,103 @@ Header END -->
 <!-- **************** MAIN CONTENT END **************** -->
 
 <!-- Modal create Feed START -->
-<div class="modal fade" id="modalCreateFeed" tabindex="-1" aria-labelledby="modalLabelCreateFeed" aria-hidden="true">
+<div
+        class="modal fade"
+        id="modalCreateFeed"
+        tabindex="-1"
+        aria-labelledby="modalLabelCreateFeed"
+        aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <!-- Modal feed header START -->
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabelCreateFeed">Create post</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
+        <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+        ></button>
       </div>
       <!-- Modal feed header END -->
-
-      <!-- Modal feed body START -->
-      <div class="modal-body">
-        <!-- Add Feed -->
-        <div class="d-flex mb-3">
-          <!-- Avatar -->
-          <div class="avatar avatar-xs me-2">
-            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="">
+      <form enctype="multipart/form-data">
+        <!-- Modal feed body START -->
+        <div class="modal-body">
+          <!-- Add Feed -->
+          <div class="d-flex mb-3">
+            <!-- Avatar -->
+            <!--<div class="avatar avatar-xs me-2">
+              <img
+                      class="avatar-img rounded-circle"
+                      src="/assets/images/albums/07.jpg"
+                      alt=""
+              />
+            </div>-->
+            <!-- Feed box  -->
+            <div class="col">
+              <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="1"
+                              placeholder="제목"
+                              autofocus
+                              id="title"
+                      ></textarea>
+              </div>
+              <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="4"
+                              placeholder="내용"
+                              autofocus
+                              id="content"
+                      ></textarea>
+              </div>
+            </div>
           </div>
-          <!-- Feed box  -->
-          <form class="w-100">
-            <textarea class="form-control pe-4 fs-3 lh-1 border-0" rows="4" placeholder="Share your thoughts..." autofocus></textarea>
-          </form>
+          <!-- Feed rect START -->
+          <div class="hstack gap-2">
+            <label
+                    class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
+                    href="#"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="사진"
+                    for="uploadFile"
+            >
+              <i class="bi bi-image-fill"></i>
+            </label>
+            <input type="file" id="uploadFile" style="display:none" multiple/>
+          </div>
+          <!-- Feed rect END -->
         </div>
-        <!-- Feed rect START -->
-        <div class="hstack gap-2">
-          <a class="icon-md bg-success bg-opacity-10 text-success rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Photo"> <i class="bi bi-image-fill"></i> </a>
-          <a class="icon-md bg-info bg-opacity-10 text-info rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Video"> <i class="bi bi-camera-reels-fill"></i> </a>
-          <a class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Events"> <i class="bi bi-calendar2-event-fill"></i> </a>
-          <a class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Feeling/Activity"> <i class="bi bi-emoji-smile-fill"></i> </a>
-          <a class="icon-md bg-light text-secondary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Check in"> <i class="bi bi-geo-alt-fill"></i> </a>
-          <a class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Tag people on top"> <i class="bi bi-tag-fill"></i> </a>
-        </div>
-        <!-- Feed rect END -->
-      </div>
-      <!-- Modal feed body END -->
+        <!-- Modal feed body END -->
 
-      <!-- Modal feed footer -->
-      <div class="modal-footer row justify-content-between">
-        <!-- Select -->
-        <div class="col-lg-3">
-          <select class="form-select js-choice" data-position="top" data-search-enabled="false">
-            <option value="PB">Public</option>
-            <option value="PV">Friends</option>
-            <option value="PV">Only me</option>
-            <option value="PV">Custom</option>
-          </select>
-        </div>
-        <!-- Button -->
-        <div class="col-lg-8 text-sm-end">
-          <button type="button" class="btn btn-danger-soft me-2"> <i class="bi bi-camera-video-fill pe-1"></i> Live video</button>
-          <button type="button" class="btn btn-success-soft">Post</button>
-        </div>
-      </div>
-      <!-- Modal feed footer -->
+        <!-- Modal feed footer -->
+        <div class="modal-footer row justify-content-between">
+          <!-- Select -->
+          <div class="row">
+            <div class="col-sm-4">
+              <select
+                      id="open_range"
+                      class="form-select choice-select-text-none"
+                      data-position="top"
+                      data-search-enabled="false"
+              >
+                <option value=0>공개</option>
+                <option value=1>친구 공개</option>
+              </select>
+            </div>
 
+
+            <div class="col-sm-4 text-sm-end">
+              <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- Modal feed footer -->
     </div>
   </div>
 </div>
@@ -545,25 +520,25 @@ Header END -->
           <div class="col-12 mt-3">
             <ul class="avatar-group list-unstyled align-items-center mb-0">
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/06.jpg" alt="avatar">
               </li>
               <li class="avatar avatar-xs">
-                <img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt="avatar">
+                <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt="avatar">
               </li>
               <li class="ms-3">
                 <small> +50 </small>
@@ -614,15 +589,15 @@ Header END -->
 JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Vendors -->
-<script src="assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
-<script src="assets/vendor/dropzone/dist/dropzone.js"></script>
-<script src="assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+<script src="/assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="/assets/vendor/dropzone/dist/dropzone.js"></script>
+<script src="/assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
 
 <!-- Theme Functions -->
-<script src="assets/js/functions.js"></script>
+<script src="/assets/js/functions.js"></script>
 <script src="/assets/js/Group/group-detail.js"></script>
 <script src="/assets/js/Group/group-modify.js"></script>
 <script src="/assets/js/Group/group-member-register.js"></script>
@@ -633,7 +608,7 @@ JS libraries, plugins and custom scripts -->
 <script src="/assets/js/Group/group-feed-list.js"></script>
 <script src="/assets/js/Group/group-member-view.js"></script>
 
-<script src="assets/js/header.js"></script>
+<script src="/assets/js/header.js"></script>
 
 
 <script th:inline="javascript">

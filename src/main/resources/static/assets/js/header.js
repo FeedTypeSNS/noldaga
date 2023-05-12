@@ -31,7 +31,7 @@ function headerContent(data) {
     return `<a class="btn text-secondary py-0 me-sm-3 sidebar-start-toggle" onclick="sidebarToggleStart()">
         <i class="bi bi-justify-left fs-3 lh-1"></i>
       </a>
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" href="/nol">
         <img
                 class="light-mode-item navbar-brand-item"
                 src="/assets/images/noldagaMain.png"
@@ -282,7 +282,7 @@ function headerContent(data) {
           >
             <img
                     class="avatar-img rounded-2"
-                    src="/assets/images/albums/07.jpg"
+                    src=${data.profileImageUrl}
                     alt=""
             />
           </a>
@@ -297,13 +297,13 @@ function headerContent(data) {
                 <div class="avatar me-3">
                   <img
                           class="avatar-img rounded-circle"
-                          src="/assets/images/avatar/07.jpg"
+                          src=${data.profileImageUrl}
                           alt="avatar"
                   />
                 </div>
                 <div>
-                  <a class="h6 stretched-link" href="#">Lori Ferguson</a>
-                  <p class="small m-0">Web Developer</p>
+                  <a class="h6 stretched-link" href="#">${data.username}</a>
+                  <p class="small m-0">${data.nickname}</p>
                 </div>
               </div>
               <a
@@ -427,34 +427,34 @@ function leftNavContent(data) {
           <!-- Card START -->
           <!-- Side Nav START -->
           <ul class="nav nav-link-secondary flex-column fw-bold gap-2">
-            <li class="nav-item">
+            <!--<li class="nav-item">
               <a class="nav-link" href="my-profile-origin.html">
                 <i class="bi bi-search nav-icon"></i>
-                <span class="nav-text">Search </span></a
+                <span class="nav-text">검색 </span></a
               >
-            </li>
+            </li>-->
             <li class="nav-item">
               <a class="nav-link" href="my-profile-origin.html">
                 <i class="bi bi-card-checklist nav-icon"></i>
-                <span class="nav-text">Feed </span></a
+                <span class="nav-text">탐색 </span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/groups">
+              <a class="nav-link" href="/nol/groups">
                 <i class="bi bi-people nav-icon"></i>
-                <span class="nav-text">Groups </span></a
+                <span class="nav-text">그룹 </span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/chat">
+              <a class="nav-link" href="/nol/chat">
                 <i class="bi bi-chat-left-text nav-icon"></i>
-                <span class="nav-text">Messaging </span></a
+                <span class="nav-text">채팅 </span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/notifications">
+              <a class="nav-link" href="/nol/notifications">
                 <i class="bi bi-bell-fill nav-icon"></i>
-                <span class="nav-text">Notifications </span></a
+                <span class="nav-text">알림 </span></a
               >
             </li>
             <li class="nav-item">
@@ -465,17 +465,17 @@ function leftNavContent(data) {
                       data-bs-target="#modalCreateFeed"
               >
                 <i class="bi bi-pencil-square nav-icon"></i>
-                <span class="nav-text">Posting </span></a
+                <span class="nav-text">포스팅 </span></a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/mypage?user_id=${data.id}">
+              <a class="nav-link" href="/nol/mypage?user_id=${data.id}">
                 <i class="bi bi nav-icon">
                   <!-- Avatar -->
                   <div class="avatar avatar-xxs me">
                     <img
                             class="avatar-img rounded-circle"
-                            src="/assets/images/albums/07.jpg"
+                            src=${data.profileImageUrl}
                             alt=""
                     />
                   </div>
