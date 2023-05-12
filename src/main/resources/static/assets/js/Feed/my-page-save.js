@@ -62,7 +62,7 @@ function setProfile(myPageOwner){
 function profileContentMine(data) {
     var profileMessage = (data.profileMessage==="" || data.profileMessage==null)? "" : data.profileMessage;
 
-    return `<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+    return `<div class="h-200px rounded-top" style="background-image:url(/assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
             <!-- Card body START -->
             <div class="card-body py-0">
               <div class="d-sm-flex align-items-start text-center text-sm-start">
@@ -135,11 +135,10 @@ function profileContentMine(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
-                  <li class="nav-item"> <a class="nav-link active" href="/save" > 저장됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/like" > 좋아요한</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/nol/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/nol/save" > 저장됨</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/nol/like" > 좋아요한</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/nol/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }

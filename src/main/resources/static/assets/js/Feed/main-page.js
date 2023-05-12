@@ -77,7 +77,7 @@ function setProfile(data){
     let profileBox = document.querySelector("#profileDiv");
 
     let profileCard = document.createElement("a");
-    profileCard.href = "/mypage?user_id="+data.id;
+    profileCard.href = "/nol/mypage?user_id="+data.id;
     profileCard.innerHTML = profileContent(data);
 
     profileBox.append(profileCard);
@@ -123,7 +123,7 @@ function feedContentPlusImage(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="/mypage?user_id=${data.userResponse.id}">
+                      <a href="/nol/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
                           src=${data.userResponse.profileImageUrl}
@@ -266,7 +266,7 @@ function feedContent(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="/mypage?user_id=${data.userResponse.id}">
+                      <a href="/nol/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
                           src=${data.userResponse.profileImageUrl}
