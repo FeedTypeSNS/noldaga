@@ -34,12 +34,12 @@ function headerContent(data) {
       <a class="navbar-brand" href="/">
         <img
                 class="light-mode-item navbar-brand-item"
-                src="/assets/images/noldagaLogo.jpg"
+                src="/assets/images/noldagaMain.png"
                 alt="logo"
         />
         <img
                 class="dark-mode-item navbar-brand-item"
-                src="/assets/images/noldagaLogo.jpg"
+                src="/assets/images/noldagaMain.png"
                 alt="logo"
         />
       </a>
@@ -282,7 +282,7 @@ function headerContent(data) {
           >
             <img
                     class="avatar-img rounded-2"
-                    src=${data.profileImageUrl}
+                    src="/assets/images/albums/07.jpg"
                     alt=""
             />
           </a>
@@ -430,31 +430,31 @@ function leftNavContent(data) {
             <li class="nav-item">
               <a class="nav-link" href="my-profile-origin.html">
                 <i class="bi bi-search nav-icon"></i>
-                <span class="nav-text">검색 </span></a
+                <span class="nav-text">Search </span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="my-profile-origin.html">
                 <i class="bi bi-card-checklist nav-icon"></i>
-                <span class="nav-text">탐색 </span></a
+                <span class="nav-text">Feed </span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/groups">
                 <i class="bi bi-people nav-icon"></i>
-                <span class="nav-text">그룹 </span></a
+                <span class="nav-text">Groups </span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/chat">
                 <i class="bi bi-chat-left-text nav-icon"></i>
-                <span class="nav-text">채팅 </span></a
+                <span class="nav-text">Messaging </span></a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/notifications">
                 <i class="bi bi-bell-fill nav-icon"></i>
-                <span class="nav-text">알림 </span></a
+                <span class="nav-text">Notifications </span></a
               >
             </li>
             <li class="nav-item">
@@ -465,7 +465,7 @@ function leftNavContent(data) {
                       data-bs-target="#modalCreateFeed"
               >
                 <i class="bi bi-pencil-square nav-icon"></i>
-                <span class="nav-text">포스팅 </span></a
+                <span class="nav-text">Posting </span></a
               >
             </li>
             <li class="nav-item">
@@ -475,12 +475,12 @@ function leftNavContent(data) {
                   <div class="avatar avatar-xxs me">
                     <img
                             class="avatar-img rounded-circle"
-                            src=${data.profileImageUrl}
+                            src="/assets/images/albums/07.jpg"
                             alt=""
                     />
                   </div>
                 </i>
-                <span class="nav-text">마이페이지 </span></a
+                <span class="nav-text">MyPage </span></a
               >
             </li>
             
