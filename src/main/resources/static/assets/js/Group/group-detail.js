@@ -77,7 +77,7 @@ function getDetailGroupPage(group, user, groupMember) {
     if(group.profile_url != "") {
 
     } else {
-        profile = "assets/images/avatar/placeholder.jpg";
+        profile = "/assets/images/avatar/placeholder.jpg";
     }
 
     return `<div class="d-md-flex flex-wrap align-items-start text-center text-md-start">

@@ -44,7 +44,7 @@ function getDetailGroupMasterPage(group) {
     return `<div class="d-md-flex align-items-center">
                 <!-- Avatar -->
                 <div class="avatar me-3 mb-3 mb-md-0">
-                  <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""> </a>
+                  <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""> </a>
                 </div>
                 <!-- Info -->
                 <div class="w-80">
@@ -74,7 +74,7 @@ function getDetailGroupMemberPage(group, master) {
             $.each(response.result, function(index, user) {
                 groupsHtml += '<div class="d-md-flex align-items-center mb-4">';
                 groupsHtml += '  <div class="avatar me-3 mb-3 mb-md-0">';
-                groupsHtml += '    <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""> </a>';
+                groupsHtml += '    <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""> </a>';
                 groupsHtml += '    </div>';
                 groupsHtml += '      <div class="w-80">';
                 groupsHtml += '        <div class="d-sm-flex align-items-start">';
