@@ -28,6 +28,9 @@ $.ajax({
             }
             groupsHtml += '      <div class="hstack gap-2 gap-xl-3 justify-content-center mt-3">';
             groupsHtml += '        <div>';
+            if(group.intro == null || group.intro == "") {
+                group.intro = "　";
+            }
             groupsHtml += '          <small class="mb-0">' + group.intro + '</small>';
             groupsHtml += '        </div>';
             groupsHtml += '      </div>';
