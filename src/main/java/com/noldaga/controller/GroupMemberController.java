@@ -78,4 +78,10 @@ public class GroupMemberController {
         List<Group> FavorGroupList = groupMemberService.getFavorGroupList(authentication.getName());
         return Response.success(FavorGroupList);
     }
+
+    @GetMapping("/groups/member/favor/{user_id}") // 유저가 가입한 그룹 중 즐겨찾는 그룹 리스트
+    public Response<List<Group>> getUserFavorGroupList(@PathVariable Long user_id, Authentication authentication) {
+        List<Group> FavorGroupList = groupMemberService.getUserFavorGroupList(user_id, authentication.getName());
+        return Response.success(FavorGroupList);
+    }
 }

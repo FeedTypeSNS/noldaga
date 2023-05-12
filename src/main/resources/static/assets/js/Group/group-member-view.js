@@ -44,12 +44,12 @@ function getDetailGroupMasterPage(group) {
     return `<div class="d-md-flex align-items-center">
                 <!-- Avatar -->
                 <div class="avatar me-3 mb-3 mb-md-0">
-                  <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""> </a>
+                  <a href="/nol/mypage?user_id=${group.userDto.id}"> <img class="avatar-img rounded-circle" src="${group.userDto.profileImageUrl}" alt=""> </a>
                 </div>
                 <!-- Info -->
                 <div class="w-80">
                   <div class="d-sm-flex align-items-start">
-                    <h6 class="mb-0"><a href="#!">${group.userDto.name} </a></h6>
+                    <h6 class="mb-0"><a href="/nol/mypage?user_id=${group.userDto.id}">${group.userDto.name} </a></h6>
                     <p class="small ms-sm-2 mb-0">그룹장</p>
                   </div>
 
@@ -74,11 +74,11 @@ function getDetailGroupMemberPage(group, master) {
             $.each(response.result, function(index, user) {
                 groupsHtml += '<div class="d-md-flex align-items-center mb-4">';
                 groupsHtml += '  <div class="avatar me-3 mb-3 mb-md-0">';
-                groupsHtml += '    <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""> </a>';
+                groupsHtml += '    <a href="/nol/mypage?user_id='+user.id+'"> <img class="avatar-img rounded-circle" src="'+user.profileImageUrl+'" alt=""> </a>';
                 groupsHtml += '    </div>';
                 groupsHtml += '      <div class="w-80">';
                 groupsHtml += '        <div class="d-sm-flex align-items-start">';
-                groupsHtml += '          <h6 class="mb-0"><a href="#!">'+user.username+'</a></h6>';
+                groupsHtml += '          <h6 class="mb-0"><a href="/nol/mypage?user_id='+user.id+'">'+user.username+'</a></h6>';
                 groupsHtml += '          <p class="small ms-sm-2 mb-0">그룹원</p>';
                 groupsHtml += '        </div>';
                 groupsHtml += '    </div>';
