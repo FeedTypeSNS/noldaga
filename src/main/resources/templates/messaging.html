@@ -207,6 +207,49 @@ Header END -->
 </main>
 <!-- **************** MAIN CONTENT END **************** -->
 
+<div
+        class="modal fade"
+        id="DeleteAlertModalChat"
+        tabindex="-1"
+        aria-labelledby="feedActionPhotoLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal feed header START -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedActionPhotoLabel">
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <!-- Modal feed header END -->
+
+            <!-- Modal feed body START -->
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;메시지를 삭제하시겠습니까?</h5>
+            <!-- Modal feed body END -->
+
+            <!-- Modal feed footer -->
+            <!--<div class="modal-footer">
+                &lt;!&ndash; Button &ndash;&gt;
+                <button
+                        type="button"
+                        class="btn btn-danger-soft me-2"
+                        data-bs-dismiss="modal"
+                        style="width: 50px; height: 30px; "
+                >
+                    취소
+                </button>
+                <button type="button" class="btn btn-success-soft" id="chat-delete-button" style="width: 30px; height: 20px;">삭제</button>
+            </div>-->
+            <!-- Modal feed footer -->
+        </div>
+    </div>
+</div>
 <!-- Chat START -->
 <div class="position-fixed bottom-0 end-0 p-3">
 
@@ -243,10 +286,10 @@ Header END -->
       </div>
       <!-- Button  -->
       <div class="d-sm-flex align-items-end">
-        <textarea class="form-control mb-sm-0 mb-3" placeholder="메시지를 입력하세요" rows="1" spellcheck="false"></textarea>
-        <button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>
-        <button class="btn btn-sm btn-secondary-soft ms-2"><i class="fa-solid fa-paperclip fs-6"></i></button>
-        <button class="btn btn-sm btn-primary ms-2" id="new-chatting-submit" type="button"><i class="fa-solid fa-paper-plane fs-6"></i></button>
+        <!--<textarea class="form-control mb-sm-0 mb-3" placeholder="메시지를 입력하세요" rows="1" spellcheck="false"></textarea>-->
+        <!--<button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>-->
+        <!--<button class="btn btn-sm btn-secondary-soft ms-2"><i class="fa-solid fa-paperclip fs-6"></i></button>-->
+        <a style="padding-left: 20px;" class="btn btn-sm btn-primary ms-2" id="new-chatting-submit" type="button"><i class="fa-solid fa-paper-plane fs-6">&nbsp;&nbsp;채팅방 불러오기</i> </a>
       </div>
     </div>
   </div>
@@ -281,6 +324,7 @@ JS libraries, plugins and custom scripts -->
 
 <script src="/assets/js/functions.js"></script>
 <script src="/assets/js/header.js"></script>
+<script src="/assets/js/Chat/chat-session-json.js"></script>
 <script src="/assets/js/Chat/chat-session.js"></script>
 <script src="/assets/js/Chat/chat-page.js"></script>
 <script src="/assets/js/Chat/chatting.js"></script>

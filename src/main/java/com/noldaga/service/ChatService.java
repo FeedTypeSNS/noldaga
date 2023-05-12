@@ -22,12 +22,17 @@ import com.noldaga.repository.Chat.ChatRepository;
 import com.noldaga.repository.Chat.ChatRoomRepository;
 import com.noldaga.repository.Chat.JoinRoomRepository;
 import com.noldaga.repository.UserRepository;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.mail.Multipart;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -42,6 +47,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatReadRepository chatReadRepository;
+    private final S3Uploader s3Uploader;
     private Map<Long, ChatRoom> chatRooms;
 
 
@@ -188,25 +194,64 @@ public class ChatService {
 
     //메시지 저장하기
     @Transactional
-    public ChatSendResponse saveChat(String me, ChatSendRequest request, Long id){
+    public ChatSendResponse saveChat(String me, ChatSendRequest request, Long id) throws IOException {
+            ChatRoom room = chatRoomRepository.findById(id).orElseThrow(() ->
+                    new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+
+             if (request.getMsg().contains("/")){
+            String[] parts = request.getMsg().split("/");
+            String admin = parts[parts.length-1];
+            if (admin.equals("ADMINSENDDELETE")){
+                String msg = "/ADMINSENDDELETE";
+                User user = userRepository.findFirstByRole(UserRole.valueOf("ADMIN")).get();
+                Chat chat = chatRepository.save(Chat.of(room, user, request.getMsg().replace(msg, ""), room.getUserNum()));
+                log.info("채팅: "+chat.getMsg());
+                return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat));
+            }
+        }//삭제시 메시지 저장하는거 따로 빼는게 날듯..
+
+            User user = userRepository.findByUsername(me).orElseThrow(() ->
+                    new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
+
+            String msg = request.getMsg();
+
+            Chat chat = chatRepository.save(Chat.of(room, user, msg, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
+            //chatReadRepository.save(ChatRead.of(user, chat)); //보낸 사람은 읽음 처리 해줘야함
+            log.info("채팅: "+chat.getMsg());
+            return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat)/*, receivers*/);
+    }
+
+    @Transactional
+    public ChatSendResponse saveChatImg(String me, MultipartFile img, Long id) throws IOException {
+        ChatRoom room = chatRoomRepository.findById(id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+
         User user = userRepository.findByUsername(me).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
 
-        ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
-                new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+        String imgurl = "CHATIMG|";
+        imgurl += s3Uploader.upload(img, "/chat/img");
 
-        Chat chat = chatRepository.save(Chat.of(room, user, request.getMsg(), room.getUserNum()-1)); //채팅 저장(자신은 읽은 거니 -1)
+        Chat chat = chatRepository.save(Chat.of(room, user, imgurl, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
         //chatReadRepository.save(ChatRead.of(user, chat)); //보낸 사람은 읽음 처리 해줘야함
-
+        log.info("채팅: "+chat.getMsg());
         return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat)/*, receivers*/);
     }
 
     //메시지 삭제
     @Transactional
-    public String deleteChat(String me, Long id){
+    public String deleteChat(String me, Long id) throws UnsupportedEncodingException {
         Chat chat = chatRepository.findById(id).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.CHAT_NOT_FIND)); //지울 채팅 찾기
         List<ChatRead> read = chatReadRepository.findAllByChat(chat); //읽은 내역도 삭제되야함
+
+
+        if (chat.getMsg().contains("CHATIMG|")&&chat.getMsg().contains("https://kr.object.ncloudstorage.com/noldaga-s3/chat/img")){
+            String msg = chat.getMsg().replace("CHATIMG|", "");
+            s3Uploader.deleteImage(msg);
+            log.info(msg);
+        }
+
         chatReadRepository.deleteAllInBatch(read); //우선 읽은 내역 전체 삭제, casecade로 안함
         chatRepository.delete(chat); //이후 채팅 삭제
         //참조 무결성의 법칙으로, 만약 chat을 지울때 이를 참조하고 있는 테이블이 있으면 삭제가 안됨.. = 그래서 참조하는 chatRead 먼저 삭제
@@ -237,7 +282,7 @@ public class ChatService {
         log.info("방에 채팅내역"+String.valueOf(chatList));
         if (room.getUserNum()==0) { throw new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM, "This room id already delete");
         }else {
-            if (people.size() == 1) { //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
+            if (people.size() == 1 ) { //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
                 log.info("내가 마지막 사람");
                 for (int i = 0; i < chatList.size(); i++) {
                     List<ChatRead> pRead = chatReadRepository.findAllByChat(chatList.get(i));
@@ -247,6 +292,7 @@ public class ChatService {
                 } //읽음 정보 모두 삭제
                 chatRepository.deleteAllInBatch(chatList);
                 joinRoomRepository.deleteAllInBatch(people);
+                log.info("방 완전 삭제");
                 chatRoomRepository.delete(room);
             } else { //아니라면 내 join 정보와 읽음 여부 정보 삭제 해줌 됨!, 이름 변경..
                 log.info("나 말고 더 있음");
@@ -260,10 +306,15 @@ public class ChatService {
             }
         }
 
-        return user.getUsername()+"님이 \""+room.getViewRoomName()+"\" 방에서 나갔습니다.";
+        return user.getUsername()+"님이 "+room.getViewRoomName()+" 방에서 나갔습니다.";
     } //join room에 모두가 나가야 삭제됨, 나간사람이 채팅한 거는 남겨두기로.. 추후에 삭제하든 정보를 null로 바꿔두든 할예정
       //내용만 바꾸게.. 초대는 일단 불가능하게 인스타처럼 설정
 
+    @Transactional
+    public void delChatRoomUserNum(int num){
+        List<ChatRoom> delRoom = chatRoomRepository.findAllByUserNum(num);
+        chatRoomRepository.deleteAllInBatch(delRoom);
+    }
     @Transactional
     public void reSettingRoom(String me, Long id){
         //방이름을 통해 찾으니 함께 변경해줘야함
@@ -278,8 +329,7 @@ public class ChatService {
 
             if (!roomName.contains(",")) {
                 if (people.size() == 1 && people.get(0).getUsers().getUsername().equals(me)) {
-                    roomName = "(알 수 없음)";
-                    viewName = roomName;
+                    viewName = "(알 수 없음)";
                 } //회원이 탈퇴해서 사라졌을때
                 else {
                     viewName = "대화상대 없음";

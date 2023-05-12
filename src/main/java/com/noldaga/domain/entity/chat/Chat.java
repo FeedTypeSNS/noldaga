@@ -20,8 +20,8 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //채팅 순서 = 메시지 순서
 
-    @OneToOne //기본 fetchtype eger -> 메시지 보내줄때마다 필요
-    @JoinColumn(name = "room_id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //채팅방 사라질떄 모두 사라져야함
+    @JoinColumn(name = "room_id")//기본 fetchtype eger -> 메시지 보내줄때마다 필요
     private ChatRoom room;
 
     @JoinColumn(name = "send_user_id")
