@@ -63,7 +63,7 @@ function initProfile(data){
 function profileContent(data) {
     return `<img
                         class="avatar-img rounded-circle"
-                        src="/assets/images/albums/07.jpg"
+                        src="${data.profileImageUrl}"
                         alt=""
                 />`;
 }
@@ -99,10 +99,10 @@ function getFeedBoxContentRemoveComment(data) {
                   <div class="d-flex align-items-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-story me-2">
-                      <a href="/mypage?user_id=${data.userResponse.id}">
+                      <a href="/nol/mypage?user_id=${data.userResponse.id}">
                         <img
                           class="avatar-img rounded-circle"
-                          src="/assets/images/avatar/04.jpg"
+                          src="${data.userResponse.profileImageUrl}"
                           alt=""
                         />
                       </a>
@@ -111,12 +111,12 @@ function getFeedBoxContentRemoveComment(data) {
                     <div>
                       <div class="nav nav-divider">
                         <h6 class="nav-item card-title mb-0">
-                          <a href="#">${data.userResponse.username} </a>
+                          <a href="/nol/mypage?user_id=${data.userResponse.id}">${data.userResponse.username} </a>
                         </h6>
                         <span class="nav-item small"> ${data.modDate} </span>
                       </div>
                       <h6 class="nav-item card-title mb-0">
-                          <a href="/feed?id=${data.id}">${data.title}  </a>
+                          <a href="/nol/feed?id=${data.id}">${data.title}  </a>
                         </h6>
                     </div>
                   </div>

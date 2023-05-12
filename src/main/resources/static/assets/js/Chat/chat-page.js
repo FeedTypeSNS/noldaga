@@ -42,6 +42,8 @@ function getChatListFunc(){
 function getChatBody(){
     $("#chatting-tool *").remove();
     $("#chatting-tool").remove();
+    $(".card-footer *").remove();
+    $(".card-footer").remove();
     let chatBody = document.querySelector("#chat-tool-body");
     let body = document.createElement("div");
     body.id = "chatting-tool";
@@ -64,11 +66,17 @@ function getMyChatListHtml(result){
     for(let i=0; i<result.length; i++){
         let data = result[i];
         let chatList = document.querySelector("#chatList");
+        let imgC = data.recentChat.msg;
 
         let myList = document.createElement("div");
         myList.className = "myChatList";
         myList.id = "room-"+data.roomInfo.id;
-        myList.innerHTML = getMyChatList(data);
+
+        if (imgC.includes("CHATIMG|")){
+            myList.innerHTML = getMyChatListImg(data);
+        }else {
+            myList.innerHTML = getMyChatList(data);
+        }
         chatList.append(myList); //mylist 밑에 붙이기 = 왼쪽 채팅방 리스트
         //내 치팅방 리스트 반환 해줌..
 
@@ -78,6 +86,7 @@ function getMyChatListHtml(result){
         let thisJoinImg = document.createElement("div");
         thisJoinImg.className = "joinPeopleImgList"+roomId;
         switch (joinCount) {
+            case 0 : thisJoinImg.innerHTML = getNonImg();break;
             case 1 : thisJoinImg.innerHTML = getOneImg(data);break;
             case 2 : thisJoinImg.innerHTML = getTwoImg(data);break;
             case 3 : thisJoinImg.innerHTML = getThreeImg(data);break;
@@ -109,11 +118,43 @@ function getMyChatList(data){
             <a class="nav-link" id="chat-${data.roomInfo.id}-tap" data-bs-toggle="pill" role="tab" onclick="getChatDetailRoom(this)">
                 <div class="d-flex">
                     <div  class="flex-shrink-0 avatar me-2" id="joinListImg${data.roomInfo.id}">
-                        <!--<img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt="">--><!--img url 넣어줘야함 회원의-->
                     </div>    
                     <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
                         <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg} · ${ago}
+                          <div class="position-relative" style="margin-left: 3px;" id="unread-${data.roomInfo.id}"></div>
+                        </div>
+                    </div>
+                </div>
+               </a>
+        </li>
+`;
+}
+
+function getMyChatListImg(data){
+    let msg = data.recentChat.msg;
+    let message = msg.replace("CHATIMG|", "");
+    let ago;
+    if (data.recentChat.sender.role==="ADMIN"){
+        ago = "";
+    }else {
+        ago = forAgoChatTimestamp(data.recentChat.createAt);
+    }
+    return`<li data-bs-dismiss="offcanvas">
+            <!-- Chat user tab item -->
+            <form class="chat-open" id="chatInfo-${data.roomInfo.id}">
+            <input type="hidden" name="chat-uuid" value="${data.roomInfo.uuid}">
+            <input type="hidden" name="chat-roomId" value="${data.roomInfo.id}">
+            <input type="hidden" name="chat-romeName" value="${data.roomInfo.roomName}">
+            </form>
+            <a class="nav-link" id="chat-${data.roomInfo.id}-tap" data-bs-toggle="pill" role="tab" onclick="getChatDetailRoom(this)">
+                <div class="d-flex">
+                    <div  class="flex-shrink-0 avatar me-2" id="joinListImg${data.roomInfo.id}">
+                    </div>    
+                    <div  class="flex-grow-1 d-block" >
+                        <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
+                        <div class="small text-secondary">${data.recentChat.sender.username}: 사진을 보냈습니다. · ${ago}
+                        <img class="rounded h-100px" src="${message}"  alt="">
                           <div class="position-relative" style="margin-left: 3px;" id="unread-${data.roomInfo.id}"></div>
                         </div>
                     </div>
@@ -147,7 +188,7 @@ function getBody(){
                             <p/>
                             <div class="dropend position-relative">
                                 <div class="nav">
-                                    <a id="myFollowList2"  class="btn btn-primary toast-btn" data-target="chatToast"> <i class="bi bi-pencil-square">&nbsp;메시지 보내기</i> </a>
+                                    <a id="myFollowList2"  class="btn btn-primary toast-btn" data-target="chatToast"> <i class="bi bi-pencil-square">&nbsp;채팅방 만들기</i> </a>
                                 </div>
                             </div>
                         </div>
@@ -155,8 +196,11 @@ function getBody(){
                         <div class="size-fix-box" style=" padding-bottom: 78%; width: 100%"></div>`;
 }
 
+function getNonImg(){
+    return `<img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="https://kr.object.ncloudstorage.com/noldaga-s3/noldaga-nonImg.png" alt="">`;
+}
 function getOneImg(data){
-    return`<img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""><p style="display: none">${data.joinPeoples[0].username}</p>`;
+    return`<img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[0].profileImageUrl}" alt="">`;
     //img url 걸어줘야함. 아직 없으니 임시 대체
 }
 //한사람일 경우 img 태그만 필요..
@@ -164,12 +208,10 @@ function getOneImg(data){
 function getTwoImg(data){
     return`<ul class="avatar-group avatar-group-two">
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt="avatar">
-                            <p style="display: none">${data.joinPeoples[0].username}</p>
+                            <img style="width:48px; height:48px;"  class="avatar-img rounded-circle" src="${data.joinPeoples[0].profileImageUrl}" alt="avatar">
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar">
-                            <p style="display: none">${data.joinPeoples[1].username}</p>
+                            <img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[1].profileImageUrl}" alt="avatar">
                         </li>
                     </ul>
 `;
@@ -178,16 +220,13 @@ function getTwoImg(data){
 function getThreeImg(data){
     return`<ul class="avatar-group avatar-group-three">
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt="avatar">
-                            <p style="display: none">${data.joinPeoples[0].username}</p>
+                            <img style="width:48px; height:48px;"  class="avatar-img rounded-circle" src="${data.joinPeoples[0].profileImageUrl}" alt="avatar">
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt="avatar">
-                            <p style="display: none">${data.joinPeoples[1].username}</p>
+                            <img style="width:48px; height:48px;"  class="avatar-img rounded-circle" src="${data.joinPeoples[1].profileImageUrl}" alt="avatar">
                         </li>
                         <li class="avatar avatar-xs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt="avatar">
-                            <p style="display: none">${data.joinPeoples[2].username}</p>
+                            <img style="width:48px; height:48px;"  class="avatar-img rounded-circle" src="${data.joinPeoples[2].profileImageUrl}" alt="avatar">
                         </li>
                     </ul>
 `;
@@ -196,19 +235,19 @@ function getThreeImg(data){
 function getFourImg(data){
     return `<ul class="avatar-group avatar-group-four">
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/06.jpg" alt="avatar">
+                            <img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[0].profileImageUrl}" alt="avatar">
                              <p style="display: none">${data.joinPeoples[0].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt="avatar">
+                            <img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[1].profileImageUrl}" alt="avatar">
                              <p style="display: none">${data.joinPeoples[1].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/08.jpg" alt="avatar">
+                            <img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[2].profileImageUrl}" alt="avatar">
                             <p style="display: none">${data.joinPeoples[2].username}</p>
                         </li>
                         <li class="avatar avatar-xxs">
-                            <img class="avatar-img rounded-circle" src="/assets/images/avatar/placeholder.jpg" alt="avatar">
+                            <img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[3].profileImageUrl}" alt="avatar">
                             <p style="display: none">${data.joinPeoples[3].username}</p>
                         </li>
                     </ul>`;

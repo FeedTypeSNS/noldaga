@@ -168,7 +168,7 @@ function headerContent(data) {
             <li>
               <a
                       class="dropdown-item bg-danger-soft-hover"
-                      href="sign-in-advance.html"
+                      href="/nol/logout"
               ><i class="bi bi-power fa-fw me-2"></i>로그아웃</a
               >
             </li>

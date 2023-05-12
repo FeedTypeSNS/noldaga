@@ -20,7 +20,6 @@ function cwsOpen(name){
     if (name==null && name.trim()===''){
         name = $("#ws-username").val();
     }
-    name = $()
     cws = new WebSocket("ws://"+location.host+"/chatroom/"+encodeURIComponent(name));
     cwsEvt();
 }
@@ -40,7 +39,7 @@ function cwsEvt(){
                getChatListFunc();
            }else if(dd.result.type==="DELETEROOM"){
                getChatListFunc();
-               saveMsg(roomId, msg);
+               saveMsg(dd.result.roomInfo.id, dd.result.msg);
            }
         }
     }
@@ -83,18 +82,20 @@ function wsEvt(){
                 if (d.result.type==="ENTER"){ //입장한거라면
                     $("#ws-sessionId").val(d.result.sessionId);
                     console.log(d.result.username+" 사용자가 입장했습니다.");
-                }else if(d.result.type==="TALK"){
+                }
+                else if(d.result.type==="TALK"){
                     alert(d.result.chat.unread_count);
                     if(d.result.chat.unread_count===0){
                         $(".readData-me-send *").remove();
                         $(".readData-me-send").remove();
                     }
                     //읽음 수 체크 삭제..
-
                     let inName = d.result.chat.sender.username;
                     let name = document.querySelector("#ws-username").value;
                     if(inName === name){ //보낸 세션 id가 같다면 내가 보낸거..
                         showChatMsg(d.result.chat, name); //내가 보낸거
+                    }else if (d.result.chat.sender.role==="ADMIN") {
+                        showChatMsg(d.result.chat, "ADMIN");
                     }else {
                         showChatMsg(d.result.chat, ""); //남이 보낸거
                         console.log(JSON.stringify(sendMsgAlarm()));
@@ -111,7 +112,13 @@ function wsEvt(){
                     $("#pre-msg-username").val(d.result.chat.sender.username);
                     $("#pre-msg-create").val(forChatTimestamp(d.result.chat.createAt));
                     $("#pre-msg-id").val(d.result.chat.id);
-                }else {
+                }
+                else if(d.result.type==="DELETEMSG"){
+                    let msgId = d.result.id;
+                    $("#chat-msg-id-"+msgId+" *").remove();
+                    $("#chat-msg-id-"+msgId).remove();
+                }
+                else {
                     console.warn("unknown type!");
                 }
             }
@@ -130,17 +137,13 @@ function wsClose(){
     }
 }
 function wsSend(){
-    /*let me = document.querySelector("#username-forChat");
-    let name = me.querySelector("input[name='chat-username-me']").value;*/
+    let roomId = $("#ws-romeId").val();
     let msg = $("#chatting-msg").val();
+    var imges = $('#ChatFileInput')[0].files[0];
     //console.log(msg);
     if(msg!=null&&msg.trim()!=='') { //msg가 빈공간일 수도 있음..
-        let roomId = $("#ws-romeId").val();
-        //console.log("보낼 방 id :"+roomId);
-        let name = $("#ws-username").val();
-        //console.log("보내는 사람 이름 :"+name);
+        console.log("메시지 전송");
         saveMsg(roomId, msg);
-
         /*var option = {
             type:"message",
             sessionId: $("#sessionId").val(),
@@ -151,8 +154,37 @@ function wsSend(){
         //showChatMsg(msg, name);
         /*ws.send(JSON.stringify(option));*/
     }
+    if (typeof imges === 'object' && imges !== null && imges !== undefined){
+        console.log("이미지 전송");
+        saveImg(roomId, imges)
+    }
     $('#chatting-msg').val("");
 }
+
+
+function saveImg(roomId, file){
+    /*let formData = new FormData();
+    formData.append("img", file);*/
+    let formData = new FormData();
+    formData.append("img", file);
+
+    $.ajax({
+        type:'post',
+        enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
+        url: "/api/chat/"+roomId+"/img",
+        data: formData,
+        processData: false,
+        contentType: false
+    }).done(function (resp){
+        //alert(JSON.stringify(resp));
+        ws.send(JSON.stringify(resp));
+    }).fail(function (error){
+        alert('채팅 전송 실패');
+        alert(JSON.stringify(error));
+        throw new Error(error);
+    })
+}
+
 function saveMsg(roomId, message){
     console.log("saveMSG");
     //let name = document.querySelector("#ws-username").value;
@@ -170,7 +202,7 @@ function saveMsg(roomId, message){
         alert('채팅 전송 실패');
         alert(JSON.stringify(error));
         throw new Error(error);
-    })
+    });
 }
 
 

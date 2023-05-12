@@ -51,7 +51,7 @@ public class GroupMemberService {
 
         Long groupMasterId = group.getUser().getId();
         Alarm alarm = Alarm.of(groupMasterId, AlarmType.NEW_MEMBER,
-                AlarmArgs.of(UserObject.from(user)),
+                AlarmArgs.of(UserObject.from(user),GroupObject.from(group)),
                 user);
         alarmRepository.save(alarm);
 
@@ -195,6 +195,15 @@ public class GroupMemberService {
         // 유저 정보
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", username)));
+
+        return groupMemberRepository.findAllByUserAndFavor(user);
+    }
+
+    @Transactional
+    public List<Group> getUserFavorGroupList(Long user_id, String username) {
+        // 유저 정보
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", user_id)));
 
         return groupMemberRepository.findAllByUserAndFavor(user);
     }

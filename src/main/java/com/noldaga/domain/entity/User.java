@@ -50,7 +50,9 @@ public class User {
 
     @Column(length = 100,nullable = false)
     private String email;
+    @Setter
     private Long totalFollower=Long.valueOf(0);
+    @Setter
     private Long totalFollowing=Long.valueOf(0);
 
     @Setter
