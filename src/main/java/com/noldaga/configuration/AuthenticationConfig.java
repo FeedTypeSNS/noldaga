@@ -45,11 +45,12 @@ public class AuthenticationConfig {
         return http.csrf().disable()//csrf disable 안해주면 get만 가능함...
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(
-                                HttpMethod.GET
+                                HttpMethod.GET,
+                                "/assets/**",
+                                "/img/**"
                         ).permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
-                                "/test",
                                 "/api/anonymous/**"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -81,7 +82,7 @@ public class AuthenticationConfig {
     @Bean//단순 페이지 불러오는 요청에서는 토큰이 있든없든 토큰필터를 거치지 않아도 되는데 무조건 토큰 필터를 거치게 되어있음.
     public WebSecurityCustomizer webSecurityCustomizer() { //스프링 시큐리티에서 제외하겠다 ( api 이외의것들인 static resource 등: 페이지 불러오기, favicon 요청등)
 
-        return (web) -> web.ignoring().regexMatchers("^(?!/api|/oauth2|/login/oauth2/code/kakao|/nol).*")// api로 시작하지않으면 시큐리티 무시인데, oauth2는 시큐리티적용
+        return (web) -> web.ignoring().regexMatchers("^(?!/api|/oauth2|/login/oauth2/code/kakao|/nol|/assets|/img).*")// api로 시작하지않으면 시큐리티 무시인데, oauth2는 시큐리티적용
                 ; //  /api로 시작 하지않으면 시큐리티 무시 (토큰필터 안거침)
 
     }

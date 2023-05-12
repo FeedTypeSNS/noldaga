@@ -10,7 +10,7 @@ public class FeedObject implements AlarmObject {
     private Long id;
     private String title;
 
-    private final String OBJECT_TYPE = "FEED";
+    private final String OBJECT_TYPE = "feed";
 
     @Override
     public Long getId() {
