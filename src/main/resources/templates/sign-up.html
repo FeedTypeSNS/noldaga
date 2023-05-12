@@ -100,7 +100,7 @@
           <div class="text-center">
             <!-- Title -->
             <h1 class="mb-2">회원 가입</h1>
-            <span class="d-block">이미 계정이 있으신가요? <a href="login-form">로그인 하기</a></span>
+            <span class="d-block">이미 계정이 있으신가요? <a href="/login-form">로그인 하기</a></span>
           </div>
           <!-- Form START -->
           <form class="mt-4">
@@ -369,7 +369,7 @@ JS libraries, plugins and custom scripts -->
                 if (response.resultCode === 'SUCCESS') {
                     console.log(response);
                     alert('회원가입에 성공하였습니다')
-                    window.location.href = "/login-form";
+                    window.location.href = "login-form";
                 } else {
                     alert('회원가입에 실패하였습니다');
                 }
