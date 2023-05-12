@@ -15,7 +15,7 @@ $.ajax({
             groupsHtml += '    <div class="card-body text-center pt-0">';
             groupsHtml += '      <div class="avatar avatar-lg mt-n5 mb-3">';
             if(group.profile_url == "" || group.profile_url == null) {
-                groupsHtml += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="assets/images/avatar/placeholder.jpg" alt="">';
+                groupsHtml += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="/assets/images/avatar/placeholder.jpg" alt="">';
             } else {
                 groupsHtml += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="' + group.profile_url + '" alt="">';
             }
