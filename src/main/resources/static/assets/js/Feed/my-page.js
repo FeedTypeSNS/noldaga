@@ -97,38 +97,12 @@ function profileContentMine(data) {
                 </div>
               </div>
               <!-- List profile -->
-              <ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
+              <div id="favorGroups"></div>
+              <!--<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
                 <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""/>
+                   <a href=""><img class="avatar-img rounded-circle" src="/assets/images/avatar/01.jpg" alt=""/></a>
                 </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/02.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/03.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/06.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/07.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/08.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/09.jpg" alt=""/>
-                </div>
-                <div class="flex-shrink-0 avatar avatar-xs me-2">
-                   <img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""/>
-                </div>
-              </ul>
+              </ul>-->
             </div>
             <!-- Card body END -->
             <div class="card-footer mt-3 pt-2 pb-0">
@@ -238,7 +212,7 @@ function insertPhotoCards(data){
 
 function photoCardContent(data) {
     return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
-                              <img class="rounded img-fluid" src="/assets/images/albums/01.jpg" alt="">
+                              <img class="thumbnailimage" src=${data.imageDtoList[0].url} alt="">
                           </a>
                           <!-- likes -->
                           <ul class="nav nav-stack py-2 small">

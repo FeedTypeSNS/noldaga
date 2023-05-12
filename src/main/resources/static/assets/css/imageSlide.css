@@ -1,0 +1,59 @@
+.imagecontainer{
+    width: 350px;
+    height: 400px;
+    margin: 0 auto;
+}
+.album{
+    width: 350px;
+    height: 350px;
+    overflow: hidden;
+    position: relative;
+}
+.images{
+    width: 350px;
+    height: 350px;
+    position: relative;
+    display: flex;
+}
+
+.feedimage{
+    width: 350px;
+    height: 350px;
+    position: relative;
+    display: flex;
+}
+
+.mainthumbnailimage{
+    width: 600px;
+    height: 450px;
+    position: relative;
+    display: flex;
+}
+
+.thumbnailimage{
+    width: 161.5px;
+    height: 161.5px;
+    position: relative;
+    display: flex;
+    border-radius: 15%;
+}
+
+button, button:active, button:focus{
+    width: 100px; height: 30px;
+    border: none;
+    color: white;
+    background-color: teal;
+    outline: none;
+}
+button:hover{
+    background-color: turquoise;
+}
+button:disabled{
+    background-color: gray;
+}
+.prev{
+    float: left;
+}
+.next{
+    float: right;
+}

@@ -126,7 +126,7 @@ function getDetailGroupPage(group, user, groupMember) {
       </div>
       <div class="modal-body">
         <!-- Form START -->
-        <form enctype="multipart/form-data">
+        
           <!-- Group name -->
           <div class="mb-3">
             <label class="form-label">그룹 이름</label>
@@ -139,7 +139,7 @@ function getDetailGroupPage(group, user, groupMember) {
             <div class="d-flex align-items-center">
               <div class="avatar-uploader me-3">
                 <div class="mb-3">
-                  <img id="groupImg" alt="등록된 사진 없음" src="${group.profile_url}" class="rounded-circle" style="width: 100px; height: 100px;">
+                  <img id="groupImg" alt="" src="${profile}${group.profile_url}" class="rounded-circle" style="width: 100px; height: 100px;">
                 </div>
                 <div>
                   <input type="file" accept=".png, .jpg, .jpeg" name="profile_url" id="fileInput">
@@ -179,7 +179,7 @@ function getDetailGroupPage(group, user, groupMember) {
           <div class="modal-footer">
             <button onclick="updateGroup(${group.id})" class="btn btn-success-soft">그룹 수정</button>
           </div>
-        </form>
+        
         <!-- Form END -->
       </div>
       <!-- Modal footer -->

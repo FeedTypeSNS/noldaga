@@ -75,10 +75,10 @@ public class Feed {
     private long totalView; //default로 0들어가게 long설정
 
     @Column(name="total_comment")
-    private long commentCount; //default로 0들어가게 long설정
+    private long commentCount;
 
     @Column(name="total_like")
-    private long likeCount; //default로 0들어가게 long설정
+    private long likeCount;
 
  //   @JsonIgnoreProperties({"feed,user"})
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -87,6 +87,9 @@ public class Feed {
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER)
     private List<FeedTag> feedTags;
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    private List<Image> images;
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikes;

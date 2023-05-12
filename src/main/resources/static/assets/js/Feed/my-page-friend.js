@@ -42,7 +42,7 @@ function getFollower(myPageOwnerUsername){
 
     $.ajax({
         type: "GET",
-        url: "/api/follower/"+myPageOwnerUsername, //내가 팔로우한 사람들 목록
+        url: "/api/follower/"+myPageOwnerUsername, //나를 팔로우한 사람들 목록
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         insertPhotoCardFollowers(resp.result);
@@ -242,7 +242,7 @@ function profileContentOther(data) {
 }
 
 
-function insertPhotoCardFollowers(data){
+function insertPhotoCardFollowers(data){ //마이페이지 소유자를 팔로우하는 사람들 목록
     for(let i=0; i<data.length; i++) {
         let photoCard = document.querySelector("#photoCardFollower");
         let photoDiv = document.createElement("div");
@@ -252,7 +252,7 @@ function insertPhotoCardFollowers(data){
     }
 }
 
-function insertPhotoCardFollowings(data){
+function insertPhotoCardFollowings(data){ //마이페이지 소유자가 팔로우하는 사람들 목록
     for(let i=0; i<data.length; i++) {
         let photoCard = document.querySelector("#photoCardFollowing");
         let photoDiv = document.createElement("div");

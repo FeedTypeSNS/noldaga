@@ -29,6 +29,7 @@ public class FeedDto {
     private Long totalComment;
     private List<CommentDto> commentList;
     private List<FeedTagDto> feedTagDtoList;
+    private List<ImageDto> imageDtoList;
 
     //댓글 있음
     private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, LocalDateTime delDate, Long totalView, Long totalLike, Long totalComment, List<CommentDto> commentList, List<FeedTagDto> feedTagDtoList) {
