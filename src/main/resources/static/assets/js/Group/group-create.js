@@ -8,7 +8,7 @@ function createGroup() {
         formData.append('profileUrl', "");
     }
     formData.append('open', $('input[name="open"]:checked').val());
-    formData.append('pw', $('#pw').val());
+    formData.append('pw', $('#group-pw').val());
     formData.append('intro', $('#intro').val());
 
     $.ajax({

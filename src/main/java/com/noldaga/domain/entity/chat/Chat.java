@@ -37,7 +37,7 @@ public class Chat {
 
     @Setter
     @Column(nullable = false)
-    private int unread_count;   //메세지 안 읽은 메시지 수 -> 안읽음 채팅방 참가 인원 수-1 , 읽음 0
+    private int unread;   //메세지 안 읽은 메시지 수 -> 안읽음 채팅방 참가 인원 수-1 , 읽음 0
 
     @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
@@ -47,16 +47,16 @@ public class Chat {
 
     protected Chat(){}
 
-    public Chat(Long id, ChatRoom room, User sender, String msg, int unread_count){
+    public Chat(Long id, ChatRoom room, User sender, String msg, int unread){
         this.id = id;
         this.room = room;
         this.sender = sender;
         this.msg = msg;
-        this.unread_count = unread_count;
+        this.unread = unread;
     }
 
-    public static Chat of (ChatRoom room, User sender, String msg, int unread_count){
-        return new Chat(null, room, sender, msg, unread_count);
+    public static Chat of (ChatRoom room, User sender, String msg, int unread){
+        return new Chat(null, room, sender, msg, unread);
     }
 
 

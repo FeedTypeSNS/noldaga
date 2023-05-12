@@ -1,100 +1,15 @@
-var ws;
-function wsOpen(name, uuid){
-    ws = new WebSocket("ws://"+location.host+"/chatting/"+uuid+"/"+encodeURIComponent(name));
-    //웹 소켓 전송 시 config에 맞춰, 방 uuid와 name을 같이 보내줌
-    //웹소켓 연결 URL에서 파라미터 값을 전달할 때, 한글 등의 문자열을 전송하면 URL 인코딩이 필요
-    //자바스크립트에서는 encodeURIComponent 함수를 사용하여 URL 인코딩 필요
-    wsEvt();
-}
-function wsEvt(){
-    ws.onopen = function (data){
-        console.log("소켓 연결");
-        //소켓열리면 초기화 세팅
-    }
-    ws.onmessage = function (data){
-        console.log("메시지 응답");
-        var get = data.data; //JSON 데이터의 문자열 표현이 저장
-        if (get != null){
-            if(get.trim() !== ''){ //받아진 데이터가 있을 때
-                var d = JSON.parse(get); //JSON 문자열을 파싱하여 자바스크립트 객체로 변환 후 속성에 접근 가능
-                //console.log(d);
-                if (d.result.type==="ENTER"){ //입장한거라면
-                        //$("#ws-username").val(d.result.username); //입장한 회원 이름 저장
-                        console.log(d.result.username+" 사용자가 입장했습니다.");
-                }else if(d.result.type==="TALK"){
-
-                    console.log(d.result.chat.sender.username);
-                    //const resp = saveMsg(msg); 이미 저장된 메시지..
-                    let inName = d.result.chat.sender.username;
-                    let name = document.querySelector("#ws-username").value;
-                    console.log("html에서 가져온 name"+name);
-                    if(inName === name){ //보낸 세션 id가 같다면 내가 보낸거..
-                        showChatMsg(d.result.chat, name); //내가 보낸거
-                    }else {
-                        showChatMsg(d.result.chat, ""); //남이 보낸거
-                    }
-                }else {
-                    console.warn("unknown type!");
-                }
-            }
-        }
-    }
-    document.getElementById("chatting-msg").addEventListener("keypress", function (e){
-        if(e.key === "Enter"){
-            send();
-        }
-    })
-}
-function send(){
-    /*let me = document.querySelector("#username-forChat");
-    let name = me.querySelector("input[name='chat-username-me']").value;*/
-    let msg = $("#chatting-msg").val();
-    console.log(msg);
-    if(msg!=null&&msg.trim()!=='') { //msg가 빈공간일 수도 있음..
-        let roomId = $("#ws-romeId").val();
-        console.log("보낼 방 id :"+roomId);
-        let name = $("#ws-username").val();
-        console.log("보내는 사람 이름 :"+name);
-        saveMsg(roomId, msg);
-
-        /*var option = {
-            type:"message",
-            sessionId: $("#sessionId").val(),
-            username : $("#ws-username").val(),
-            msg: $("#chatting-msg").val(),
-            roomId: $("#ws-romeId").val()
-        }*/
-        //showChatMsg(msg, name);
-        /*ws.send(JSON.stringify(option));*/
-    }
-    $('#chatting-msg').val("");
-}
-
-function saveMsg(roomId, message){
-    console.log("saveMSG");
-    //let name = document.querySelector("#ws-username").value;
-    let sendReq = {msg : message};
+function getChatPage(){
     $.ajax({
-        type: "POST",
-        url:"/api/chat/"+roomId+"/message",
-        data:JSON.stringify(sendReq),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8"
-    }).done(function (resp){
-        alert(JSON.stringify(resp));
-        ws.send(JSON.stringify(resp));
-    }).fail(function (error){
-        alert('채팅 전송 실패');
-        alert(JSON.stringify(error));
-        throw new Error(error);
-    })
+        type: "GET",
+        url:"/chat"
+    });
 }
-
 
 let chatting = {
     init:function (){
-        $("#new-chatting-submit").on("click", ()=>{
-           alert("채팅방 생성");
+        $("#new-chatting-submit").on("click", (event)=>{
+           //alert("채팅방 생성");
+            event.preventDefault();// 이벤트 기본 동작 취소
             this.createChatting();
         });
     },
@@ -109,13 +24,23 @@ let chatting = {
             dataType: "json",
             contentType: "application/json; charset=utf-8"
         }).done(function (resp){
-            getChatListFunc();//채팅방 리스트 불러오기
-            let username = document.querySelector("#ws-username").value;
-            $("#ws-romeId").val(resp.result.roomInfo.id);
-            $("#ws-romeUuid").val(resp.result.roomInfo.uuid);  //방 정보 표현해주기..
-            enterRoom(resp.result);
-            wsOpen(username, resp.result.roomInfo.uuid);
-            //alert(JSON.stringify(resp));
+            let sessionId = document.querySelector("#ws-sessionId")?.value; //세션 존재하는지 확인하기 위해
+            if(sessionId){ //기존 세션이 존재한다면.. 닫고 새로운 세션을 열어야 함
+                // sessionId가 undefined, null, 빈 문자열 등이 아닌 경우 실행될 코드
+                wsClose();
+            }else {
+                //getChatListFunc();//채팅방 리스트 불러오기
+                cws.send(JSON.stringify(resp));
+                //리스트를 직접 호출하는대신 cws에 보내서 현재 들어와 있는 사람들 바로.. 켜지게게
+                let username = document.querySelector("#ws-username").value;
+                $("#ws-romeId").val(resp.result.roomInfo.id);
+                $("#ws-romeUuid").val(resp.result.roomInfo.uuid);  //방 정보 표현해주기..
+                //alert("채팅방 기본 뷰 생성 중..")
+                enterRoom(resp.result);
+                //alert("채팅방 기본 뷰 생성 완료")
+                wsOpen(username, resp.result.roomInfo.uuid);
+                //alert(JSON.stringify(resp));
+            }
         }).fail(function (error){
             alert('채팅방 생성 실패');
             alert(JSON.stringify(error));
@@ -141,21 +66,47 @@ function getOneChatRoom(roomId, uuid){
         url:"/api/chat/"+roomId,
         dataType: "json"
     }).done(function (resp){
-        alert("방하나 불러오기\n"+JSON.stringify(resp));
+        let sessionId = document.querySelector("#ws-sessionId").value; //세션 존재하는지 확인하기 위해
+        if(sessionId!=null||sessionId.trim()!==""){ //기존 세션이 존재한다면.. 닫고 새로운 세션을 열어야 함
+            wsClose();
+        }
+        //alert("방하나 불러오기\n"+JSON.stringify(resp));
         //getChatListFunc();
         let name = document.querySelector("#ws-username").value;
         enterRoom(resp.result);
         wsOpen(name, uuid);
-        console.log('채팅기본 뷰 완성');
+        //console.log('채팅기본 뷰 완성');
     }).fail(function (error){
         console.log('채팅방 불러오기 실패');
         alert(JSON.stringify(error));
         throw new Error(error);
-    })
+    });
 }
 
+function deleteChatRoom(event){
+    let uuid = document.querySelector("#ws-romeUuid").value;
+    event.preventDefault();
+    let roomId = $("#ws-romeId").val();
+    $.ajax({
+        type: "DELETE",
+        url:"/api/chat/"+roomId,
+        dataType: "json"
+    }).done(function (resp) {
+        console.log(JSON.stringify(resp));
+        getChatBody();
+        cws.send(JSON.stringify(sendDelRoomAlarm(uuid)));
+    }).fail(function (error){
+        console.log('채팅방 삭제 실패');
+        alert(JSON.stringify(error));
+        throw new Error(error);
+    });
+}
 
 function enterRoom(resp){
+    $("#chatting-tool *").remove();
+    $("#chatting-tool").remove();
+    $(".card-footer *").remove();
+    $(".card-footer").remove();
     let me = document.querySelector("#ws-username").value;
     console.log(me);
     //let name = me.querySelector("input[name='chat-username-me']").value;
@@ -183,14 +134,17 @@ function getJoinName(){
 
 function initChattingPage(resp, name){
     console.log("기본페이지 생성 시작");
-    $("#chatting-tool *").remove();
-    $("#chatting-tool").remove();
     let chatBody = document.querySelector("#chat-tool-body");
     let body = document.createElement("div");
     body.id = "chatting-tool";
     body.className="card-body h-100";
     body.innerHTML = initChatBody(resp, name);
     chatBody.append(body);
+
+    let footer = document.createElement("div");
+    footer.className="card-footer flex-shrink-0";
+    footer.innerHTML = cardFooter();
+    body.after(footer);
 
     let roomId = resp.roomInfo.id;
     let joinCount = Number(resp.joinPeoples.length)-1; //회원 참가수에 따라 회원 이미지 변화..
@@ -208,12 +162,17 @@ function initChattingPage(resp, name){
     //alert(resp.pastChat); //확인
     //console.log("pastChat"+"\n"+JSON.stringify(resp.pastChat));
     let data = resp.pastChat;
-    console.log("과거 채팅 목록 정상 불러옴\n"+JSON.stringify(data));
+    let rmId = -1;
     for(let i=0; i<data.length; i++) {
-        console.log(JSON.stringify(data[i]));
         showChatMsg(data[i], name);
+        if (rmId === data[i].id){
+            $("#senderImg-" + rmId + " *").remove();
+            $("#senderImg-" + rmId).remove();
+            $("#sender-" + rmId + " *").remove();
+            $("#sender-" + rmId).remove();
+        }
         if(i!==data.length-1){
-            delSameTimeChat(data[i], data[i+1]);
+            rmId = delSameTimeChat(data[i], data[i+1]);
         }
     }
     const chatDisplayBody = document.getElementById('chat-display-body');
@@ -222,8 +181,6 @@ function initChattingPage(resp, name){
 }
 
 function showChatMsg(data, name){
-    console.log("채팅 보여주기"+"\n"+name);
-    console.log(JSON.stringify(data));
         let chatList = document.querySelector("#chat-display-body");
         let chat;
         //console.log(data.sender.username === name);
@@ -238,8 +195,14 @@ function showChatMsg(data, name){
             chat.innerHTML= chatSent_o(data);
         }
 
+
         chatList.append(chat);
 
+    $("i.fa-solid.fa-check").each(function() {
+        if ($(this).text().trim() === "0") {
+            $(this).remove();
+        }
+    });//읽음 수 체크 삭제..
     //기존 채팅 내용 붙이기
 }
 
@@ -275,9 +238,9 @@ function initChatBody(resp, name){
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-check-lg me-2 fw-icon"></i>모두 읽음 표시</a></li>
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-mic-mute me-2 fw-icon"></i>대화 음소거</a></li>
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-check me-2 fw-icon"></i>상대 프로필 페이지 이동</a></li>
-                                                <li><a class="dropdown-item" href="#"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
+                                                <li><a class="dropdown-item" onclick="deleteChatRoom(event)"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
                                                 <li class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="/chat"><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
+                                                <li><a class="dropdown-item" onclick="setBasic()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
                                             </ul>
                                         </div>
                                         <!-- Card action END -->
@@ -286,27 +249,34 @@ function initChatBody(resp, name){
                                 <!-- Top avatar and status END -->
                                 <hr>
                                 <!-- Chat conversation START -->
-                                <div class="chat-conversation-content custom-scrollbar"  id="chat-display-body">
-
+                                <input type="hidden" id="pre-msg-username" value="">
+                                <input type="hidden" id="pre-msg-create" value="">
+                                <input type="hidden" id="pre-msg-id" value="">
+                                <div class="chat-conversation-content" style="overflow: auto" id="chat-display-body">
+                               
                                 </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-sm-flex align-items-end">
-                            <textarea id="chatting-msg" class="form-control mb-sm-0 mb-3" data-autoresize placeholder="메시지를 입력하세요" rows="1"></textarea>
-                            <button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>
-                            <button class="btn btn-sm btn-secondary-soft ms-2"><i class="fa-solid fa-paperclip fs-6"></i></button>
-                            <button class="btn btn-sm btn-primary ms-2" onclick="send()"><i class="fa-solid fa-paper-plane fs-6"></i></button>
                         </div>
                     </div>`;
 }
 
+function cardFooter(){
+    return `<div class="d-sm-flex align-items-end">
+                            <textarea id="chatting-msg" class="form-control mb-sm-0 mb-3" data-autoresize placeholder="메시지를 입력하세요" rows="1"></textarea>
+                            <button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>
+                            <button class="btn btn-sm btn-secondary-soft ms-2"><i class="fa-solid fa-paperclip fs-6"></i></button>
+                            <button class="btn btn-sm btn-primary ms-2" onclick="wsSend()"><i class="fa-solid fa-paper-plane fs-6"></i></button>
+                    </div>`;
+}
+
+
 const readData = (data) => {
     let html = '';
-    if(Number(data.unread_count)===0){
-        html += `<i class="fa-solid fa-check-double text-info"> ${data.unread_count}</i>`;
+    //alert(data.unread);
+    if(Number(data.unread)!==0){
+        html += `<i class="fa-solid fa-check" style="color: #0a58ca"><br> ${data.unread_count}</i>`;
     }else {
-        html += ``; //<i class="fa-solid fa-check"> ${data.unread_count}</i>
+        $(".readData-me-send *").remove();
+        $(".readData-me-send").remove();
     }
     return html;
 }//읽은 수에 따라 다르게 표시
@@ -314,22 +284,25 @@ const readData = (data) => {
 function delSameTimeChat(one, two){
     let oneT = forChatTimestamp(one.createAt);
     let twoT = forChatTimestamp(two.createAt);
-    if(oneT===twoT){
-        $("#createDate-"+one.id+" *").remove();
-        $("#createDate-"+one.id).remove();
+    if(one.sender.username===two.sender.username){
+        if(oneT===twoT) {
+            $("#createDate-" + one.id + " *").remove();
+            $("#createDate-" + one.id).remove();
+            return two.id;
+        }
     }
 }//만약 둘이 같은 시간에 보내면 화면 표시 달라짐
 
 function chatSent_m(resp){
     let sendData = forChatTimestamp(resp.createAt);
-    console.log(sendData);
+    //console.log(sendData);
     return `<div class="w-100">
-                      <div class="d-flex flex-column align-items-end">
+                      <div class="d-flex flex-column align-items-end">                  
                         <div class="bg-primary text-white p-2 px-3 rounded-2">${resp.msg}</div>
                         <!-- Images -->
                         <div class="d-flex my-2" id="createDate-${resp.id}">
-                          <div class="small ms-2">${readData(resp)}</div>                         
-                          <div class="small text-secondary">${sendData} </div>
+                          <div class="small ms-2 readData-me-send">${readData(resp)}</div>                         
+                          <div class="small text-secondary">${sendData}</div>
                          
                         </div>
                       </div>
@@ -340,15 +313,19 @@ function chatSent_o(resp){
     let sendData = forChatTimestamp(resp.createAt);
 
     return `<div class="flex-shrink-0 avatar avatar-xs me-2">
-                      <img class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
+                      <img id="senderImg-${resp.id}" class="avatar-img rounded-circle" src="/assets/images/avatar/10.jpg" alt=""><!--${resp.sender.profileImageUrl}-->
                     </div>
                     <div class="flex-grow-1">
                       <div class="w-100">
                         <div class="d-flex flex-column align-items-start" >
-                          <div class="bg-light text-secondary p-2 px-3 rounded-2">${resp.msg}</div>
-                          <div class="d-flex my-2" id="createDate-${resp.id}">
-                          <div class="small text-secondary">${sendData} </div>
-                          <div class="small ms-2">${readData(resp)}</div>
+                                <div id="sender-${resp.id}">
+                                    <h6 class="mb-0 mt-1">${resp.sender.username}</h6>
+                                </div>                        
+                            <div class="bg-light text-secondary p-2 px-3 rounded-2">${resp.msg}</div>
+                            <div class="d-flex my-2" id="createDate-${resp.id}">
+                            <div class="small text-secondary">${sendData} </div>
+                            <div class="small ms-2">${readData(resp)}</div>
+                          </div>
                         </div>
                         </div>
                       </div>

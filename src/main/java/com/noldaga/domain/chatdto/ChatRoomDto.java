@@ -2,12 +2,14 @@ package com.noldaga.domain.chatdto;
 
 import com.noldaga.domain.entity.chat.ChatRoom;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class ChatRoomDto {
     private Long id;
     private String uuid; //실제 통신은 이걸로..
     private String roomName;
+    @Setter
     private String viewRoomName;
     private int userNum;
 

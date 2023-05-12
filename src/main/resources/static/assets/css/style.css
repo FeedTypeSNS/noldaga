@@ -17628,5 +17628,13 @@ a.badge:hover {
   }
 }
 
+
+#chat-display-body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+#chat-display-body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */

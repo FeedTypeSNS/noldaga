@@ -39,7 +39,7 @@ function headerContent(data) {
         />
         <img
                 class="dark-mode-item navbar-brand-item"
-                src="/assets/images/logo.svg"
+                src="/assets/images/noldagaLogo.jpg"
                 alt="logo"
         />
       </a>

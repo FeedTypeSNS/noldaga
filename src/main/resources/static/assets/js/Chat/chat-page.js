@@ -3,28 +3,15 @@
 let ws = Stomp.over(socket);
 let reconnect = 0;*/
 function init(){
-    setMyinfo();
-
+    setBasic();
+}
+function setBasic(){
     getChatBody();
 
     getChatListFunc();
 
     //outPage();
 }
-
-function setMyinfo(){
-    $.ajax({
-        type:"GET",
-        url:"/api/chat/me",
-        dataType: "json"
-    }).done(function (resp){
-        $("#ws-username").val(resp.result.username);
-    }).fail(function (error){
-        alert(JSON.stringify(error));
-    });
-
-}
-
 /*function outPage(){
     if (!(window.location.pathname.startsWith('/chat'))) {
         localStorage.removeItem('username');
@@ -37,9 +24,12 @@ function getChatListFunc(){
         //contentType: "application/json; charset=utf-8"
         dataType: "json"
     }).done(function (resp){ //dataType을 통해 이미 json 파일만 가져오게됨. -> 즉 응답만 가져옴
-        alert(JSON.stringify(resp));
+        //alert(JSON.stringify(resp));
         //console.log(resp.result);
-        initChatPageSimpleModified(resp.result);
+        getMyChatListHtml(resp.result);
+
+        let name = document.querySelector("#ws-username").value;
+        cwsOpen(name);
     }).fail(function (error){
         alert("실패");
         alert(JSON.stringify(error));
@@ -50,8 +40,8 @@ function getChatListFunc(){
 
 
 function getChatBody(){
-    $("#chat-tool *").remove();
-    $("#chat-tool").remove();
+    $("#chatting-tool *").remove();
+    $("#chatting-tool").remove();
     let chatBody = document.querySelector("#chat-tool-body");
     let body = document.createElement("div");
     body.id = "chatting-tool";
@@ -60,13 +50,17 @@ function getChatBody(){
     chatBody.append(body);
 }
 
-function initChatPageSimpleModified(result){
+function getMyChatListHtml(result){
     $(".myChatList *").remove();
     $(".myChatList").remove();
 
     let active = document.querySelector("#active-chat-count");
     active.textContent = '';
-    active.append(result.length);
+    let num = 0;
+    for (let j=0; j<result.length; j++){
+       num += result[j].unreadCount;
+    }
+    active.append(num);
     for(let i=0; i<result.length; i++){
         let data = result[i];
         let chatList = document.querySelector("#chatList");
@@ -77,7 +71,6 @@ function initChatPageSimpleModified(result){
         myList.innerHTML = getMyChatList(data);
         chatList.append(myList); //mylist 밑에 붙이기 = 왼쪽 채팅방 리스트
         //내 치팅방 리스트 반환 해줌..
-
 
         let roomId = data.roomInfo.id;
         let joinCount = Number(data.joinPeoples.length)-1; //회원 참가수에 따라 회원 이미지 변화..
@@ -94,6 +87,7 @@ function initChatPageSimpleModified(result){
         joinImg.append(thisJoinImg);
         //코드로 조건에 맞게 하고 싶었는데 안되서 하드 코딩으로 바꿈..
 
+        checkUnread(data);
 
     }
 }
@@ -119,7 +113,9 @@ function getMyChatList(data){
                     </div>    
                     <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
-                        <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg} · ${ago}</div>
+                        <div class="small text-secondary">${data.recentChat.sender.username}: ${data.recentChat.msg} · ${ago}
+                          <div class="position-relative" style="margin-left: 3px;" id="unread-${data.roomInfo.id}"></div>
+                        </div>
                     </div>
                 </div>
                </a>
@@ -244,41 +240,20 @@ function forAgoChatTimestamp(timestamp){
 
 } //날짜 포맷, 온지 얼마나 됬는지
 
-
-/*
-function getPeopleListImg(joinCount, data, myList) {
-    let thisJoinImg = document.createElement("div");
-    thisJoinImg.className = "joinPeopleImgList";
-    if (joinCount <= 1) {
-        thisJoinImg.innerHTML = getOneImg(data);
-
-    } else {
-        let num;
-        switch (joinCount) {
-            case 2 :
-                num = "two";
-                break;
-            case 3 :
-                num = "three";
-                break;
-            default :
-                num = "four";
-                joinCount = 4;
-        }
-        let ulImgList = document.createElement("ul");
-        ulImgList.className = "avatar-group avatar-group-" + num;
-        for (let j = 0; j < joinCount; j++) {
-            let dataImg = data.joinPeoples[j];
-            if (joinCount > 3) {
-                ulImgList.innerHTML = getFourOverImg(dataImg);
-            } else {
-                ulImgList.innerHTML = getOneOverImg(dataImg);
-            }
-        }
-
+let unread = 0;
+function checkUnread(data) {
+    unread += data.unreadCount;
+    console.log("총안읽은 메시지 수 :"+unread);
+    if (unread !== 0) {
+        $("#unread-" + data.roomInfo.id + " *").remove();
+        let unr = document.querySelector("#unread-" + data.roomInfo.id)
+        let un = document.createElement("span");
+        un.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
+        un.innerHTML = `${unread}`;
+        unr.append(un);
+    }else if (unread===0){
+        $("#unread" + data.roomInfo.id + " *").remove();
     }
+}
 
-    thisJoinImg.append(myList);
-    return thisJoinImg;
-} //회원 참가 채팅 리스트 반환에서 이미지 부분 너무 길어서 밖에 배치*/
 init();

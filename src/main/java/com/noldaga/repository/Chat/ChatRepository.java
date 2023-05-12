@@ -16,4 +16,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     List<Chat> findAllByRoom(ChatRoom room);
 
+    //List<Chat> findAllByRoomAndUnreadNot(ChatRoom room, int i);
+
 }

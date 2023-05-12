@@ -1,16 +1,18 @@
+/*
 package com.noldaga.util.listener;
 
 import com.noldaga.domain.entity.User;
 import com.noldaga.domain.entity.chat.ChatRoom;
 import com.noldaga.domain.entity.chat.JoinRoom;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
 
+@Configuration
 @Component
 public class JoinRoomListener {
-
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -37,19 +39,21 @@ public class JoinRoomListener {
                         chatRoom.setViewRoomName("(알 수 없음)");
                     }
                     entityManager.persist(chatRoom);//변경된 방이름 저장
+                    entityManager.flush();
                 }
                 entityManager.remove(joinRoom); //변경된 joinRoom은 삭제
             }
         }
     } //회원이 탈퇴하는 경우 방이름을 변경 해줌
 
+
     @PostUpdate
     @PostRemove
     public void updateUserNum(JoinRoom joinRoom) {
         ChatRoom chatRoom = joinRoom.getRoom();
         if (chatRoom!=null) {
-            int userNum = entityManager.createQuery("SELECT COUNT(jr) FROM JoinRoom jr WHERE jr.room = :room", Integer.class)
-                    .setParameter("room", chatRoom)
+            int userNum = entityManager.createQuery("SELECT COUNT(jr) FROM JoinRoom jr WHERE jr.room.id = :room", Integer.class)
+                    .setParameter("room", chatRoom.getId())
                     .getSingleResult();
             chatRoom.setUserNum(userNum);
             entityManager.persist(chatRoom);
@@ -59,9 +63,11 @@ public class JoinRoomListener {
         }
     }
     //방에 참가한 인원 수 자동 업데이트
-    /*JoinRoom 엔티티의 생성/제거 시점에 ChatRoom 엔티티의 UserNum 값을 업데이트
+    */
+/*JoinRoom 엔티티의 생성/제거 시점에 ChatRoom 엔티티의 UserNum 값을 업데이트
       EntityManager를 사용하여 JoinRoom 엔티티를 기반으로 ChatRoom 엔티티의 userNum 값을 조회한 후,
-      ChatRoom 엔티티의 userNum 값을 업데이트하고, EntityManager를 사용하여 변경사항을 저장*/
+      ChatRoom 엔티티의 userNum 값을 업데이트하고, EntityManager를 사용하여 변경사항을 저장*//*
+
 
 
 }
@@ -70,6 +76,7 @@ public class JoinRoomListener {
 
 
 //전체 흐름 순서
+*/
 /*1. 유저가 삭제될 때 해당 유저를 가지고 있는 모든 JoinRoom을 조회하고,
      각 JoinRoom이 속한 ChatRoom의 이름을 변경한 후에 변경된 ChatRoom을 저장한다.
      그 후 joinRoom을 삭제 해야하니 updateUserNum이 실행되고 회원수가 0인경우에는
@@ -78,3 +85,4 @@ public class JoinRoomListener {
      따라서 유저가 삭제되면 해당 유저를 가지고 있는 모든 JoinRoom의 ChatRoom의 정보가 업데이트되고, JoinRoom도 삭제된다.
 
 */
+

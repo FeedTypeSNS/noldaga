@@ -5,12 +5,15 @@ import com.noldaga.controller.request.ChatSendRequest;
 import com.noldaga.controller.response.*;
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.service.ChatService;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Log4j2
@@ -61,6 +64,7 @@ public class ChatController {
     @DeleteMapping("/{roomId}")
     public Response<String> deleteChatRoom(Authentication authentication, @PathVariable Long roomId){
         String result = chatService.deleteChatRoom(authentication.getName(), roomId);
+        chatService.reSettingRoom(authentication.getName(), roomId);
         return Response.success(result);
     }//채팅방 삭제
 
