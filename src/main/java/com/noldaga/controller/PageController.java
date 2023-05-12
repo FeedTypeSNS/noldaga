@@ -1,23 +1,39 @@
 package com.noldaga.controller;
 
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 @Controller
 public class PageController {
 
+    @GetMapping("/")
+    public String root(){
+        return "redirect:/login-form";
+    }
+
     @GetMapping("/login-form")
-    public String login() {
+    public String login(Authentication authentication) {
+
+        if(authentication!=null){
+            return "home";
+        }
         return "sign-in";
     }
 
     @GetMapping("/join-form")
-    public String join() {
+    public String join(Authentication authentication) {
+        if(authentication!=null){
+            return "home";
+        }
         return "sign-up";
     }
-
 
     @GetMapping("/find-username")
     public String findUsername() {
@@ -113,4 +129,17 @@ public class PageController {
     public String notifications(){
         return "notifications";
     }
+
+    @GetMapping("/nol/logout")
+    public String logOut(HttpServletResponse response) throws IOException {
+
+        System.out.println("===========================UserController.logOut===============");
+        Cookie tokenCookie = new Cookie("tokenCookie", null);
+        tokenCookie.setMaxAge(0);
+        tokenCookie.setPath("/");
+        response.addCookie(tokenCookie);
+
+        return "sign-in";
+    }
+
 }

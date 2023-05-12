@@ -11,7 +11,6 @@ import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 
 
 @RequiredArgsConstructor
@@ -159,6 +157,7 @@ public class UserController {
 
         return Response.success();
     }
+
 
 
 }
