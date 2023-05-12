@@ -15,7 +15,7 @@ function init() {
     $("#search-content").on("keydown",(e)=>{
         if (e.keyCode === 13) {
             let data= $("#search-content").val();
-            window.location.href = "/searchfeed?q="+data;
+            window.location.href = "/nol/searchfeed?q="+data;
         }
     })
 }
@@ -99,7 +99,7 @@ function headerContent(data) {
         <li class="nav-item ms-2">
           <a
                   class="nav-link icon-md btn btn-light p-0"
-                  href="/chat"
+                  href="/nol/chat"
           >
             <i class="bi bi-chat-left-text-fill fs-6"> </i>
           </a>
@@ -107,7 +107,7 @@ function headerContent(data) {
         <li class="nav-item ms-2">
           <a
                   class="nav-link icon-md btn btn-light p-0"
-                  href="settings"
+                  href="/nol/settings"
           >
             <i class="bi bi-gear-fill fs-6"> </i>
           </a>
@@ -308,13 +308,13 @@ function headerContent(data) {
               </div>
               <a
                       class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center"
-                      href="/profile?user_id=${data.id}"
+                      href="/nol/editProfile?user_id=${data.id}"
               >View profile</a
               >
             </li>
             <!-- Links -->
             <li>
-              <a class="dropdown-item" href="settings"
+              <a class="dropdown-item" href="/nol/settings"
               ><i class="bi bi-gear fa-fw me-2"></i>내 정보 & 알림 범위 수정</a
               >
             </li>
