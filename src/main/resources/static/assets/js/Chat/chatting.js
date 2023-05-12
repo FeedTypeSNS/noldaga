@@ -240,7 +240,7 @@ function initChatBody(resp, name){
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-check me-2 fw-icon"></i>상대 프로필 페이지 이동</a></li>
                                                 <li><a class="dropdown-item" onclick="deleteChatRoom(event)"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
                                                 <li class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" onclick="getChatPage()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
+                                                <li><a class="dropdown-item" onclick="setBasic()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
                                             </ul>
                                         </div>
                                         <!-- Card action END -->

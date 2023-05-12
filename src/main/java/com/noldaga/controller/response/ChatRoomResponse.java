@@ -16,9 +16,10 @@ public class ChatRoomResponse {
     private List<UserSimpleDto> joinPeoples; //참가자, 방번호
     private List<ChatDto> pastChat; //과거 채팅 리스트
     private List<ChatReadDto> readList; //읽은 사람 리스트
+    private String type;
 
-    public static ChatRoomResponse returnResponse(ChatRoomDto roomInfo, List<UserSimpleDto> jp, List<ChatDto> pc, List<ChatReadDto> read){
-        return new ChatRoomResponse(roomInfo, jp, pc, read);
+    public static ChatRoomResponse returnResponse(ChatRoomDto roomInfo, List<UserSimpleDto> jp, List<ChatDto> pc, List<ChatReadDto> read, String type){
+        return new ChatRoomResponse(roomInfo, jp, pc, read, type);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.noldaga.domain.entity.chat;
 
+import com.noldaga.domain.entity.User;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,13 +17,17 @@ public class ChatSession {
     @ManyToOne
     private ChatRoom chatRoom;
 
+    @ManyToOne
+    private User user;
+
 
     protected ChatSession(){}
-    public ChatSession(String id, ChatRoom room){
+    public ChatSession(String id, ChatRoom room, User user){
         this.sessionId = id;
         this.chatRoom = room;
+        this.user = user;
     }
 
-    public static ChatSession of(String id, ChatRoom room){return new ChatSession(id, room);}
+    public static ChatSession of(String id, ChatRoom room, User user){return new ChatSession(id, room, user);}
 
 }

@@ -2,6 +2,9 @@
 /*let socket = new SockJS("/ws/chat");
 let ws = Stomp.over(socket);
 let reconnect = 0;*/
+function init(){
+    setBasic();
+}
 function setBasic(){
     getChatBody();
 

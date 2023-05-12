@@ -30,7 +30,7 @@ public class ChatDto {
                 ChatRoomDto.fromEntity(chat.getRoom()),
                 UserSimpleDto.fromEntity(chat.getSender()),
                 chat.getMsg(),
-                chat.getUnread_count(),
+                chat.getUnread(),
                 chat.getCreatedAt()
         );
     }
