@@ -73,5 +73,9 @@ public class Comment {
     public String getFeedTitle(){
         return feed.getTitle();
     }
+
+    public Long getFeedId(){
+        return feed.getId();
+    }
 }
 

@@ -11,13 +11,14 @@ public class CommentObject implements AlarmObject{
     private String comment;
 
     private String feedTitle;
-    private final String OBJECT_TYPE = "COMMENT";
+    private Long feedId;
+    private final String OBJECT_TYPE = "comment";
 
 
 
     @Override
     public Long getId() {
-        return this.id;
+        return this.feedId;
     }
 
     @Override
@@ -34,8 +35,8 @@ public class CommentObject implements AlarmObject{
         return this.OBJECT_TYPE;
     }
 
-    public static AlarmObject from(Comment comment,String feedTitle){
-        return new CommentObject(comment.getId(), comment.getContent(),feedTitle);
+    public static AlarmObject from(Comment comment,String feedTitle,Long feedId){
+        return new CommentObject(comment.getId(), comment.getContent(),feedTitle,feedId);
 
     }
 }
