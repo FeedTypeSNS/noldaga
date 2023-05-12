@@ -12,14 +12,27 @@ function sendMsgAlarm(){
     return jsonObj;
 } //채팅 보냈을때 알려주기..
 
-function sendDelRoomAlarm(uuid){
+function sendDelRoomAlarm(uuid, msg, id){
     const jsonObj = {
         "resultCode": "SUCCESS",
         "result": {
             "type":"DELETEROOM",
             "roomInfo":{
-                "uuid": uuid
-            }
+                "uuid": uuid,
+                "id" : id
+            },
+            "msg": msg
+        }
+    }
+    return jsonObj;
+}
+
+function sendDelChatAlarm(id){
+    const jsonObj = {
+        "resultCode": "SUCCESS",
+        "result": {
+            "type":"DELETEMSG",
+            "chatId": id
         }
     }
     return jsonObj;

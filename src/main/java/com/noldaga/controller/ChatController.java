@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Log4j2
@@ -50,13 +51,19 @@ public class ChatController {
     }//채팅방 생성하기
 
     @PostMapping("/{roomId}/message")
-    public Response<ChatSendResponse> saveMessage(Authentication authentication, @RequestBody ChatSendRequest request, @PathVariable Long roomId){
+    public Response<ChatSendResponse> saveMessage(Authentication authentication, @RequestBody ChatSendRequest request, @PathVariable Long roomId) throws IOException {
         ChatSendResponse result = chatService.saveChat(authentication.getName(), request, roomId);
         return Response.success(result);
     }//메시지 보내기 = 보내자마자 저장되야함..
 
+    @PostMapping("/{roomId}/img")
+    public Response<ChatSendResponse> saveMessageImg(Authentication authentication, @RequestPart(required = false) MultipartFile img, @PathVariable Long roomId) throws IOException {
+        ChatSendResponse result = chatService.saveChatImg(authentication.getName(), img, roomId);
+        return Response.success(result);
+    }
+
     @DeleteMapping("/{roomId}/message/{chatId}")
-    public Response<String> deleteMessage(Authentication authentication, @PathVariable Long chatId){
+    public Response<String> deleteMessage(Authentication authentication, @PathVariable Long chatId) throws UnsupportedEncodingException {
         String result = chatService.deleteChat(authentication.getName(), chatId);
         return Response.success(result);
     }//메시지 삭제
@@ -65,6 +72,7 @@ public class ChatController {
     public Response<String> deleteChatRoom(Authentication authentication, @PathVariable Long roomId){
         String result = chatService.deleteChatRoom(authentication.getName(), roomId);
         chatService.reSettingRoom(authentication.getName(), roomId);
+        chatService.delChatRoomUserNum(0); //안 삭제된 방 지우기 위해 0명인 방 강제 삭제
         return Response.success(result);
     }//채팅방 삭제
 
