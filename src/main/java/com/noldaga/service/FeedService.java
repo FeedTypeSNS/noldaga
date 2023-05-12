@@ -336,4 +336,8 @@ public class FeedService {
 //        else
 //            feedRepository.delete(feed);
     }
+
+    public void deleteImage(String url) {
+        imageRepository.deleteByUrl(url);
+    }
 }

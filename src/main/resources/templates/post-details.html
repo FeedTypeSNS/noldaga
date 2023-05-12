@@ -235,6 +235,13 @@ Header END -->
                         <!-- Feed rect END -->
                     </div>
                     <!-- Modal feed body END -->
+                    <div class = "row mt-3">
+                        <div class="col">
+                            <div class="container-fluid d-flex" style="flex-wrap: wrap">
+                                <h2>여기에 업로드 결과 보여주기</h2>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Modal feed footer -->
                     <div class="modal-footer row justify-content-between">
@@ -340,19 +347,12 @@ Header END -->
                     ></button>
                 </div>
                 <!-- Modal feed header END -->
-                <form>
+                <form enctype="multipart/form-data">
                     <!-- Modal feed body START -->
                     <div class="modal-body">
                         <!-- Add Feed -->
                         <div class="d-flex mb-3">
                             <!-- Avatar -->
-                            <div class="avatar avatar-xs me-2">
-                                <img
-                                        class="avatar-img rounded-circle"
-                                        src="/assets/images/albums/07.jpg"
-                                        alt=""
-                                />
-                            </div>
                             <!-- Feed box  -->
                             <div class="col">
                                 <div class="row">
@@ -376,82 +376,31 @@ Header END -->
                                           id="modify_content"
                                   ></textarea>
                                 </div>
-                                <div>
-                                    <label class="form-label">Upload attachment</label>
-                                    <div
-                                            class="dropzone dropzone-default card shadow-none"
-                                            data-dropzone='{"maxFiles":10}'
-                                            id="images"
-                                    >
-                                        <div class="dz-message">
-                                            <i class="bi bi-images display-3"></i>
-                                            <p>드래그해서 사진 업로드하기</p>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <!-- Feed rect START -->
                         <div class="hstack gap-2">
-                            <a
+                            <label
                                     class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
                                     href="#"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     title="사진"
+                                    for="modify-uploadFile"
                             >
                                 <i class="bi bi-image-fill"></i>
-                            </a>
-                            <a
-                                    class="icon-md bg-info bg-opacity-10 text-info rounded-circle"
-                                    href="#"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="비디오"
-                            >
-                                <i class="bi bi-camera-reels-fill"></i>
-                            </a>
-                            <a
-                                    class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle"
-                                    href="#"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="이벤트"
-                            >
-                                <i class="bi bi-calendar2-event-fill"></i>
-                            </a>
-                            <a
-                                    class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle"
-                                    href="#"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="기분/활동"
-                            >
-                                <i class="bi bi-emoji-smile-fill"></i>
-                            </a>
-                            <a
-                                    class="icon-md bg-light text-secondary rounded-circle"
-                                    href="#"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="위치태그"
-                            >
-                                <i class="bi bi-geo-alt-fill"></i>
-                            </a>
-                            <a
-                                    class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle"
-                                    href="#"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="회원태그"
-                            >
-                                <i class="bi bi-tag-fill"></i>
-                            </a>
+                            </label>
+                            <input type="file" id="modify-uploadFile" style="display:none" multiple/>
                         </div>
                         <!-- Feed rect END -->
                     </div>
                     <!-- Modal feed body END -->
-
+                    <div class = "row mt-3">
+                        <div class="col">
+                            <div class="container-fluid d-flex modify-uploadResult" style="flex-wrap: wrap">
+                            </div>
+                        </div>
+                    </div>
                     <!-- Modal feed footer -->
                     <div class="modal-footer row justify-content-between">
                         <!-- Select -->

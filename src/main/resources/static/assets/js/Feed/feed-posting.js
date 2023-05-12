@@ -47,9 +47,8 @@ let post = {
       contentType: "application/json; charset=utf-8",
       dataType: "json"
     }).done(function(resp){
-      alert(JSON.stringify(data));
       alert('포스팅 완료');
-      location.href = "/";
+      location.href = "/nol";
     }).fail(function(error){
       alert('포스팅 실패');
       alert(JSON.stringify(error));
@@ -57,7 +56,7 @@ let post = {
 
   },
 
-  posting_demo:function(){
+  /*posting_demo:function(){
     let data={
       title: $("#titledemo").val(),
       content: $("#contentdemo").val(),
@@ -73,12 +72,12 @@ let post = {
       dataType: "json"
     }).done(function(resp){
       this.image_save(resp);
-      location.href = "/";
+      location.href = "/nol";
     }).fail(function(error){
       alert('포스팅 실패');
       alert(JSON.stringify(error));
     });
-  },
+  },*/
 
   image_save:function(){
     const formImageData = new FormData();
@@ -95,10 +94,9 @@ let post = {
       data: formImageData,
       processData: false,
       contentType: false
-    }).done(function(resp){
-      alert("업로드 성공");
+    }).done((resp)=>{
       imageList = resp.result;
-      alert(JSON.stringify(imageList));
+      this.showUploadFile(resp.result);
     }).fail(function(error){
       alert('업로드실패');
       alert(JSON.stringify(error));
@@ -121,15 +119,56 @@ let post = {
       dataType: "json"
     }).done(function(resp){
       alert('포스팅 완료');
-      location.href = "/";
+      location.href = "/nol";
     }).fail(function(error){
       alert('포스팅 실패');
       alert(JSON.stringify(error));
     });
 
+  },
+
+  showUploadFile:function(images) {
+    for (let i = 0; i < images.length; i++) {
+      const uploadResult = document.querySelector(".uploadResult");
+      const str = `<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                <button type="button" onclick="remove.removeFile('${images[i]}',this)">삭제</button>
+            </div>
+            <div class="card-body">
+                 <img src=${images[i]}>
+            </div>
+        </div><!-- card -->`
+
+      uploadResult.innerHTML += str
+    }
   }
+
 
 };
 
 post.init();
 
+let remove = {
+  removeFile:function(url,obj){
+    const targetDiv = obj.closest(".card");
+
+    //배열에서 삭제
+    var index = imageList.indexOf(url);
+    imageList.splice(index, 1);
+    //서버에서 삭제
+    this.removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+  },
+
+  removeFileFromServer:function(url){
+    $.ajax({
+      type: "DELETE",
+      url: "/api/feed/img?url="+url,
+      contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+    }).fail(function(error){
+      alert(JSON.stringify(error));
+    });
+  }
+}

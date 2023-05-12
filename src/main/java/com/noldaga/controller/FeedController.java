@@ -186,7 +186,21 @@ public class FeedController {
     public Response<List<String>> uploadImgs(@RequestParam("images") List<MultipartFile> img) throws IOException {
         List<String> urls = s3Uploader.uploadList(img, "/feed/img");
         return Response.success(urls);
-    }//이미지 여러개 넣을때 이런식..
+    }
+
+    //클라우드에서 삭제
+    @DeleteMapping("/api/feed/s3Img")
+    public Response<String> delS3Img(String url) throws IOException {
+        String fileName = s3Uploader.deleteImage(url);
+        return Response.success(fileName);
+    }
+
+    //DB에서 삭제
+    @DeleteMapping("/api/feed/dbImg")
+    public Response<Void> delDBImg(String url) throws IOException {
+        feedService.deleteImage(url);
+        return Response.success();
+    }
 
 //    @PostMapping("/api/upload")
 //    public Response<List<UploadDto>> imageUpload(@RequestParam("images") List<MultipartFile> files) throws IOException {
