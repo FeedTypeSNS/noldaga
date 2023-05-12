@@ -265,7 +265,116 @@ Header END -->
   </div>
 </div>
 <!-- Modal create group END -->
+<div
+        class="modal fade"
+        id="modalCreateFeed"
+        tabindex="-1"
+        aria-labelledby="modalLabelCreateFeed"
+        aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelCreateFeed">게시물 작성</h5>
+        <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+        ></button>
+      </div>
+      <!-- Modal feed header END -->
+      <form enctype="multipart/form-data">
+        <!-- Modal feed body START -->
+        <div class="modal-body">
+          <!-- Add Feed -->
+          <div class="d-flex mb-3">
+            <!-- Avatar -->
+            <!--<div class="avatar avatar-xs me-2">
+              <img
+                      class="avatar-img rounded-circle"
+                      src="assets/images/albums/07.jpg"
+                      alt=""
+              />
+            </div>-->
+            <!-- Feed box  -->
+            <div class="col">
+              <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="1"
+                              placeholder="제목"
+                              autofocus
+                              id="title"
+                      ></textarea>
+              </div>
+              <div class="row">
+                      <textarea
+                              class="form-control pe-4 fs-3 lh-1 border-0"
+                              rows="4"
+                              placeholder="내용"
+                              autofocus
+                              id="content"
+                      ></textarea>
+              </div>
+            </div>
+          </div>
+          <!-- Feed rect START -->
+          <div class="hstack gap-2">
+            <label
+                    class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
+                    href="#"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="사진"
+                    for="uploadFile"
+            >
+              <i class="bi bi-image-fill"></i>
+            </label>
+            <input type="file" id="uploadFile" style="display:none" multiple/>
+          </div>
+          <!-- Feed rect END -->
+        </div>
+        <!-- Modal feed body END -->
 
+        <!-- Modal feed footer -->
+        <div class="modal-footer row justify-content-between">
+          <!-- Select -->
+          <div class="row">
+            <div class="col-sm-4">
+              <select
+                      id="open_range"
+                      class="form-select choice-select-text-none"
+                      data-position="top"
+                      data-search-enabled="false"
+              >
+                <option value=0>공개</option>
+                <option value=1>친구 공개</option>
+              </select>
+            </div>
+            <div class="col-sm-4">
+              <select
+                      id="group_id"
+                      class="form-select choice-select-text-none"
+                      data-position="top"
+                      data-search-enabled="false"
+              >
+                <option value=0>마이페이지</option>
+              </select>
+              <!-- Button -->
+            </div>
+
+            <div class="col-sm-4 text-sm-end">
+              <button type="button" id="posting-button" class="btn btn-success-soft">완료</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- Modal feed footer -->
+    </div>
+  </div>
+</div>
 <!-- =======================
 JS libraries, plugins and custom scripts -->
 
