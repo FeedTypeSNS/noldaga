@@ -20,7 +20,6 @@ function cwsOpen(name){
     if (name==null && name.trim()===''){
         name = $("#ws-username").val();
     }
-    name = $()
     cws = new WebSocket("ws://"+location.host+"/chatroom/"+encodeURIComponent(name));
     cwsEvt();
 }
