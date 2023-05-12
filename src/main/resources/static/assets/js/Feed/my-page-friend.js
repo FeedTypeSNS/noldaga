@@ -233,8 +233,7 @@ function profileContentOther(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/nol/mypage?user_id=${data.id}"> 게시물 </a> </li>
                   <li class="nav-item"> <a class="nav-link active" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
@@ -266,7 +265,7 @@ function photoCardContent(data) {
     return `<div class="d-md-flex align-items-center mb-4">
                 <!-- Avatar -->
                 <div class="avatar me-3 mb-3 mb-md-0">
-                  <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""> </a>
+                  <a href="/nol/mypage?user_id=${data.id}"> <img class="avatar-img rounded-circle" src=${data.profileImageUrl} alt=""> </a>
                 </div>
                 <!-- Info -->
                 <div class="w-100">
