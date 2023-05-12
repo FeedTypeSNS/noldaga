@@ -73,12 +73,18 @@ function getDetailGroupPage(group, user, groupMember) {
         hiddenType5 = groupMember.favor === 1 ? "hidden" : "";
     }
 
+    let profile = "";
+    if(group.profile_url != "") {
+
+    } else {
+        profile = "assets/images/avatar/placeholder.jpg";
+    }
 
     return `<div class="d-md-flex flex-wrap align-items-start text-center text-md-start">
     <div class="mb-2">
         <!-- Avatar -->
         <div class="avatar avatar-xl">
-            <img class="avatar-img border-0" src="/assets/images/logo/13.svg" alt="">
+            <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="${group.profile_url}${profile}" alt="">
         </div>
     </div>
     <div class="ms-md-4 mt-3">
@@ -120,7 +126,7 @@ function getDetailGroupPage(group, user, groupMember) {
       </div>
       <div class="modal-body">
         <!-- Form START -->
-        <form>
+        
           <!-- Group name -->
           <div class="mb-3">
             <label class="form-label">그룹 이름</label>
@@ -132,20 +138,17 @@ function getDetailGroupPage(group, user, groupMember) {
             <!-- Avatar upload START -->
             <div class="d-flex align-items-center">
               <div class="avatar-uploader me-3">
-                <!-- Avatar edit -->
-                <div class="avatar-edit">
-                  <input name="profile_url" type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
-                  <label for="avatarUpload"></label>
+                <div class="mb-3">
+                  <img id="groupImg" alt="" src="${profile}${group.profile_url}" class="rounded-circle" style="width: 100px; height: 100px;">
                 </div>
-                <!-- Avatar preview -->
-                <div class="avatar avatar-xl position-relative">
-                  <img id="avatar-preview" class="avatar-img rounded-circle border border-white border-3 shadow" src="/assets/images/avatar/placeholder.jpg" alt="">
+                <div>
+                  <input type="file" accept=".png, .jpg, .jpeg" name="profile_url" id="fileInput">
                 </div>
               </div>
               <!-- Avatar remove button -->
-              <div class="avatar-remove">
+              <!--<div class="avatar-remove">
                 <button type="button" id="avatar-reset-img" class="btn btn-light">사진 삭제</button>
-              </div>
+              </div>-->
             </div>
             <!-- Avatar upload END -->
           </div>
@@ -176,7 +179,7 @@ function getDetailGroupPage(group, user, groupMember) {
           <div class="modal-footer">
             <button onclick="updateGroup(${group.id})" class="btn btn-success-soft">그룹 수정</button>
           </div>
-        </form>
+        
         <!-- Form END -->
       </div>
       <!-- Modal footer -->
@@ -184,6 +187,24 @@ function getDetailGroupPage(group, user, groupMember) {
     </div>
   </div>
 </div>
+<script>
+  imageViewer();
+  function imageViewer() {
+    const fileInput = document.getElementById('fileInput');
+    const imgPreview = document.getElementById('groupImg');
+
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        imgPreview.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
 <!-- Modal modify group END -->`;
 }
 

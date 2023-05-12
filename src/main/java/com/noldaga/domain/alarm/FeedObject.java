@@ -19,7 +19,9 @@ public class FeedObject implements AlarmObject {
 
     @Override
     public String getNameOnAlarm() {
-        return this.title;
+
+        String f =AlarmObject.shortenString(this.title);
+        return String.format("피드 : %s", f);
     }
 
 

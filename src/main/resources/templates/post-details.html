@@ -82,6 +82,7 @@
 
     <!-- Theme CSS -->
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/imageSlide.css" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.js"></script>
 
 </head>
@@ -119,6 +120,14 @@ Header END -->
                 </div>
                 <div class="col-lg-8 mx-auto">
                     <div class="card card-body">
+                        <div class="imagecontainer">
+                            <div class="album">
+                                <div class="images" id = "FeedImages">
+                                </div>
+                            </div>
+                            <button class="prev">PREV</button>
+                            <button class="next">NEXT</button>
+                        </div>
                         <div id = "FeedDetailcontent">
                             <!-- getDetailPage_first 함수 내용-->
                         </div>
@@ -183,7 +192,7 @@ Header END -->
                             <div class="avatar avatar-xs me-2">
                                 <img
                                         class="avatar-img rounded-circle"
-                                        src="assets/images/albums/07.jpg"
+                                        src="/assets/images/albums/07.jpg"
                                         alt=""
                                 />
                             </div>
@@ -656,6 +665,7 @@ JS libraries, plugins and custom scripts -->
 <script src="/assets/js/functions.js"></script>
 <script src="/assets/js/Feed/feed-detail.js"></script>
 <script src="/assets/js/Feed/feed-modify.js"></script>
+<script src="/assets/js/Feed/feed-slide.js"></script>
 <script src="/assets/js/header.js"></script>
 </body>
 </html>

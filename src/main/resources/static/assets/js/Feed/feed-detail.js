@@ -1,3 +1,5 @@
+let imageLength = null;
+
 function getUser() {
 
     $.ajax({
@@ -83,8 +85,8 @@ function loadmoreComments(feedData,comment_page,loginUser){
 }
 
 function setDetailPage(feedData,comment_page,loginUser){
-
-    //$('#commentCount').val(data.totalComment);
+    //피드 사진
+    let imageBox = document.querySelector("#FeedImages");
 
     //피드 내용 들어가는 부분
     let feedBox = document.querySelector("#FeedDetailcontent");
@@ -99,6 +101,8 @@ function setDetailPage(feedData,comment_page,loginUser){
     let replySubmitForm = document.createElement("form");
     replySubmitForm.className = "nav nav-item w-100 position-relative";
 
+    imageBox.innerHTML = getFeedImages(feedData.imageDtoList);
+
     feedCard.innerHTML = getDetailPage_Feed(feedData);
     feedBox.append(feedCard);
 
@@ -110,6 +114,7 @@ function setDetailPage(feedData,comment_page,loginUser){
     }
     else
         feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 글은 수정 삭제 버튼 없음
+
     feedReactBox.append(feedReactCard);
 
     replySubmitForm.innerHTML = reply_submit_form(feedData);
@@ -201,11 +206,17 @@ function getReactButtonsOthers(data){
                         </ul>`;
 }
 
+function getFeedImages(images){
+    let result = "";
+    imageLength = images.length-1;
+    for(let i=0; i<images.length; i++) {
+        result += `<img class="feedimage" src=${images[i].url} alt="">`;
+    }
+    return result;
+}
+
 function getDetailPage_Feed(data){
-    return `<!-- Fees images --><!-- 함수에 넣을 부분 시작 -->
-                            <img class="card-img rounded" src="/assets/images/post/16by9/big/01.jpg" alt="">
-                            <!-- Feed meta START -->
-                            <div class="d-flex align-items-center justify-content-between my-3">
+    return `<div class="d-flex align-items-center justify-content-between my-3">
                                 <div class="d-flex align-items-center">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-story me-2">

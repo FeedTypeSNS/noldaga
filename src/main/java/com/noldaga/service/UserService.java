@@ -9,10 +9,11 @@ import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.UserRepository;
+import com.noldaga.util.ConstUtil;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
@@ -35,6 +35,8 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
 
     private final AlarmRepository alarmRepository;
+
+    private final S3Uploader s3Uploader;
 
     @Value("${com.noldaga.upload.path}")
     private String directoryPath;
@@ -56,25 +58,25 @@ public class UserService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
 
 
-        //todo 네이버 클라우드
         String afterUrl = beforeUrl;
-        if(multipartFile!=null && !multipartFile.isEmpty()) {
-
-            //todo beforeUrl 파일 삭제
-
-            String originFileName = multipartFile.getOriginalFilename();
-            String extension = originFileName.substring(originFileName.lastIndexOf("."));
-            String newFileName = originFileName.replace(extension, "") + "_" + System.currentTimeMillis() + extension;
-
-            String path = directoryPath + "\\" + newFileName;
-            File file = new File(path);
-            multipartFile.transferTo(file);
-            afterUrl = file.getAbsolutePath();
+        if(containImageFile(multipartFile)) {
+            afterUrl =s3Uploader.upload(multipartFile,"/user");
+            if (isNotDefaultImage(beforeUrl)) {
+                s3Uploader.deleteImage(beforeUrl);
+            }
         }
 
         user.modifyProfile(nickname,message,afterUrl);
 
         return UserDto.fromEntity(user);
+    }
+
+    private boolean isNotDefaultImage(String beforeUrl) {
+        return beforeUrl != null && !beforeUrl.isEmpty() && !beforeUrl.equals(ConstUtil.USER_DEFAULT_IMG_URL);
+    }
+
+    private boolean containImageFile(MultipartFile multipartFile) {
+        return multipartFile != null && !multipartFile.isEmpty();
     }
 
 

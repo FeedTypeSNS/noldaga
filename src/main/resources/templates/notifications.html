@@ -339,7 +339,7 @@ Header END -->
         <!-- Card START -->
         <div class="card">
           <div class="card-header py-3 border-0 d-flex align-items-center justify-content-between">
-            <h1 class="h5 mb-0">Notifications</h1>
+            <h1 class="h5 mb-0">알 림</h1>
             <!-- Notification action START -->
             <div class="dropdown">
               <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardNotiAction"
@@ -371,7 +371,7 @@ Header END -->
           <div class="card-footer border-0 py-3 text-center position-relative d-grid pt-0">
             <!-- Load more button START -->
             <a href="#!" role="button" class="btn btn-loader btn-primary-soft" data-bs-toggle="button"
-               aria-pressed="true">
+               aria-pressed="true" onclick="loadAlarm()">
               <span class="load-text"> Load more notifications </span>
               <div class="load-icon">
                 <div class="spinner-grow spinner-grow-sm" role="status">
@@ -404,11 +404,13 @@ JS libraries, plugins and custom scripts -->
 
 <script>
 
+    let page =0;
+
     alarmListInit();
 
 
-    const notifItemTemplate = (avatarSrc, name,alarmText, targetNameOnAlarm,actionTime) => `
-  <li>
+    const notifItemTemplate = (avatarSrc,alarmId, name,alarmText, targetNameOnAlarm,actionTime) => `
+  <li alarm-id="${alarmId}">
     <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
       <!-- Avatar -->
       <div class="avatar text-center">
@@ -416,18 +418,19 @@ JS libraries, plugins and custom scripts -->
       </div>
       <!-- Info -->
       <div class="mx-sm-3 my-2 my-sm-0">
-        <p class="small mb-2"><b>${alarmText}</b> sent you a friend request.</p>
-        <p class="small mb-2"><b>${name}</b> sent you a friend request.</p>
-        <p class="small mb-2"><b>${targetNameOnAlarm}</b> sent you a friend request.</p>
+      <p class="mb-2" ><b>${alarmId}</b>a</p>
+        <p class="mb-2"><b>${alarmText}</b>a</p>
+        <p class="small mb-2"><b>${name}</b> b</p>
+        <p class="small mb-2"><b>${targetNameOnAlarm}</b> c</p>
         <!-- Button -->
         <div class="d-flex">
-          <button class="btn btn-sm py-1 btn-primary me-2">Accept</button>
-          <button class="btn btn-sm py-1 btn-danger-soft">Delete</button>
+          <button class="btn btn-sm py-1 btn-danger-soft" onclick="deleteAlarm(${alarmId})">Delete</button>
+<!--          <button class="btn btn-sm py-1 btn-primary me-2">Accept</button>-->
         </div>
       </div>
       <!-- Action -->
       <div class="d-flex ms-auto">
-        <p class="small me-5 text-nowrap">${actionTime}</p>
+        <p class="small me-5 text-nowrap">${forAgoChatTimestamp(actionTime)}</p>
         <!-- Notification action START -->
         <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
           <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1"
@@ -458,17 +461,19 @@ JS libraries, plugins and custom scripts -->
         const myUl = document.querySelector('.myUl');
 
         for(let i=0; i<contentArr.length; ++i){
+
+            const alarmId = contentArr[i].id;
             const alarmArgs = contentArr[i].alarmArgs;
-            const avatarSrc = `assets/images/avatar/0${i+1}.jpg`;
-            const name= alarmArgs.fromNameOnAlarm;
+            const avatarSrc = contentArr[i].imageUrl;
+            const name= alarmArgs.fromNameOnAlarm ;
             const actionTime= contentArr[i].createdAt;
             const alarmText = contentArr[i].alarmText;
-            const targetNameOnAlarm = alarmArgs.targetNameOnAlarm;
+            const targetNameOnAlarm = alarmArgs.targetNameOnAlarm || '';
 
 
 
             const newNotifItem=document.createElement('li');
-            newNotifItem.innerHTML = notifItemTemplate(avatarSrc, name,alarmText,targetNameOnAlarm, actionTime);
+            newNotifItem.innerHTML = notifItemTemplate(avatarSrc,alarmId, name,alarmText,targetNameOnAlarm, actionTime);
             myUl.appendChild(newNotifItem);
 
         }
@@ -482,6 +487,7 @@ JS libraries, plugins and custom scripts -->
             if (this.readyState === XMLHttpRequest.DONE) {
                 const response = JSON.parse(this.responseText);
                 if(response.resultCode==='SUCCESS'){
+                    ++page;
                     const contentArray = response.result.content;
                     render(contentArray);
                 }
@@ -492,6 +498,125 @@ JS libraries, plugins and custom scripts -->
         }
         xhr.send();
     }
+
+
+
+
+  function loadAlarm(){
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `/api/users/me/alarm?page=${page}`,true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange=function(){
+          if (this.readyState === XMLHttpRequest.DONE) {
+              const response = JSON.parse(this.responseText);
+              if(response.resultCode==='SUCCESS'){
+
+                  if(response.result.last===true){
+                      alert('마지막 페이지 입니다');
+                      return;
+                  }
+                  ++page;
+                  const contentArray = response.result.content;
+                  render(contentArray);
+              }
+              else{
+
+              }
+          }
+      }
+      xhr.send();
+  }
+
+  function deleteAlarm(alarmId){
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `/api/users/me/alarm/${alarmId}`,true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange=function(){
+          if (this.readyState === XMLHttpRequest.DONE) {
+              const response = JSON.parse(this.responseText);
+              if(response.resultCode==='SUCCESS'){
+                  const li = document.querySelector(`li[alarm-id="${alarmId}"]`);
+                  li.remove();
+              }
+              else{
+
+              }
+          }
+      }
+      xhr.send();
+  }
+
+
+    function forAgoChatTimestamp(timestamp){
+        let date = new Date(timestamp);
+        let diffMs = new Date() - date;
+// Calculate the time difference in minutes
+        let diffMins = Math.floor(diffMs / (1000 * 60));
+        if (diffMins < 60) {
+            // Less than an hour ago
+            return diffMins === 1 ? '1분 전' : `${diffMins}분 전`;
+        } else if (diffMins < 1440) {
+            // Within a day
+            const diffHours = Math.floor(diffMins / 60);
+            return diffHours === 1 ? '1시간 전' : `${diffHours}시간 전`;
+        } else if (diffMins < 10080) {
+            // Within a week
+            const diffDays = Math.floor(diffMins / 1440);
+            return diffDays === 1 ? '1일 전' : `${diffDays}일 전`;
+        } else {
+            // More than a week ago
+            const diffWeeks = Math.floor(diffMins / 10080);
+            return diffWeeks === 1 ? '1주 전' : `${diffWeeks}주 전`;
+        }
+    } //날짜 포맷, 온지 얼마나 됬는지
+    function forChatTimestamp(timestamp){
+        const date = new Date(timestamp);
+        const currentDate = new Date();
+        const diffMs = currentDate - date;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        if (diffDays >= 365) {
+            return date.toLocaleString("ko-KR", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        } else if (diffDays > 7) {
+            return date.toLocaleString("ko-KR", {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        } else if (diffDays > 0) {
+            if (diffDays === 1) {
+                return "어제, " + date.toLocaleString("ko-KR", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                });
+            } else {
+                return date.toLocaleString("ko-KR", {
+                    weekday: "long",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                });
+            }
+        } else {
+            return date.toLocaleString("ko-KR", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        }
+    } //날짜 포맷, 언제 도착했는지
+    //시간변환
+
 
 </script>
 
