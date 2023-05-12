@@ -83,7 +83,7 @@ function profileContentMine(data) {
                 <div>
                   <!-- Avatar -->
                   <div class="avatar avatar-xxl mt-n5 mb-3">
-                    <img class="avatar-img rounded-circle border border-white border-3" src="/assets/images/avatar/07.jpg" alt="">
+                    <img class="avatar-img rounded-circle border border-white border-3" src=${data.profileImageUrl} alt="">
                   </div>
                 </div>
                 <div class="ms-sm-4 mt-sm-3">
@@ -168,7 +168,7 @@ function profileContentOther(data) {
                 <div>
                   <!-- Avatar -->
                   <div class="avatar avatar-xxl mt-n5 mb-3">
-                    <img class="avatar-img rounded-circle border border-white border-3" src="/assets/images/avatar/07.jpg" alt="">
+                    <img class="avatar-img rounded-circle border border-white border-3" src=${data.profileImageUrl} alt="">
                   </div>
                 </div>
                 <div class="ms-sm-4 mt-sm-3">
