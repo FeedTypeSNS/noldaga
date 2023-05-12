@@ -30,7 +30,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         insertTokenCookie(response, token);
 
-        response.sendRedirect("/");
+        response.sendRedirect("/nol");
     }
 
     private void insertTokenCookie(HttpServletResponse response, String token) {

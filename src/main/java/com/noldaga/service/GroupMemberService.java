@@ -51,7 +51,7 @@ public class GroupMemberService {
 
         Long groupMasterId = group.getUser().getId();
         Alarm alarm = Alarm.of(groupMasterId, AlarmType.NEW_MEMBER,
-                AlarmArgs.of(UserObject.from(user)),
+                AlarmArgs.of(UserObject.from(user),GroupObject.from(group)),
                 user);
         alarmRepository.save(alarm);
 

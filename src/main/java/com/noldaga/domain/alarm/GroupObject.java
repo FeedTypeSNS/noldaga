@@ -9,7 +9,7 @@ public class GroupObject implements AlarmObject{
 
     private Long id;
     private String name;
-    private final String OBJECT_TYPE = "GROUP";
+    private final String OBJECT_TYPE = "group";
 
     @Override
     public Long getId() {

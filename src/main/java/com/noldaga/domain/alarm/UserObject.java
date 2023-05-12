@@ -13,7 +13,7 @@ public class UserObject implements AlarmObject{
     private String username;
     private String nickname;
 
-    private final String OBJECT_TYPE = "USERS";
+    private final String OBJECT_TYPE = "user";
 
     @Override
     public Long getId() {
@@ -23,7 +23,7 @@ public class UserObject implements AlarmObject{
     @Override
     public String getNameOnAlarm() {
         String viewText = String.format("%s  (%s)", this.nickname, this.username);
-        return String.format("사용자 : %s", viewText);
+        return String.format("회원 : %s", viewText);
 
     }
 

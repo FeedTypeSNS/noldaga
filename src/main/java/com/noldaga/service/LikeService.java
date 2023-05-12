@@ -109,10 +109,10 @@ public class LikeService {
 
 
         Long likerId= user.getId();
-        Long commentWriterId = comment.getId();
+        Long commentWriterId = comment.getUser().getId();
         if (likerId != commentWriterId) {//내가 내꺼 좋아요할때는 알림 안보냄
             Alarm alarm =Alarm.of(commentWriterId, AlarmType.NEW_LIKE_ON_COMMENT,
-                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment, comment.getFeedTitle())),
+                    AlarmArgs.of(UserObject.from(user), CommentObject.from(comment, comment.getFeedTitle(),comment.getFeedId())),
                     user);
             alarmRepository.save(alarm);
         }
