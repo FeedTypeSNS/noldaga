@@ -155,7 +155,7 @@ function profileContentOther(data) {
                 </div>
               </div>
               <!-- List profile -->
-              <div id="favorGroups"></div>
+              <div id="userFavorGroups"></div>
             </div>
             <!-- Card body END -->
             <div class="card-footer mt-3 pt-2 pb-0">
