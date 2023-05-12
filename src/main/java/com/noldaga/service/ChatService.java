@@ -231,12 +231,14 @@ public class ChatService {
         List<JoinRoom> people = joinRoomRepository.findAllByRoom(room);
         JoinRoom meJoin = joinRoomRepository.findByUsersAndRoom(user, room).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.ALREADY_OUT_ROOM));
+        log.info("방에 참가한 사람들"+String.valueOf(people));
 
         List<Chat> chatList = chatRepository.findAllByRoom(room); //방안의 채팅 내역
-
+        log.info("방에 채팅내역"+String.valueOf(chatList));
         if (room.getUserNum()==0) { throw new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM, "This room id already delete");
         }else {
             if (people.size() == 1) { //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
+                log.info("내가 마지막 사람");
                 for (int i = 0; i < chatList.size(); i++) {
                     List<ChatRead> pRead = chatReadRepository.findAllByChat(chatList.get(i));
                     chatReadRepository.deleteAllInBatch(pRead);
@@ -247,10 +249,13 @@ public class ChatService {
                 joinRoomRepository.deleteAllInBatch(people);
                 chatRoomRepository.delete(room);
             } else { //아니라면 내 join 정보와 읽음 여부 정보 삭제 해줌 됨!, 이름 변경..
+                log.info("나 말고 더 있음");
                 for (int i = 0; i < chatList.size(); i++) {
                     List<ChatRead> meRead = chatReadRepository.findAllByChatAndReadUser(chatList.get(i), user);
                     chatReadRepository.deleteAllInBatch(meRead);
+                    log.info("읽은 목록"+meRead);
                 }//읽음 여부  내 부분 삭제
+                log.info("나 조인 삭제: "+meJoin.getId());
                 joinRoomRepository.delete(meJoin);
             }
         }
