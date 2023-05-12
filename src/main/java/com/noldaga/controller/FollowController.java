@@ -19,12 +19,14 @@ public class FollowController {
     @PostMapping("/follow/{userId}")
     public Response<FollowResponse> doFollow(Authentication authentication, @PathVariable Long userId){
         FollowResponse msg = followService.doFollow(authentication.getName(), userId);
+        followService.setFollowCount(authentication.getName(), userId);
         return Response.success(msg);
     }//팔로우 하기
 
     @PostMapping("/unfollow/{userId}")
     public Response<FollowResponse> unFollow(Authentication authentication, @PathVariable Long userId){
         FollowResponse msg = followService.unFollow(authentication.getName(), userId);
+        followService.setFollowCount(authentication.getName(), userId);
         return Response.success(msg);
     }//언팔로우 하기
 
