@@ -17,10 +17,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         System.out.println("CustomAuthenticationEntryPoint.commence");
-        response.setContentType("application/json");
-        response.setStatus(ErrorCode.INVALID_TOKEN.getStatus().value());
-        response.getWriter().write(Response.error(ErrorCode.INVALID_TOKEN.name()).toStream());
-        System.out.println("CustomAuthenticationEntryPoint.commence");
-//        response.sendRedirect("/login-form");
+//        response.setContentType("application/json");
+//        response.setStatus(ErrorCode.INVALID_TOKEN.getStatus().value());
+//        response.getWriter().write(Response.error(ErrorCode.INVALID_TOKEN.name()).toStream());
+//        System.out.println("CustomAuthenticationEntryPoint.commence");
+        response.sendRedirect("/login-form");
     }
 }
