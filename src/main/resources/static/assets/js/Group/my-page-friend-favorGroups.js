@@ -1,6 +1,9 @@
 $(document).ready(function() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('user_id');
     $.ajax({
-        url: '/api/groups/member/favor',
+        url: '/api/groups/member/favor/'+userId,
         method: 'GET',
         success: function(response) {
             var groupList = response.result; // 받은 데이터에서 그룹 리스트 추출
@@ -24,7 +27,7 @@ $(document).ready(function() {
             });
 
             // 결과를 원하는 요소에 추가
-            $('#favorGroups').append(ul); // 출력을 원하는 요소의 ID를 지정해야 합니다.
+            $('#userFavorGroups').append(ul); // 출력을 원하는 요소의 ID를 지정해야 합니다.
         }
     });
 });
