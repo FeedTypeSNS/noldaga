@@ -192,9 +192,8 @@ function profileContentOther(data) {
             <div class="card-footer mt-3 pt-2 pb-0">
               <!-- Nav profile pages -->
               <ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                  <li class="nav-item"> <a class="nav-link active" href="/mypage?user_id=${data.id}"> 게시물 </a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="#"> 태그됨</a> </li>
-                  <li class="nav-item"> <a class="nav-link" href="/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
+                  <li class="nav-item"> <a class="nav-link active" href="/nol/mypage?user_id=${data.id}"> 게시물 </a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="/nol/friend?user_id=${data.id}"> 친구목록 <span class="badge bg-success bg-opacity-10 text-success small">${data.totalFollower+data.totalFollowing}</span> </a> </li>
               </ul>
             </div>`;
 }
@@ -210,7 +209,7 @@ function insertPhotoCards(data){
 }
 
 function photoCardContent(data) {
-    return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
+    return `<a href="/nol/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
                               <img class="thumbnailimage" src=${data.imageDtoList[0].url} alt="">
                           </a>
                           <!-- likes -->

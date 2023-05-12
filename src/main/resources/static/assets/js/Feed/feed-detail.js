@@ -220,7 +220,7 @@ function getDetailPage_Feed(data){
                                 <div class="d-flex align-items-center">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-story me-2">
-                                        <a href="#!"> <img class="avatar-img rounded-circle" src="/assets/images/avatar/04.jpg" alt=""> </a>
+                                        <a href="/nol/mypage?user_id=${data.userResponse.id}"> <img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""> </a>
                                     </div>
                                     <!-- Info -->
                                     <div>

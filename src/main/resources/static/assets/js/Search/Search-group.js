@@ -12,7 +12,7 @@ function makeSearchMenu(){
     $("#search-content-second").on("keydown",(e)=>{
         if (e.keyCode === 13) {
             let data= $("#search-content-second").val();
-            window.location.href = "/searchfeed?q="+data;
+            window.location.href = "/nol/searchfeed?q="+data;
         }
     })
 }
@@ -21,10 +21,10 @@ makeSearchMenu();
 
 function searchMenuContent(queryString){
     return `<ul class="nav nav-bottom-line align-items-center justify-content-center mb-0 border-0">
-              <li class="nav-item"> <a class="nav-link" href="/searchfeed${queryString}"> 게시글 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchhash${queryString}"> 해시태그 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchpeople${queryString}"> 사람 </a> </li>
-              <li class="nav-item"> <a class="nav-link active" href="/searchgroup${queryString}"> 그룹 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchfeed${queryString}"> 게시글 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchhash${queryString}"> 해시태그 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchpeople${queryString}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link active" href="/nol/searchgroup${queryString}"> 그룹 </a> </li>
             </ul>`;
 }
 

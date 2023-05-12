@@ -156,7 +156,7 @@ function insertPhotoCards(data){
 }
 
 function photoCardContent(data) {
-    return `<a href="/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
+    return `<a href="/nol/feed?id=${data.id}" data-gallery="image-popup" data-glightbox="description: .custom-desc2; descPosition: left;">
                               <img class="thumbnailimage" src=${data.imageDtoList[0].url} alt="">
                           </a>
                           <!-- likes -->

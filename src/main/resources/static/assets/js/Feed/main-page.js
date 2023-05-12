@@ -140,7 +140,7 @@ function feedContentPlusImage(data) {
                         <span class="nav-item small"> ${data.modDate} </span>
                       </div>
                       <h6 class="nav-item card-title mb-0">
-                          <a href="/feed?id=${data.id}">${data.title}  </a>
+                          <a href="/nol/feed?id=${data.id}">${data.title}  </a>
                         </h6>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ function feedContent(data) {
                         <span class="nav-item small"> ${data.modDate} </span>
                       </div>
                       <h6 class="nav-item card-title mb-0">
-                          <a href="/feed?id=${data.id}">${data.title}  </a>
+                          <a href="/nol/feed?id=${data.id}">${data.title}  </a>
                         </h6>
                     </div>
                   </div>
@@ -417,10 +417,10 @@ function like_register(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = "/nol";
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = "/nol";
     });
 }
 
@@ -430,10 +430,10 @@ function like_delete(data) {
         type: "DELETE",
         url: "api/like/feed/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = "/nol";
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = "/nol";
     });
 }
 
@@ -460,10 +460,10 @@ function save_register(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = "/nol";
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = "/nol";
     });
 }
 
@@ -473,9 +473,9 @@ function save_delete(data) {
         type: "DELETE",
         url: "api/feed/store/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = "/nol";
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = "/nol";
     });
 }
