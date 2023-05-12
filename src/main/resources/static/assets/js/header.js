@@ -34,12 +34,12 @@ function headerContent(data) {
       <a class="navbar-brand" href="/">
         <img
                 class="light-mode-item navbar-brand-item"
-                src="/assets/images/logo.svg"
+                src="/assets/images/noldagaMain.png"
                 alt="logo"
         />
         <img
                 class="dark-mode-item navbar-brand-item"
-                src="/assets/images/noldagaLogo.jpg"
+                src="/assets/images/noldagaMain.png"
                 alt="logo"
         />
       </a>
