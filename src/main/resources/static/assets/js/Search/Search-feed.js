@@ -14,7 +14,7 @@ function makeSearchMenu(query){
     $("#search-content-second").on("keydown",(e)=>{
         if (e.keyCode === 13) {
             let data= $("#search-content-second").val();
-            window.location.href = "/searchfeed?q="+data;
+            window.location.href = "/nol/searchfeed?q="+data;
         }
     })
 }
@@ -23,10 +23,10 @@ makeSearchMenu();
 
 function searchMenuContent(queryString){
     return `<ul class="nav nav-bottom-line align-items-center justify-content-center mb-0 border-0">
-              <li class="nav-item"> <a class="nav-link active" href="/searchfeed${queryString}"> 게시글 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchhash${queryString}"> 해시태그 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchpeople${queryString}"> 사람 </a> </li>
-              <li class="nav-item"> <a class="nav-link" href="/searchgroup${queryString}"> 그룹 </a> </li>
+              <li class="nav-item"> <a class="nav-link active" href="/nol/searchfeed${queryString}"> 게시글 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchhash${queryString}"> 해시태그 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchpeople${queryString}"> 사람 </a> </li>
+              <li class="nav-item"> <a class="nav-link" href="/nol/searchgroup${queryString}"> 그룹 </a> </li>
             </ul>`;
 }
 
@@ -69,11 +69,11 @@ function setFeedCardContent(feed) {
     return `<div class="row g-3">
                 <div class="col-4">
                   <!-- Blog image -->
-                  <img class="rounded" src="assets/images/post/4by3/03.jpg" alt="">
+                  <img class="rounded" src="/assets/images/post/4by3/03.jpg" alt="">
                 </div>
                 <div class="col-8">
                   <!-- Blog caption -->
-                  <h5><a href="/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
+                  <h5><a href="/nol/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
                   <div class="d-none d-sm-inline-block">
                     <p class="mb-2">${feed.content}</p>
                     <p class="mb-2">${feed.userResponse.username}</p>
