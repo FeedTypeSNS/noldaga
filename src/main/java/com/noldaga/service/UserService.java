@@ -58,7 +58,6 @@ public class UserService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", username)));
 
 
-        //todo 네이버 클라우드
         String afterUrl = beforeUrl;
         if(containImageFile(multipartFile)) {
             afterUrl =s3Uploader.upload(multipartFile,"/user");

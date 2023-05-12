@@ -10,6 +10,7 @@ import com.noldaga.service.UserService;
 import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -63,7 +64,6 @@ public class UserController {
         System.out.println("req = " + req);
 
 
-
         UserDto userDto = userService.modifyMyProfile(multipartFile,
                 req.getNickname(), req.getProfileMessage(), req.getProfileImageUrl(),
                 authentication.getName());
@@ -99,7 +99,7 @@ public class UserController {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
-        UserDto userDto = userService.modifyPassword(req.getNewPassword(),req.getCurrentPassword(),loginUserDto );
+        UserDto userDto = userService.modifyPassword(req.getNewPassword(), req.getCurrentPassword(), loginUserDto);
         return Response.success(UserInfoResponse.fromUserDto(userDto));
     }
 
@@ -126,30 +126,36 @@ public class UserController {
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
 
-        UserDto resultUserDto = userService.modifyMyEmail(req.getCodeId(),req.getCode(),req.getPassword(),loginUserDto);
+        UserDto resultUserDto = userService.modifyMyEmail(req.getCodeId(), req.getCode(), req.getPassword(), loginUserDto);
 
 
         return Response.success(UserInfoResponse.fromUserDto(resultUserDto));
     }
 
 
-//    db에 쌓여있는 알람 가져오기
+    //    db에 쌓여있는 알람 가져오기
     @GetMapping("/me/alarm")
-     public Response<Page<AlarmResponse>> getAlarm(Pageable pageable, Authentication authentication){
+    public Response<Page<AlarmResponse>> getAlarms(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            Authentication authentication)
+    {
 
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
+        PageRequest pageable = PageRequest.of(page, size);
         Page<AlarmResponse> alarmResponsePage = userService.alarmList(loginUserDto.getId(), pageable).map(AlarmResponse::fromAlarmDto);
         return Response.success(alarmResponsePage);
     }
 
+
     @PostMapping("/me/alarm/{alarmId}")
-    public Response<Void> deleteAlarm(@PathVariable Long alarmId, Authentication authentication){
+    public Response<Void> deleteAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
-        userService.deleteAlarm(alarmId,loginUserDto);
+        userService.deleteAlarm(alarmId, loginUserDto);
 
         return Response.success();
     }
