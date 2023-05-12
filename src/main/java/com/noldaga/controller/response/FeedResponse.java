@@ -3,6 +3,7 @@ package com.noldaga.controller.response;
 import com.noldaga.domain.CommentDto;
 import com.noldaga.domain.FeedDto;
 import com.noldaga.domain.FeedTagDto;
+import com.noldaga.domain.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -28,6 +29,7 @@ public class FeedResponse {
     private Long totalComment;
     private List<CommentResponse> commentList;
     private List<FeedTagDto> feedTagDtoList;
+    private List<ImageDto> imageDtoList;
 
     public static FeedResponse fromFeedDto(FeedDto feedDto) {
         return new FeedResponse(
@@ -44,7 +46,8 @@ public class FeedResponse {
                 feedDto.getTotalLike(),
                 feedDto.getTotalComment(),
                 CommentResponse.fromCommentDtoList(feedDto.getCommentList()),
-                feedDto.getFeedTagDtoList()
+                feedDto.getFeedTagDtoList(),
+                feedDto.getImageDtoList()
         );
     }
 

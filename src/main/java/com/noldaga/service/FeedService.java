@@ -3,16 +3,15 @@ package com.noldaga.service;
 
 import com.noldaga.controller.request.FeedCreateRequest;
 import com.noldaga.controller.request.FeedModifyRequest;
+import com.noldaga.domain.ImageDto;
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.Comment;
-import com.noldaga.domain.entity.Follow;
+import com.noldaga.domain.entity.*;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.FeedDto;
-import com.noldaga.domain.entity.Feed;
-import com.noldaga.domain.entity.User;
 import com.noldaga.repository.Feed.FeedRepository;
 import com.noldaga.repository.FollowRepository;
+import com.noldaga.repository.ImageRepository;
 import com.noldaga.repository.StoreFeedRepository;
 import com.noldaga.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,7 @@ public class FeedService {
     private final UserRepository userRepository;
     private final StoreFeedRepository storeFeedRepository;
     private final FollowRepository followRepository;
+    private final ImageRepository imageRepository;
     private final HashTagService hashTagService;
 
 
@@ -47,6 +47,7 @@ public class FeedService {
         String content = request.getContent();
         long groupId = request.getGroupId();
         int range = request.getRange();
+        List<String> urls = request.getUrls();
 
         //회원가입된 user인지 확인
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -55,8 +56,21 @@ public class FeedService {
         //post feed
         Feed feed = feedRepository.save(Feed.of(title, content, groupId, range, user));
         FeedDto feedDto = FeedDto.fromEntity(feed);
+
         //해시태그저장
         hashTagService.extractHashTag(feedDto.getContent(), feedDto.getId());
+
+        //url 저장
+        if(urls.size() == 0){
+            imageRepository.save(Image.of("https://kr.object.ncloudstorage.com/noldaga-s3/feed/img/fbb1b30d-1079-4d4c-b15b-008ca55affc4.jpg",feed,0));
+        }
+        else{
+            int index =0;
+            for(String url : urls){
+                imageRepository.save(Image.of(url,feed,index));
+                index++;
+            }
+        }
 
         return feedDto;
     }
@@ -73,7 +87,13 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
             FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
         return feedDtoList;
@@ -120,9 +140,16 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
+
         return feedDtoList;
     }
 
@@ -138,9 +165,16 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
+
         return feedDtoList;
     }
 
@@ -154,7 +188,14 @@ public class FeedService {
         Feed feed = feedRepository.findByIdWithComment(feedId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.FEED_NOT_FOUND, String.format("%s not founded", feedId)));
 
+        List<ImageDto> imageDtoList = new ArrayList<>();
+        feed.getImages().forEach(image->{
+            ImageDto imageDto = ImageDto.fromEntity(image);
+            imageDtoList.add(imageDto);
+        });
+
         FeedDto feedDto = FeedDto.fromEntity(feed);
+        feedDto.setImageDtoList(imageDtoList);
         return feedDto;
     }
 
@@ -178,9 +219,16 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
+
         return feedDtoList;
     }
 
@@ -196,9 +244,16 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
+
         return feedDtoList;
     }
 
@@ -214,9 +269,16 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
+
         return feedDtoList;
     }
 

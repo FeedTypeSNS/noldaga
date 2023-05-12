@@ -1,4 +1,6 @@
+let imageList = [];
 let post = {
+
   init:function() {
     $("#posting-button").on("click",()=>{
       this.posting();
@@ -9,6 +11,10 @@ let post = {
         this.enterkey();
       }
     });
+
+    $("#uploadFile").on("change",(e)=>{
+      this.image_save();
+    });
   },
 
   posting:function(){
@@ -17,7 +23,8 @@ let post = {
       title: $("#title").val(),
       content: $("#content").val(),
       range: $("#open_range").val(),
-      groupId: $("#group_id").val()
+      groupId: $("#group_id").val(),
+      urls : imageList
     };
 
     if(data.title.length>20) {
@@ -40,6 +47,7 @@ let post = {
       contentType: "application/json; charset=utf-8",
       dataType: "json"
     }).done(function(resp){
+      alert(JSON.stringify(data));
       alert('포스팅 완료');
       location.href = "/";
     }).fail(function(error){
@@ -72,13 +80,28 @@ let post = {
     });
   },
 
-  image_save:function(data){
-    alert("여기 작동 확인");
-    var myDropzone = Dropzone.forElement("#images");
-    myDropzone.processQueue();
-    myDropzone.on("success", function(file, response) {
-      var url = response.url;
-      var fileName = response.fileName;
+  image_save:function(){
+    const formImageData = new FormData();
+
+    var images = $("#uploadFile")[0];
+    for(let i=0; i<images.files.length; i++) {
+      formImageData.append("images", images.files[i]);
+    }
+
+    $.ajax({
+      type:'post',
+      enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
+      url: '/api/feed/imgs',
+      data: formImageData,
+      processData: false,
+      contentType: false
+    }).done(function(resp){
+      alert("업로드 성공");
+      imageList = resp.result;
+      alert(JSON.stringify(imageList));
+    }).fail(function(error){
+      alert('업로드실패');
+      alert(JSON.stringify(error));
     });
   },
 

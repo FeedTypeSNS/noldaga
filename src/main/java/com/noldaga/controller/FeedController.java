@@ -14,6 +14,7 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.FeedService;
 import com.noldaga.service.UserService;
 import com.noldaga.util.ClassUtils;
+import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -47,6 +48,7 @@ public class FeedController {
 
     private final FeedService feedService;
     private final UserService userService;
+    private final S3Uploader s3Uploader;
 
     //피드 조회시 로그인한 사용자 정보 가져옴
     @GetMapping("/api/feed/getuser")
@@ -179,6 +181,12 @@ public class FeedController {
         feedService.delete(id, authentication.getName());
         return Response.success();
     }
+
+    @PostMapping("/api/feed/imgs")
+    public Response<List<String>> uploadImgs(@RequestParam("images") List<MultipartFile> img) throws IOException {
+        List<String> urls = s3Uploader.uploadList(img, "/feed/img");
+        return Response.success(urls);
+    }//이미지 여러개 넣을때 이런식..
 
 //    @PostMapping("/api/upload")
 //    public Response<List<UploadDto>> imageUpload(@RequestParam("images") List<MultipartFile> files) throws IOException {
