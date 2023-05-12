@@ -8,6 +8,7 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.AlarmRepository;
+import com.noldaga.repository.FollowRepository;
 import com.noldaga.repository.UserRepository;
 import com.noldaga.util.ConstUtil;
 import com.noldaga.util.S3Uploader;
@@ -172,4 +173,6 @@ public class UserService {
 
         alarmRepository.deleteById(alarmId);
     }
+
+
 }

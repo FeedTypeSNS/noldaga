@@ -55,6 +55,11 @@ public class FollowService {
 
             Long id = followRepository.save(Follow.of(following, follower, both)).getId();
 
+            /*following.setTotalFollowing(following.getTotalFollowing()+1);
+            follower.setTotalFollower(follower.getTotalFollower()+1);
+            userRepository.save(following);
+            userRepository.save(follower); //팔로잉 숫자 증가..*/
+
             String msg = following.getUsername()+"님 "+follower.getUsername()+"님을 팔로우 성공했습니다.";
             FollowResponse fr = new FollowResponse(id, msg, UserDto.fromEntity(following), UserDto.fromEntity(follower), both);
 
@@ -89,6 +94,14 @@ public class FollowService {
             } //둘다 팔로우 중일때 한명이 언팔하면 맞팔 false 해야됨..
 
             followRepository.delete(value.get());
+
+           /* if(following.getTotalFollowing()!=0 && follower.getTotalFollower()!=0 ) {
+                following.setTotalFollowing(following.getTotalFollowing() - 1);
+                follower.setTotalFollower(follower.getTotalFollower() - 1);
+                userRepository.save(following);
+                userRepository.save(follower);
+            }*/
+
             String msg = following.getUsername()+"님  "+follower.getUsername()+"님을 언팔로우 성공했습니다.";
             FollowResponse fr = new FollowResponse(msg);
             return fr;
@@ -116,5 +129,28 @@ public class FollowService {
         }
         return fl;
     }//팔로잉 리스트 보기
+
+    @Transactional
+    public void setFollowCount(String user, Long otherId){
+        User me = userRepository.findByUsername(user).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", user)));
+
+        User other = userRepository.findById(otherId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s id is not founded", otherId)));
+
+        Long myFollower = (long) followRepository.findByFollower(me).size();
+        Long myFollowing = (long) followRepository.findByFollowing(me).size();
+        me.setTotalFollower(myFollower);
+        me.setTotalFollowing(myFollowing); //내 팔로우 팔로잉 수
+
+        Long otherFollower = (long) followRepository.findByFollower(other).size();
+        Long otherFollowing = (long) followRepository.findByFollowing(other).size();
+        other.setTotalFollower(otherFollower);
+        other.setTotalFollowing(otherFollowing);//상대방 팔로우 팔로잉 수
+
+
+        userRepository.save(me);
+        userRepository.save(other);
+    }
 
 }
