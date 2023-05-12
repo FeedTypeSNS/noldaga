@@ -14,7 +14,11 @@ $.ajax({
             groupsHtml2 += '    <div class="h-40px rounded-top"></div>';
             groupsHtml2 += '    <div class="card-body text-center pt-0">';
             groupsHtml2 += '      <div class="avatar avatar-lg mt-n5 mb-3">';
-            groupsHtml2 += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="' + group.profile_url + '" alt="">';
+            if(group.profile_url == "" || group.profile_url == null) {
+                groupsHtml2 += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="/assets/images/avatar/placeholder.jpg" alt="">';
+            } else {
+                groupsHtml2 += '        <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="' + group.profile_url + '" alt="">';
+            }
             groupsHtml2 += '      </div>';
             groupsHtml2 += '      <h5 class="mb-0"><a href="group?id='+group.id+'">' + group.name + '</a></h5>';
             if (group.open === 0) {

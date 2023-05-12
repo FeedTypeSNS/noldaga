@@ -198,4 +198,13 @@ public class GroupMemberService {
 
         return groupMemberRepository.findAllByUserAndFavor(user);
     }
+
+    @Transactional
+    public List<Group> getUserFavorGroupList(Long user_id, String username) {
+        // 유저 정보
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", user_id)));
+
+        return groupMemberRepository.findAllByUserAndFavor(user);
+    }
 }
