@@ -37,7 +37,8 @@ let post = {
       title: $("#modify_title").val(),
       content: $("#modify_content").val(),
       range: $("#modify_open_range").val(),
-      groupId: $("#modify_group_id").val()
+      groupId: $("#modify_group_id").val(),
+      urls : imageList
     };
 
     $.ajax({
@@ -66,11 +67,11 @@ let post = {
       contentType: "application/json; charset=utf-8"
     }).done(function(resp){
       alert('삭제 완료');
-      location.href = "/";
+      location.href = "/nol";
     }).fail(function(error){
       alert('삭제 실패');
       alert(JSON.stringify(error));
-      location.href = "/";
+      location.href = "/nol";
     });
 
   },
@@ -104,8 +105,6 @@ let post = {
       content: $("#commentContent").val()
     };
 
-    alert(JSON.stringify(data));
-
     $.ajax({
       type: "PUT",
       url: "/api/comment/"+data.id,
@@ -114,7 +113,7 @@ let post = {
       dataType: "json"
     }).done(function(resp){
       alert('수정 완료');
-      location.href = "/feed"+queryString;
+      location.href = "/nol/feed"+queryString;
     }).fail(function(error){
       alert('수정 실패');
       alert(JSON.stringify(error));
@@ -136,11 +135,11 @@ let post = {
       contentType: "application/json; charset=utf-8"
     }).done(function(resp){
       alert('삭제 완료');
-      location.href = "/feed"+queryString;
+      location.href = "/nol/feed"+queryString;
     }).fail(function(error){
       alert('삭제 실패');
       alert(JSON.stringify(error));
-      location.href = "/feed"+queryString;
+      location.href = "/nol/feed"+queryString;
     });
 
   }
