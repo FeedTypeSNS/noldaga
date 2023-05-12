@@ -31,7 +31,7 @@ public class PageController {
 
     @GetMapping("/nol")
     public String home() {
-        return "index";
+        return "home";
     }
 
     @GetMapping("/nol/feed")
