@@ -75,7 +75,7 @@ function setGroupCardContent(group) {
           </div>
         </div>
         <div class="card-footer text-center">
-          <button class="btn btn-sm btn-loader btn-primary-soft" onclick="registerCheck(${group.pw})">그룹 가입</button>
+          <a class="btn btn-sm btn-loader btn-primary-soft" href="group?id=${group.id}">그룹 가기 </a>
         </div>
       </div>
     </div>`;
