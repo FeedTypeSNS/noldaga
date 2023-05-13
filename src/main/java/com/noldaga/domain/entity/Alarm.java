@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
         @Index(name = "user_id_idx", columnList = "user_id")
 }*/
 )
-//@TypeDef(name= "jsonb", typeClass= JsonBinaryType.class)
 @TypeDef(name= "json", typeClass= JsonType.class)
 @SQLDelete(sql= "update alarm set deleted_at = now() where alarm_id=?")
 @Where(clause = "deleted_at is NULL")
@@ -41,11 +40,6 @@ public class Alarm {
     //알람 타입별로 뭉쳐서 알림을 보냄 ( '1번 게시글을 영수 외 10명이 좋아합니다' 라고 1번만 알람이 감)
     @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
-
-//    @ManyToOne(fetch = FetchType.LAZY)//EAGER : 디폴트 : 즉시로딩
-//    @JoinColumn(name="user_id")
-//    private User toUser; //알람 받는사람
-
 
     @JoinColumn(name="user_id")
     private Long toUserId;
@@ -68,6 +62,9 @@ public class Alarm {
     @ManyToOne(fetch =FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User fromUser;
+
+
+    private boolean unRead;
 
 
     @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
@@ -93,6 +90,7 @@ public class Alarm {
         this.alarmArgs = alarmArgs;
         this.fromGroup = fromGroup;
         this.fromUser = fromUser;
+        this.unRead= true;
     }
 
     public static Alarm of(Long toUserId, AlarmType alarmType, AlarmArgs alarmArgs,Group fromGroup){
@@ -105,6 +103,10 @@ public class Alarm {
 
     public String getFromType(){
         return alarmArgs.getFromType();
+    }
+
+    public void readAlarm(){
+        this.unRead =false;
     }
 
 }

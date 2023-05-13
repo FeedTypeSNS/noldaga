@@ -182,7 +182,7 @@ JS libraries, plugins and custom scripts -->
 
 <script>
 
-    const notifItemTemplate = (alarmId,avatarSrc, actionTime,alarmText,fromType, fromId,fromQs,name,targetType,targetQs,targetObjectId,targetNameOnAlarm) => `
+    const notifItemTemplate = (alarmId,avatarSrc, actionTime,alarmText,fromType, fromId,fromQs,name,targetType,targetQs,targetObjectId,targetNameOnAlarm,unRead) => `
   <li alarm-id="${alarmId}">
     <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
       <!-- Avatar -->
@@ -249,6 +249,7 @@ JS libraries, plugins and custom scripts -->
             const avatarSrc = contentArr[i].imageUrl;
             const actionTime= contentArr[i].createdAt;
             const alarmText = contentArr[i].alarmText;
+            const unRead = contentArr[i].unRead;
 
             let fromType=alarmArgs.fromType;
 
@@ -296,7 +297,7 @@ JS libraries, plugins and custom scripts -->
 
             const newNotifItem=document.createElement('li');
             newNotifItem.innerHTML = notifItemTemplate
-            (alarmId,avatarSrc, actionTime,alarmText,fromType, fromId,fromQs,name,targetType,targetQs,targetObjectId,targetNameOnAlarm);
+            (alarmId,avatarSrc, actionTime,alarmText,fromType, fromId,fromQs,name,targetType,targetQs,targetObjectId,targetNameOnAlarm,unRead);
             myUl.appendChild(newNotifItem);
 
         }

@@ -8,7 +8,6 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.domain.entity.User;
 import com.noldaga.repository.AlarmRepository;
-import com.noldaga.repository.FollowRepository;
 import com.noldaga.repository.UserRepository;
 import com.noldaga.util.ConstUtil;
 import com.noldaga.util.S3Uploader;
@@ -157,7 +156,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public Page<AlarmDto> alarmList(Long userId, Pageable pageable) {
+    public Page<AlarmDto> getAlarms(Long userId, Pageable pageable) {
 
 
         return alarmRepository.findAllByToUserIdOrderByIdDesc(userId, pageable).map(AlarmDto::fromEntity);
@@ -172,6 +171,16 @@ public class UserService {
         }
 
         alarmRepository.deleteById(alarmId);
+    }
+
+    @Transactional
+    public void readAlarm(Long loginUserId, Long alarmId){
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new SnsApplicationException(ErrorCode.ALARM_NOT_FOUND));
+        if (loginUserId != alarm.getToUserId()) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION);
+        }
+
+        alarm.readAlarm();
     }
 
 
