@@ -60,11 +60,11 @@ function setHashTagFeedsContent(feed) {
     return `<div class="row g-3">
                 <div class="col-4">
                   <!-- Blog image -->
-                  <img class="rounded" src="assets/images/post/4by3/03.jpg" alt="">
+                  <img class="rounded" src=${feed.imageDtoList[0].url} alt="">
                 </div>
                 <div class="col-8">
                   <!-- Blog caption -->
-                  <h5><a href="/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
+                  <h5><a href="/nol/feed?id=${feed.id}" class="btn-link stretched-link text-reset fw-bold">${feed.title}</a></h5>
                   <div class="d-none d-sm-inline-block">
                     <p class="mb-2">${feed.content}</p>
                     <p class="mb-2">${feed.userResponse.username}</p>

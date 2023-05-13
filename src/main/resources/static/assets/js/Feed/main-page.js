@@ -250,11 +250,11 @@ function feedContentPlusImage(data) {
 function getImageUrl(data){
     let result = "";
     for(let i=0; i<data.length; i++) {
-        result += `<img
-            className="card-img"
-            src=${data[i].url}
-            alt="Post"
-        />`;
+            result += `<img
+                className="card-img"
+                src=${data[i].url}
+                alt="Post"
+            />`;
     }
     return result;
 }
@@ -372,6 +372,10 @@ function feedContent(data) {
                   <li class="nav-item">
                     <a class="nav-link save" href="#!" onclick="save(${data.id})">
                       <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link save" href="#!">
+                      <i class="bi bi-eye pe-1"></i>${data.totalView}</a>
                   </li>
                 </ul>
                 <!-- Feed react END -->
