@@ -112,7 +112,13 @@ public class FeedService {
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
-            FeedDto feedDto = FeedDto.fromEntity(feed);
+            List<ImageDto> imageDtoList = new ArrayList<>();
+            feed.getImages().forEach(image->{
+                ImageDto imageDto = ImageDto.fromEntity(image);
+                imageDtoList.add(imageDto);
+            });
+            FeedDto feedDto = FeedDto.fromEntityWithoutComment(feed);
+            feedDto.setImageDtoList(imageDtoList);
             feedDtoList.add(feedDto);
         });
         return feedDtoList;
@@ -311,9 +317,7 @@ public class FeedService {
 
         //이미지 db 지우기
         imageRepository.deleteByFeedId(feedId);
-        //다시 저장하기
-
-        //url 저장
+        //이미지 다시 저장
         if(urls == null || urls.size() == 0){
             imageRepository.save(Image.of(ConstUtil.FEED_DEFAULT_IMG_URL,feed,0));
         }
@@ -345,6 +349,10 @@ public class FeedService {
 
         //해시태그 지우기
         hashTagService.deleteHashTag(feedId);
+        //이미지 db날리기
+        imageRepository.deleteByFeedId(feedId);
+        imageRepository.save(Image.of(ConstUtil.FEED_DEFAULT_IMG_URL,feed,0));
+
         //delete
         feed.change("삭제된 게시물입니다.","삭제된 게시물입니다.",feed.getGroupId(),feed.getRange());
         feed.setDelDate(LocalDateTime.now());
