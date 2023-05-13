@@ -48,8 +48,6 @@ public class User {
     private String profileImageUrl;
     private String profileMessage;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserTag> userTags;
 
     @Column(length = 100,nullable = false)
     private String email;
