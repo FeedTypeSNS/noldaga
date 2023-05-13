@@ -38,6 +38,8 @@ public class UserService {
 
     private final S3Uploader s3Uploader;
 
+    private final HashTagUserService hashTagUserService;
+
     @Value("${com.noldaga.upload.path}")
     private String directoryPath;
 
@@ -181,6 +183,13 @@ public class UserService {
         }
 
         alarm.readAlarm();
+    }
+
+
+    @Transactional
+    public void addMyHashTag(String hashTags,Long userId){
+
+        hashTagUserService.extractHashTag(hashTags,userId);
     }
 
 

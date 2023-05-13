@@ -169,4 +169,14 @@ public class UserController {
         userService.readAlarm(loginUserDto.getId(),alarmId);
         return Response.success();
     }
+
+
+    @PostMapping("/me/hashtag")
+    public Response<Void> addMyHashTag(@RequestBody UserHashTagRequest req,Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        userService.addMyHashTag(req.getHashtags(), loginUserDto.getId());
+        return Response.success();
+    }
 }
