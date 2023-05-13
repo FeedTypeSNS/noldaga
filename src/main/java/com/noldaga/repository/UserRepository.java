@@ -27,4 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllBySearch(String q);
 
 
+    @Query("SELECT u from User u Join u.userTags t where t.hashTag.tagName = :tagName")
+    List<User> findAllByUserTags(String tagName);
+
 }
