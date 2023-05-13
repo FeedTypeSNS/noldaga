@@ -172,16 +172,17 @@ public class UserController {
         return Response.success();
     }
 
-
+    //유저 해쉬태그 목록 등록(리셋하고 새로운 목록 등록)
     @PostMapping("/me/hashtag")
-    public Response<Void> addMyHashTag(@RequestBody UserHashTagRequest req,Authentication authentication){
+    public Response<Void> updateMyHashTag(@RequestBody UserHashTagRequest req,Authentication authentication){
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
-        userService.addMyHashTag(req.getHashtags(), loginUserDto.getId());
+        userService.addMyHashTag(req.getHashTags(), loginUserDto.getId());
         return Response.success();
     }
 
+    //유저 해쉬태그 목록 불러오기
     @GetMapping("/{userId}/hashtag")
     public Response<List<HashTagResponse>> getMyHashTags(@PathVariable Long userId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
