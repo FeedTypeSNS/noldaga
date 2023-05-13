@@ -60,7 +60,7 @@ function setFeedCardContent(user) {
     var profileMessage = (user.profileMessage==="" || user.profileMessage==null)? "" : user.profileMessage;
 
     return `<div class="avatar me-3 mb-3 mb-md-0">
-                <a href="/nol/mypage?user_id=${user.id}"> <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt=""> </a>
+                <a href="/nol/mypage?user_id=${user.id}"> <img class="avatar-img rounded-circle" src=${user.profileImageUrl} alt=""> </a>
               </div>
               <!-- Info -->
               <div class="w-100">
