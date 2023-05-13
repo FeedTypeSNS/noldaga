@@ -155,6 +155,9 @@ function getReactButtonsMine(data){
                                 <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-eye pe-1"></i>(${data.totalView})</a>
+                            </li>
+                            <li class="nav-item">
                                 <a
                                         href="#"
                                         class="nav-link bg-light py-1 px-2 mb-0"
@@ -190,6 +193,9 @@ function getReactButtonsOthers(data){
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-eye pe-1"></i>(${data.totalView})</a>
                             </li>
                             <!-- Card share action START -->
                             <li class="nav-item dropdown ms-sm-auto">
@@ -398,7 +404,7 @@ function reply() {
 function feedLike(data) {
     $.ajax({
         type: "GET",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
         if(resp) feed_like_delete(data);
@@ -413,7 +419,7 @@ function feed_like_register(data) {
 
     $.ajax({
         type: "POST",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
@@ -430,7 +436,7 @@ function feed_like_delete(data) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/like/feed/"+data
+        url: "/api/like/feed/"+data
     }).done(function(resp){
         window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
@@ -444,7 +450,7 @@ function commentLike(data) {
 
     $.ajax({
         type: "GET",
-        url: "api/like/comment/"+data,
+        url: "/api/like/comment/"+data,
         dataType: "json"
     }).done(function(resp){
         if(resp) comment_like_delete(data);
@@ -458,7 +464,7 @@ function comment_like_register(data) {
     const queryString = window.location.search;
     $.ajax({
         type: "POST",
-        url: "api/like/comment/"+data,
+        url: "/api/like/comment/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
@@ -474,7 +480,7 @@ function comment_like_delete(data) {
     const queryString = window.location.search;
     $.ajax({
         type: "DELETE",
-        url: "api/like/comment/"+data
+        url: "/api/like/comment/"+data
     }).done(function(resp){
         window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
@@ -554,8 +560,11 @@ function showUploadFile(images){
             </div>
         </div><!-- card -->`
 
-        uploadResult.innerHTML += str;
-        imageList.push(`${images[i].url}`);
+
+        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg.png") {
+            uploadResult.innerHTML += str;
+            imageList.push(`${images[i].url}`);
+        }
     }
 }
 
