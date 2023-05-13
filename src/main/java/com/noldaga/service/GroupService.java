@@ -12,6 +12,7 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.repository.GroupMemberRepository;
 import com.noldaga.repository.GroupRepository;
 import com.noldaga.repository.UserRepository;
+import com.noldaga.util.ConstUtil;
 import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,7 @@ public class GroupService {
     public GroupDto createGroup(GroupDto groupDto, MultipartFile img, String username) throws IOException {
         String url = "";
         if(img == null) {
-            url = "";
+            url = ConstUtil.GROUP_DEFAULT_IMG_URL;
         } else {
             url = s3Uploader.upload(img, "/group/img");
         }
@@ -104,7 +105,7 @@ public class GroupService {
         }
 
         //s3스토리지에 있는 사진 삭제
-        if(group.getProfile_url().equals("")) {
+        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
         } else {
             s3Uploader.deleteImage(group.getProfile_url());
@@ -112,7 +113,7 @@ public class GroupService {
 
         String url = "";
         if(img == null) {
-            url = "";
+            url = ConstUtil.GROUP_DEFAULT_IMG_URL;
         } else {
             url = s3Uploader.upload(img, "/group/img");
         }
@@ -141,7 +142,7 @@ public class GroupService {
         }
 
         //s3스토리지에 있는 사진도 함께 삭제
-        if(group.getProfile_url().equals("")) {
+        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
         } else {
             s3Uploader.deleteImage(group.getProfile_url());

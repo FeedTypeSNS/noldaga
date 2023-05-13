@@ -27,6 +27,8 @@ public class AlarmDto {
     private GroupDto fromGroupDto;
     private UserDto fromUserDto;
 
+    private boolean unRead;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
@@ -47,6 +49,7 @@ public class AlarmDto {
                 alarm.getAlarmArgs(),
                 GroupDto.fromEntity(alarm.getFromGroup()),
                 UserDto.fromEntity(alarm.getFromUser()),
+                alarm.isUnRead(),
                 alarm.getCreatedAt(),
                 alarm.getModifiedAt(),
                 alarm.getDeletedAt()

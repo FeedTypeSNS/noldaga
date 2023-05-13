@@ -1,3 +1,4 @@
+let imageList = [];
 let imageLength = null;
 
 function getUser() {
@@ -11,6 +12,10 @@ function getUser() {
         getGroups();
     }).fail(function(error){
         alert(JSON.stringify(error));
+    });
+
+    $("#modify-uploadFile").on("change",(e)=>{
+        image_save();
     });
 }
 getUser();
@@ -383,7 +388,7 @@ function reply() {
         dataType: "json"
     }).done(function(resp){
         alert('댓글 등록 완료');
-        window.location.href = "/feed"+queryString;
+        window.location.href = "/nol/feed"+queryString;
     }).fail(function(error){
         alert('댓글 등록 실패');
         alert(JSON.stringify(error));
@@ -413,10 +418,10 @@ function feed_like_register(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     });
 }
 
@@ -427,10 +432,10 @@ function feed_like_delete(data) {
         type: "DELETE",
         url: "api/like/feed/"+data
     }).done(function(resp){
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     });
 }
 
@@ -458,10 +463,10 @@ function comment_like_register(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     });
 }
 
@@ -471,10 +476,10 @@ function comment_like_delete(data) {
         type: "DELETE",
         url: "api/like/comment/"+data
     }).done(function(resp){
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/feed"+ queryString;
+        window.location.href = "/nol/feed"+ queryString;
     });
 }
 
@@ -500,6 +505,18 @@ function setDeleteComment(id){
     $('#deleteId').val(id);
 }
 
+function getImageUrl(data){
+    let result = "";
+    for(let i=0; i<data.length; i++) {
+        result += `<img
+            className="card-img"
+            src=${data[i].url}
+            alt="Post"
+        />`;
+    }
+    return result;
+}
+
 function show() {
 
     const queryString = window.location.search;
@@ -510,6 +527,7 @@ function show() {
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         setModifyModal(resp);
+        showUploadFile(resp.result.imageDtoList);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -521,6 +539,107 @@ function show() {
         $("#modify_open_range").val(data.result.range).prop("selected", true);
         $("#modify_group_id").val(data.result.groupId).prop("selected", true);
     }
+
+}
+
+function showUploadFile(images){
+    for (let i = 0; i < images.length; i++) {
+        const uploadResult = document.querySelector(".modify-uploadResult");
+        const str = `<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                <button type="button" onclick="removeAlreadySavedFile('${images[i].url}',this)">삭제</button>
+            </div>
+            <div class="card-body">
+                 <img src=${images[i].url}>
+            </div>
+        </div><!-- card -->`
+
+        uploadResult.innerHTML += str;
+        imageList.push(`${images[i].url}`);
+    }
+}
+
+function shownewUploadFile(images){
+    for (let i = 0; i < images.length; i++) {
+        const uploadResult = document.querySelector(".modify-uploadResult");
+        const str = `<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                <button type="button" onclick="removeNewFile('${images[i]}',this)">삭제</button>
+            </div>
+            <div class="card-body">
+                 <img src=${images[i]}>
+            </div>
+        </div><!-- card -->`
+
+        uploadResult.innerHTML += str
+        imageList.push(`${images[i]}`);
+    }
+}
+
+function image_save(){
+    const formImageData = new FormData();
+
+    var images = $("#modify-uploadFile")[0];
+    for(let i=0; i<images.files.length; i++) {
+        formImageData.append("images", images.files[i]);
+    }
+
+    $.ajax({
+        type:'post',
+        enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
+        url: '/api/feed/imgs',
+        data: formImageData,
+        processData: false,
+        contentType: false
+    }).done((resp)=>{
+        shownewUploadFile(resp.result);
+    }).fail(function(error){
+        alert('업로드실패');
+        alert(JSON.stringify(error));
+    });
+}
+
+function removeAlreadySavedFile(url,obj){
+    const targetDiv = obj.closest(".card");
+
+    //db에서 삭제
+    removeFromDB(url);
+    //서버에서 삭제
+    removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+    var index = imageList.indexOf(url);
+    imageList.splice(index, 1);
+}
+
+function removeNewFile(url,obj){
+    const targetDiv = obj.closest(".card");
+    //서버에서 삭제
+    removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+}
+
+function removeFileFromServer(url){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/feed/s3Img?url="+url,
+        contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function removeFromDB(url){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/feed/dbImg?url="+url,
+        contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
 }
 
 

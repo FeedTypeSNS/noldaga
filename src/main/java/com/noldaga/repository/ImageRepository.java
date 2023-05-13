@@ -9,4 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
+    @Modifying
+    @Transactional
+    @Query("delete from Image i where i.url=:url")
+    void deleteByUrl(String url);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Image i where i.feed.id=:feedId")
+    void deleteByFeedId(Long feedId);
 }

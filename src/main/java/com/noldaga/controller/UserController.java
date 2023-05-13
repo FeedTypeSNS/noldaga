@@ -143,11 +143,12 @@ public class UserController {
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
         PageRequest pageable = PageRequest.of(page, size);
-        Page<AlarmResponse> alarmResponsePage = userService.alarmList(loginUserDto.getId(), pageable).map(AlarmResponse::fromAlarmDto);
+        Page<AlarmResponse> alarmResponsePage = userService.getAlarms(loginUserDto.getId(), pageable).map(AlarmResponse::fromAlarmDto);
         return Response.success(alarmResponsePage);
     }
 
 
+    //알림 삭제
     @PostMapping("/me/alarm/{alarmId}")
     public Response<Void> deleteAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
@@ -159,5 +160,13 @@ public class UserController {
     }
 
 
+    @PostMapping("/me/alarm")
+    public Response<Void> readAlarm(@RequestParam Long alarmId , Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
+
+        userService.readAlarm(loginUserDto.getId(),alarmId);
+        return Response.success();
+    }
 }
