@@ -70,6 +70,10 @@ function profileContent(data) {
 
 
 function setFeedsContent(data) {
+    if(data.length == 0) {
+        let GroupNoFeedBox = document.querySelector("#noFeed");
+        GroupNoFeedBox.style.display = "";
+    }
     for(let i=0; i<data.length; i++){
         let feedBox = document.querySelector("#feed");
 

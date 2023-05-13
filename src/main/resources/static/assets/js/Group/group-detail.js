@@ -211,6 +211,8 @@ function getDetailGroupPage(group, user, groupMember) {
 /* ----------------------------------------------------------------- */
 function initDetailGroupPostPage(group, user, groupMember) {
     let GroupPostBox = document.querySelector("#groupPostBox");
+    let GroupFeedBox = document.querySelector("#feed");
+    let GroupNoFeedBox = document.querySelector("#noMemberFeed");
 
     if(user.id === group.userDto.id) {
         GroupPostBox.style.display = "";
@@ -220,6 +222,11 @@ function initDetailGroupPostPage(group, user, groupMember) {
         }
     } else {
         GroupPostBox.style.display = "none";
+        if(group.open == 0) {
+            GroupFeedBox.style.display = "none";
+            GroupNoFeedBox.style.display = "";
+        }
+
     }
 }
 
