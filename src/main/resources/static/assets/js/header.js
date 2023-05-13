@@ -310,20 +310,20 @@ function leftNavContent(data) {
               >
             </li>
             
-            <li class="nav-item">
-              <a
-                      class="nav-link"
-                      href="#!"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalUserTag"
-              >
-                <i class="bi bi-emoji-heart-eyes nav-icon"></i>
-                <span class="nav-text">관심사 </span></a
-              >
-            </li>
+<!--            <li class="nav-item">-->
+<!--              <a-->
+<!--                      class="nav-link"-->
+<!--                      href="#!"-->
+<!--                      data-bs-toggle="modal"-->
+<!--                      data-bs-target="#modalUserTag"-->
+<!--              >-->
+<!--                <i class="bi bi-emoji-heart-eyes nav-icon"></i>-->
+<!--                <span class="nav-text">관심사 </span></a-->
+<!--              >-->
+<!--            </li>-->
             
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="/nol/mypage?user_id=${data.id}">
                 <i class="bi bi nav-icon">
                   <!-- Avatar -->
                   <div class="avatar avatar-xxs me">
