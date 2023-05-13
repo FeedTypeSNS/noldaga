@@ -25,6 +25,8 @@ public class AlarmResponse {
 
     private String imageUrl;
 
+    private boolean unRead;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
@@ -52,6 +54,7 @@ public class AlarmResponse {
                 alarmDto.getAlarmArgs(),
                 alarmDto.getAlarmType().getAlarmText(),
                 imageUrl,
+                alarmDto.isUnRead(),
                 alarmDto.getCreatedAt(),
                 alarmDto.getModifiedAt(),
                 alarmDto.getDeletedAt()
