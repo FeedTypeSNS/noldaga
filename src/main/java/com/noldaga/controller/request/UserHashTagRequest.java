@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserHashTagRequest {
 
-    private String hashtags;
+    private String hashTags;
 }

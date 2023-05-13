@@ -294,7 +294,7 @@ function leftNavContent(data) {
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/nol/notifications">
-                <i class="bi bi-bell-fill nav-icon"></i>
+                <i class="bi bi-bell nav-icon"></i>
                 <span class="nav-text">알림 </span></a
               >
             </li>
@@ -309,8 +309,21 @@ function leftNavContent(data) {
                 <span class="nav-text">포스팅 </span></a
               >
             </li>
+            
             <li class="nav-item">
-              <a class="nav-link" href="/nol/mypage?user_id=${data.id}">
+              <a
+                      class="nav-link"
+                      href="#!"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalUserTag"
+              >
+                <i class="bi bi-emoji-heart-eyes nav-icon"></i>
+                <span class="nav-text">관심사 </span></a
+              >
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="#">
                 <i class="bi bi nav-icon">
                   <!-- Avatar -->
                   <div class="avatar avatar-xxs me">
@@ -324,6 +337,9 @@ function leftNavContent(data) {
                 <span class="nav-text">MyPage </span></a
               >
             </li>
+            
+            
+            
             
           </ul>
           <!-- Side Nav END -->
