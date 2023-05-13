@@ -105,7 +105,7 @@ public class GroupService {
         }
 
         //s3스토리지에 있는 사진 삭제
-        if(group.getProfile_url().equals("")) {
+        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
         } else {
             s3Uploader.deleteImage(group.getProfile_url());
@@ -142,7 +142,7 @@ public class GroupService {
         }
 
         //s3스토리지에 있는 사진도 함께 삭제
-        if(group.getProfile_url().equals("")) {
+        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
         } else {
             s3Uploader.deleteImage(group.getProfile_url());
