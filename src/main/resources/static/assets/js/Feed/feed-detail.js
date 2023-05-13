@@ -547,15 +547,15 @@ function showUploadFile(images){
         const uploadResult = document.querySelector(".modify-uploadResult");
         const str = `<div class="card col-4">
             <div class="card-header d-flex justify-content-center">
-                <button type="button" onclick="removeFile('${images[i].url}',this)">삭제</button>
+                <button type="button" onclick="removeAlreadySavedFile('${images[i].url}',this)">삭제</button>
             </div>
             <div class="card-body">
                  <img src=${images[i].url}>
             </div>
         </div><!-- card -->`
 
-        uploadResult.innerHTML += str
-        //imageList.push(${images[i].url});
+        uploadResult.innerHTML += str;
+        imageList.push(`${images[i].url}`);
     }
 }
 
@@ -564,7 +564,7 @@ function shownewUploadFile(images){
         const uploadResult = document.querySelector(".modify-uploadResult");
         const str = `<div class="card col-4">
             <div class="card-header d-flex justify-content-center">
-                <button type="button" onclick="removeFile('${images[i]}',this)">삭제</button>
+                <button type="button" onclick="removeNewFile('${images[i]}',this)">삭제</button>
             </div>
             <div class="card-body">
                  <img src=${images[i]}>
@@ -572,7 +572,7 @@ function shownewUploadFile(images){
         </div><!-- card -->`
 
         uploadResult.innerHTML += str
-        //imageList.push(${images[i].url});
+        imageList.push(`${images[i]}`);
     }
 }
 
@@ -592,7 +592,6 @@ function image_save(){
         processData: false,
         contentType: false
     }).done((resp)=>{
-        imageList.push(resp.result);
         shownewUploadFile(resp.result);
     }).fail(function(error){
         alert('업로드실패');
@@ -600,11 +599,21 @@ function image_save(){
     });
 }
 
-function removeFile(url,obj){
+function removeAlreadySavedFile(url,obj){
     const targetDiv = obj.closest(".card");
 
     //db에서 삭제
     removeFromDB(url);
+    //서버에서 삭제
+    removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+    var index = imageList.indexOf(url);
+    imageList.splice(index, 1);
+}
+
+function removeNewFile(url,obj){
+    const targetDiv = obj.closest(".card");
     //서버에서 삭제
     removeFileFromServer(url);
     //모달창에서 삭제
