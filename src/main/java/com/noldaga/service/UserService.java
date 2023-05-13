@@ -1,7 +1,9 @@
 package com.noldaga.service;
 
+import com.noldaga.domain.HashTagDto;
 import com.noldaga.domain.alarm.AlarmDto;
 import com.noldaga.domain.entity.Alarm;
+import com.noldaga.domain.entity.UserTag;
 import com.noldaga.domain.userdto.Gender;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
@@ -24,7 +26,9 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +41,8 @@ public class UserService {
     private final AlarmRepository alarmRepository;
 
     private final S3Uploader s3Uploader;
+
+    private final HashTagUserService hashTagUserService;
 
     @Value("${com.noldaga.upload.path}")
     private String directoryPath;
@@ -184,4 +190,21 @@ public class UserService {
     }
 
 
+    @Transactional
+    public void addMyHashTag(String hashTags,Long userId){
+
+        hashTagUserService.deleteHashTag(userId);
+        hashTagUserService.extractHashTag(hashTags,userId);
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<HashTagDto> getUserHashTags(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not founded", userId)));
+
+        user.getUserTags().forEach(System.out::println);
+       return user.getUserTags().stream()
+                .map(UserTag::getHashTag).map(HashTagDto::fromEntity).collect(Collectors.toList());
+    }
 }
