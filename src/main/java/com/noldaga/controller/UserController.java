@@ -20,6 +20,8 @@ import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -178,5 +180,14 @@ public class UserController {
 
         userService.addMyHashTag(req.getHashtags(), loginUserDto.getId());
         return Response.success();
+    }
+
+    @GetMapping("/{userId}/hashtag")
+    public Response<List<HashTagResponse>> getMyHashTags(@PathVariable Long userId, Authentication authentication) {
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        List<HashTagResponse> hashTagResponses = userService.getUserHashTags(userId).stream().map(HashTagResponse::fromHashTagDto).collect(Collectors.toList());
+        return Response.success((hashTagResponses));
     }
 }

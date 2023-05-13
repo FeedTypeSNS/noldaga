@@ -21,7 +21,6 @@ import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter //Dto 만들때 쓰임
-@ToString
 @Table(name="users") //db 테이블 만들때 예약어는 피해야하는것을 염두해야함
 @Entity
 @SQLDelete(sql = "update users set deleted_at = now() where user_id=? ") //소프트 delete를 위함...
