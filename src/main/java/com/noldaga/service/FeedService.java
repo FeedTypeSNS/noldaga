@@ -298,6 +298,7 @@ public class FeedService {
         }
 
         feed.change(request.getTitle(), request.getContent(), request.getGroupId(), request.getRange());
+        List<String> urls = request.getUrls();
 
         feedRepository.save(feed);
         FeedDto feedDto = FeedDto.fromEntity(feed);
@@ -306,6 +307,23 @@ public class FeedService {
         hashTagService.deleteHashTag(feedId);
         //다시저장하기
         hashTagService.extractHashTag(request.getContent(), feedId);
+
+        //이미지 db 지우기
+        imageRepository.deleteByFeedId(feedId);
+        //다시 저장하기
+
+        //url 저장
+        if(urls == null || urls.size() == 0){
+            imageRepository.save(Image.of("https://kr.object.ncloudstorage.com/noldaga-s3/feed/img/fbb1b30d-1079-4d4c-b15b-008ca55affc4.jpg",feed,0));
+        }
+        else{
+            int index =0;
+            for(String url : urls){
+                imageRepository.save(Image.of(url,feed,index));
+                index++;
+            }
+        }
+
         return feedDto;
     }
 
