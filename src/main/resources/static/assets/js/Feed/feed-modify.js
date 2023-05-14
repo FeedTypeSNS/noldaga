@@ -48,7 +48,6 @@ let post = {
       contentType: "application/json; charset=utf-8",
       dataType: "json"
     }).done(function(resp){
-      alert(JSON.stringify(data.urls));
       alert('수정 완료');
       location.href = url;
     }).fail(function(error){

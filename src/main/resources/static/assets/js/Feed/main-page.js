@@ -105,7 +105,7 @@ function setFeedsContent(data) {
         let tagCard = document.createElement("li");
         tagCard.className = "list-inline-item m-0";
         for(let j=0; j<data[i].feedTagDtoList.length; j++){
-            tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="/hashtag?tag_id=${data[i].feedTagDtoList[j].hashTagDto.id}&tag_name=${data[i].feedTagDtoList[j].hashTagDto.tagName.substr(1)}">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
+            tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="/nol/hashtag?tag_id=${data[i].feedTagDtoList[j].hashTagDto.id}&tag_name=${data[i].feedTagDtoList[j].hashTagDto.tagName.substr(1)}">${data[i].feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
         }
 
         //해쉬태그 밑에 공백을 만들고싶어서..
