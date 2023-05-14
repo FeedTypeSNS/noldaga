@@ -137,7 +137,7 @@ public class UserController {
     @GetMapping("/me/alarm")
     public Response<Page<AlarmResponse>> getAlarms(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "size", defaultValue = "10") int size,
             Authentication authentication) {
 
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
@@ -161,7 +161,7 @@ public class UserController {
     }
 
 
-    //알림 읽기
+    //알림 read로 처리
     @PostMapping("/me/alarm/{alarmId}")
     public Response<Void> readAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->

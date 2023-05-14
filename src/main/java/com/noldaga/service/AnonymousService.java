@@ -35,7 +35,7 @@ public class AnonymousService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
     private final int INIT_PASSWORD_SIZE =10;
-    private final int MAX_ACCOUNTS_PER_EMAIL=30;
+    private final int MAX_ACCOUNTS_PER_EMAIL=3;
 
     //회원가입 1 : 아이디 중복검사
     public void validateDuplication(String username){
@@ -71,9 +71,9 @@ public class AnonymousService {
         });
 
         //todo 테스트환경에서는 주석을 해주장
-        //이거 주석 해야 포스트맨으로 인증코드없이 회원가입 가능 : 중복검사를 앞에서 안하고 뒤에서 해주게되면, 포스트맨으로 아이디중복으로 하고 코드 맞춰주면 회원가입은 안되고 코드만 사라짐
-//        String emailAuthenticated = mailAuthService.validateCodeForJoinAgain(codeId, code, email);
-        String emailAuthenticated ="asdf";
+//        이거 주석 해야 포스트맨으로 인증코드없이 회원가입 가능 : 중복검사를 앞에서 안하고 뒤에서 해주게되면, 포스트맨으로 아이디중복으로 하고 코드 맞춰주면 회원가입은 안되고 코드만 사라짐
+        String emailAuthenticated = mailAuthService.validateCodeForJoinAgain(codeId, code, email);
+//        String emailAuthenticated ="asdf";
 
 
 
