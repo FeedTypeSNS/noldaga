@@ -103,7 +103,7 @@ function getDetailGroupPage(group, user, groupMember) {
         <i class="bi bi-bookmark-star-fill"></i>
         </button>
         <button onclick="registerCheck(${group.pw})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType} ${hiddenType3}><i
-            class="bi bi-person-plus-fill pe-1"></i> 가입하기
+            class="bi bi-person-plus-fill pe-1"></i> 가입
         </button>
         <button onclick="unregisterGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType3}><i
             class="bi bi-person-check-fill pe-1"></i> 가입됨
