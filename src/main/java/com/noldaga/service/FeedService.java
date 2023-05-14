@@ -62,7 +62,7 @@ public class FeedService {
         hashTagService.extractHashTag(feedDto.getContent(), feedDto.getId());
 
         //url 저장
-        if(urls == null){
+        if(urls == null || urls.size() == 0){
             imageRepository.save(Image.of(ConstUtil.FEED_DEFAULT_IMG_URL,feed,0));
         }
         else{
@@ -85,9 +85,9 @@ public class FeedService {
         Pageable pageable = PageRequest.of(page,5);
         Page<Feed> feedListPagination = feedRepository.MainFeedWithFollow(user.getId(), pageable);
 
-        //if(feedListPagination.getTotalElements() == 0){
-        //    feedListPagination = feedRepository.MostLikedFeed(pageable);
-        //}
+        if(feedListPagination.getTotalElements() == 0){
+            feedListPagination = feedRepository.MostLikedFeed(pageable);
+        }
 
         List<FeedDto> feedDtoList = new ArrayList<>();
 
