@@ -23,19 +23,25 @@
     display: flex;
 }
 
-.mainthumbnailimage{
-    width: 600px;
-    height: 450px;
-    position: relative;
+.mainthumbnailimageContainer{
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainthumbnailimage{
+    width: 450px;
+    height: 450px;
 }
 
 .thumbnailimage{
-    width: 161.5px;
-    height: 161.5px;
+    width: 162px;
+    height: 162px;
     position: relative;
     display: flex;
     border-radius: 15%;
+    object-fit: contain;
+    object-position: center;
 }
 
 button, button:active, button:focus{

@@ -55,6 +55,7 @@ function loadmore(currentPage){
         url: "/api/feeds/"+currentPage,
         dataType: "json"
     }).done(function(resp){
+        if(resp.result.length == 0) alert("마지막 페이지입니다");
         setFeedsContent(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -343,11 +344,13 @@ function feedContent(data) {
                   ${data.content} 
                 </p>
                 <!-- Card img -->
-                <img
-                  class="card-img"
-                  src=${data.imageDtoList[0].url} 
-                  alt=""
-                />
+                <div class="mainthumbnailimageContainer">
+                    <img
+                      class="mainthumbnailimage"
+                      src=${data.imageDtoList[0].url} 
+                      alt=""
+                    />
+                </div>
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
                   <li class="nav-item">
@@ -396,7 +399,7 @@ function like(data) {
 
     $.ajax({
         type: "GET",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
         if(resp){
@@ -416,7 +419,7 @@ function like_register(data) {
 
     $.ajax({
         type: "POST",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
@@ -432,7 +435,7 @@ function like_delete(data) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/like/feed/"+data
+        url: "/api/like/feed/"+data
     }).done(function(resp){
         window.location.href = "/nol";
     }).fail(function(error){
@@ -459,7 +462,7 @@ function save_register(data) {
 
     $.ajax({
         type: "POST",
-        url: "api/feed/store/"+data,
+        url: "/api/feed/store/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
@@ -475,7 +478,7 @@ function save_delete(data) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/feed/store/"+data
+        url: "/api/feed/store/"+data
     }).done(function(resp){
         window.location.href = "/nol";
     }).fail(function(error){
