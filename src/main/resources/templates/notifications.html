@@ -150,7 +150,7 @@ Header END -->
             <!-- Load more button START -->
             <a href="#!" role="button" class="btn btn-loader btn-primary-soft" data-bs-toggle="button"
                aria-pressed="true" onclick="loadAlarm()">
-              <span class="load-text"> Load more notifications </span>
+              <span class="load-text"> 알림 더 보기 </span>
               <div class="load-icon">
                 <div class="spinner-grow spinner-grow-sm" role="status">
                   <span class="visually-hidden">Loading...</span>
@@ -347,7 +347,7 @@ JS libraries, plugins and custom scripts -->
 
   function deleteAlarm(alarmId){
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `/api/users/me/alarm/${alarmId}`,true);
+      xhr.open('DELETE', `/api/users/me/alarm/${alarmId}`,true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange=function(){
           if (this.readyState === XMLHttpRequest.DONE) {
