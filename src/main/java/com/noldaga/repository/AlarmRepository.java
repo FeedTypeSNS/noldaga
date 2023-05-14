@@ -15,7 +15,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
 //    Page<Alarm> findAllByToUser(User user, Pageable pageable); // -> 알람에 유저로 인덱스 걸어주자
 
-    Page<Alarm> findAllByToUserIdOrderByIdDesc(Long toUserId, Pageable pageable);
+    Page<Alarm> findAllByToUserId(Long toUserId, Pageable pageable);
 
     @Transactional
     @Modifying
