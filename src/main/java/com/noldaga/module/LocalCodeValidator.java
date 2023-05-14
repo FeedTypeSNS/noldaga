@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 //@Component
@@ -31,6 +34,15 @@ public class LocalCodeValidator implements CodeValidator {
         String code = generateRandomString();
         int key = keyGenerator.incrementAndGet();
         storage.put(key, code + DELIMITER + email);
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(() -> {
+            if (storage.containsKey(key)) {
+                storage.remove(key);
+            }
+        }, 5, TimeUnit.MINUTES);
+        executorService.shutdown();
+
         return CodeDto.of(key, code);
     }
 
