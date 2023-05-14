@@ -138,8 +138,7 @@ public class UserController {
     public Response<Page<AlarmResponse>> getAlarms(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "3") int size,
-            Authentication authentication)
-    {
+            Authentication authentication) {
 
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
@@ -164,14 +163,23 @@ public class UserController {
 
     //알림 읽기
     @PostMapping("/me/alarm/{alarmId}")
-    public Response<Void> readAlarm(@PathVariable Long alarmId , Authentication authentication){
+    public Response<Void> readAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
 
-        userService.readAlarm(loginUserDto.getId(),alarmId);
+        userService.readAlarm(loginUserDto.getId(), alarmId);
         return Response.success();
     }
 
+    //안읽은 알림 있나 확인
+    @GetMapping("me/alarm/check")
+    public Response<Boolean> checkUnReadAlarm(Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
+        boolean existUnRead = userService.existUnReadAlarm(loginUserDto.getId());
+
+        return Response.success(existUnRead);
+    }
 }

@@ -23,6 +23,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     void deleteById(Long id);
 
 
+    long countByToUserIdAndUnRead(Long toUserid,boolean unRead);
 
 
 }
