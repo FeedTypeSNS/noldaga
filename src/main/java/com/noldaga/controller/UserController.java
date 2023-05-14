@@ -172,9 +172,9 @@ public class UserController {
         return Response.success();
     }
 
-    //안읽은 알림 있나 확인
-    @GetMapping("me/alarm/check")
-    public Response<Boolean> checkUnReadAlarm(Authentication authentication){
+    //안읽은 알림 있으면 true , 안읽은 알림 없으면 false
+    @GetMapping("/me/alarm/check")
+    public Response<Boolean> existUnReadAlarm(Authentication authentication){
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
@@ -182,4 +182,16 @@ public class UserController {
 
         return Response.success(existUnRead);
     }
+
+    //안읽은 알람 몇개 인지 개수 반환
+    @GetMapping("/me/alarm/un-read")
+    public Response<Long> countUnReadAlarm(Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        Long cntUnReadAlarm = userService.countUnReadAlarm(loginUserDto.getId());
+
+        return Response.success(cntUnReadAlarm);
+    }
+
 }

@@ -25,5 +25,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     long countByToUserIdAndUnRead(Long toUserid,boolean unRead);
 
+    boolean existsByToUserIdAndUnRead(Long toUserId, boolean unRead);
+
 
 }
