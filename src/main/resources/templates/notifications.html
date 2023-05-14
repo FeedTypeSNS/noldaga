@@ -191,6 +191,7 @@ JS libraries, plugins and custom scripts -->
       </div>
       <!-- Info -->
       <div class="mx-sm-3 my-2 my-sm-0">
+<p class="mb-2"><b>${alarmId}</b></p>
         <p class="mb-2"><b>${alarmText}</b></p>
         <a href="${fromType}?${fromQs}=${fromId}"><p class="small mb-2"><b>${name}</b> </p></a>
         <a href="${targetType}?${targetQs}=${targetObjectId}"><p class="small mb-2"><b>${targetNameOnAlarm}</b> </p></a>
@@ -285,10 +286,12 @@ JS libraries, plugins and custom scripts -->
             newNotifItem.innerHTML = notifItemTemplate
             (alarmId,avatarSrc, actionTime,alarmText,fromType, fromId,fromQs,name,targetType,targetQs,targetObjectId,targetNameOnAlarm,unRead);
             myUl.appendChild(newNotifItem);
-            if (!unRead) {
+            if (!unRead) { //읽었을때
+
                 const alarmItem = document.querySelector(`li[alarm-id="${alarmId}"] .d-flex`);
                 const checkBtn = alarmItem.querySelector('.alarm-check');
                 checkBtn.style.display = 'none';
+
             }
         }
     }
@@ -327,11 +330,12 @@ JS libraries, plugins and custom scripts -->
 
                   if(response.result.last===true){
                       alert('마지막 페이지 입니다');
-                      return;
+                      // return;
                   }
                   ++page;
                   const contentArray = response.result.content;
                   render(contentArray);
+
               }
               else{
 
