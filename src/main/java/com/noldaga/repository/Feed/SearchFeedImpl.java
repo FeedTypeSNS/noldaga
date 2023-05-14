@@ -44,6 +44,20 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
     }
 
     @Override
+    public Page<Feed> MostLikedFeed(Pageable pageable) {
+        JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
+                .where(feed.groupId.eq(0L))
+                .where(feed.delDate.isNull())
+                .orderBy(feed.likeCount.desc());
+
+        this.getQuerydsl().applyPagination(pageable,query);
+        List<Feed> feedList = query.fetch();
+        long count = query.fetchCount();
+
+        return new PageImpl<>(feedList,pageable,count);
+    }
+
+    @Override
     public Page<Feed> MyPageFeed(long userId, Pageable pageable) {
         JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
                 .where(feed.user.id.eq(userId))
