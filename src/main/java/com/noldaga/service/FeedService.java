@@ -85,6 +85,10 @@ public class FeedService {
         Pageable pageable = PageRequest.of(page,5);
         Page<Feed> feedListPagination = feedRepository.MainFeedWithFollow(user.getId(), pageable);
 
+        //if(feedListPagination.getTotalElements() == 0){
+        //    feedListPagination = feedRepository.MostLikedFeed(pageable);
+        //}
+
         List<FeedDto> feedDtoList = new ArrayList<>();
 
         feedListPagination.getContent().forEach(feed -> {
