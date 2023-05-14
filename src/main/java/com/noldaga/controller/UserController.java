@@ -161,7 +161,7 @@ public class UserController {
     }
 
 
-    //알림 읽기
+    //알림 read로 처리
     @PostMapping("/me/alarm/{alarmId}")
     public Response<Void> readAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->

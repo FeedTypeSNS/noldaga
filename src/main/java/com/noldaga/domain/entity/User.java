@@ -49,7 +49,7 @@ public class User {
     private String profileMessage;
 
 
-    @Column(length = 100,nullable = false)
+    @Column(length = 100)
     private String email;
     @Setter
     private Long totalFollower=Long.valueOf(0);
