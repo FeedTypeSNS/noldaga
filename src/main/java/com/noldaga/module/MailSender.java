@@ -1,5 +1,6 @@
 package com.noldaga.module;
 
+import com.noldaga.util.ConstUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,8 +18,11 @@ import java.io.UnsupportedEncodingException;
 public class MailSender {
 
     private final JavaMailSender javaMailSender;
-    private final String DEFAULT_TEXT ="기본메세지";
 
+
+    private final String SLOGAN = "놀다가~";
+
+    private final String EMAIL_LOGO_URL = ConstUtil.EMAIL_SERVICE_LOGO_URL;
     @Value("${mail.sender}")
     private String sender;
 
@@ -32,16 +36,25 @@ public class MailSender {
     private MimeMessage createMessage(String recipient,String text) throws UnsupportedEncodingException, MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         mimeMessage.addRecipients(Message.RecipientType.TO, recipient);//인증요청한 유저메일
-        mimeMessage.setSubject("메일인증요청에관한 이메일입니다.");//제목
-        StringBuilder sb = new StringBuilder();
+        mimeMessage.setSubject("안녕하세요 놀다가~ 입니다.");//제목
 
-        sb.append(DEFAULT_TEXT).append("\n").append(text);
-        mimeMessage.setText(sb.toString(), "utf-8", "html");
+
+        mimeMessage.setText(getTotalMessage(text), "utf-8", "html");
         mimeMessage.setFrom(new InternetAddress(sender, "noldaga"));//송신자
         return  mimeMessage;
     }
 
 
+    private String getTotalMessage(String text){
 
+        return "<div style=\"text-align: center; background-color: #f5f5f5; padding: 20px;\">\n" +
+                "  <h1 style=\"font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;\">"+SLOGAN+"</h1>\n" +
+                "  <div style=\"max-width: 600px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 20px;\">\n" +
+                "  <img src=\""+ EMAIL_LOGO_URL +"\"/>"+
+                "  </div>\n <br>" +
+                text+
+                "</div>";
+
+    }
 
 }
