@@ -31,8 +31,7 @@ function init() {
     });
 
     $("#loadmore-button").on("click",()=>{
-        alert("버튼확인");
-        this.loadmore(++page, groupId);
+        loadmore(++page, groupId);
     });
 }
 
@@ -43,9 +42,10 @@ function loadmore(currentPage, groupId){
 
     $.ajax({
         type: "GET",
-        url: "/api/feeds/group"+groupId+"/"+currentPage,
+        url: "/api/feeds/group/"+groupId+"/"+currentPage,
         dataType: "json"
     }).done(function(resp){
+        if(resp.result.length == 0) alert("마지막 페이지입니다");
         setFeedsContent(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -180,11 +180,13 @@ function feedContent(data) {
                   ${data.content} 
                 </p>
                 <!-- Card img -->
-                <img
-                  class="card-img"
-                  src=${data.imageDtoList[0].url}
-                  alt=""
-                />
+                <div class="mainthumbnailimageContainer">
+                    <img
+                      class="mainthumbnailimage"
+                      src=${data.imageDtoList[0].url} 
+                      alt=""
+                    />
+                </div>
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
                   <li class="nav-item">
@@ -256,87 +258,89 @@ function reply() {
 }
 
 function like(data) {
+    const url = window.location.href;
 
     $.ajax({
         type: "GET",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
-        if(resp) like_delete(data);
-        else like_register(data);
+        if(resp) like_delete(data,url);
+        else like_register(data,url);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function like_register(data) {
+function like_register(data,url) {
 
     $.ajax({
         type: "POST",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
 
-function like_delete(data) {
+function like_delete(data,url) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/like/feed/"+data
+        url: "/api/like/feed/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
 
 function save(data) {
+    const url = window.location.href;
 
     $.ajax({
         type: "GET",
         url: "/api/feed/store/"+data,
         dataType: "json"
     }).done(function(resp){
-        if(resp) save_delete(data);
-        else save_register(data);
+        if(resp) save_delete(data,url);
+        else save_register(data,url);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 }
 
-function save_register(data) {
+function save_register(data,url) {
 
     $.ajax({
         type: "POST",
-        url: "api/feed/store/"+data,
+        url: "/api/feed/store/"+data,
         data: JSON.stringify(content),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
 
-function save_delete(data) {
+function save_delete(data,url) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/feed/store/"+data
+        url: "/api/feed/store/"+data
     }).done(function(resp){
-        window.location.href = "/";
+        window.location.href = url;
     }).fail(function(error){
         alert(JSON.stringify(error));
-        window.location.href = "/";
+        window.location.href = url;
     });
 }
