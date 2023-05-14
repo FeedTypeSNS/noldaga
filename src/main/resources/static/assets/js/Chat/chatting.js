@@ -30,10 +30,10 @@ let chatting = {
             contentType: "application/json; charset=utf-8"
         }).done(function (resp){
             let sessionId = document.querySelector("#ws-sessionId")?.value; //세션 존재하는지 확인하기 위해
-            if(sessionId){ //기존 세션이 존재한다면.. 닫고 새로운 세션을 열어야 함
+            if(sessionId !==null || sessionId.trim()===""){ //기존 세션이 존재한다면.. 닫고 새로운 세션을 열어야 함
                 // sessionId가 undefined, null, 빈 문자열 등이 아닌 경우 실행될 코드
                 wsClose();
-            }else {
+            }
                 //getChatListFunc();//채팅방 리스트 불러오기
                 cws.send(JSON.stringify(resp));
                 //리스트를 직접 호출하는대신 cws에 보내서 현재 들어와 있는 사람들 바로.. 켜지게게
@@ -43,9 +43,8 @@ let chatting = {
                 //alert("채팅방 기본 뷰 생성 중..")
                 enterRoom(resp.result);
                 //alert("채팅방 기본 뷰 생성 완료")
-                wsOpen(username, resp.result.roomInfo.uuid);
+                wsOpen(resp.result.roomInfo.uuid);
                 //alert(JSON.stringify(resp));
-            }
         }).fail(function (error){
             alert('채팅방 생성 실패');
             alert(JSON.stringify(error));
@@ -79,10 +78,9 @@ function getOneChatRoom(roomId, uuid){
             wsClose();
         }
         //alert("방하나 불러오기\n"+JSON.stringify(resp));
-        //getChatListFunc();
-        let name = document.querySelector("#ws-username").value;
+        getChatListFunc();
         enterRoom(resp.result);
-        wsOpen(name, uuid);
+        wsOpen(uuid);
         //console.log('채팅기본 뷰 완성');
     }).fail(function (error){
         console.log('채팅방 불러오기 실패');
@@ -91,11 +89,14 @@ function getOneChatRoom(roomId, uuid){
     });
 }
 
+
 function deleteChatRoom(event){
-    let uuid = document.querySelector("#ws-romeUuid").value;
-    event.preventDefault();
-    let roomId = $("#ws-romeId").val();
+    //let uuid = document.querySelector("#ws-romeUuid").value;
     ws.close(1000,"Out ChatRoom");
+    event.preventDefault();
+    let name = document.querySelector("#getUsernameFromHeader").textContent;
+    let viewName = document.querySelector("#chat-view-name").textContent;
+    let roomId = $("#ws-romeId").val();
 
     $.ajax({
         type: "DELETE",
@@ -103,10 +104,13 @@ function deleteChatRoom(event){
         dataType: "json"
     }).done(function (resp) {
         //console.log(JSON.stringify(resp));
-        let msg = resp.result+"/ADMINSENDDELETE";
-        setBasic();
         //alert(JSON.stringify(sendDelRoomAlarm(uuid, msg, roomId)));
-        cws.send(JSON.stringify(sendDelRoomAlarm(uuid, msg, roomId)));
+        if (viewName!=="대화상대 없음") {
+            saveAdminMsg(roomId, name)
+        }//먼저 저장후 삭제해야함.. 아니면 같이 사라짐..
+
+        window.location.reload();
+
     }).fail(function (error){
         console.log('채팅방 삭제 실패');
         alert(JSON.stringify(error));
@@ -119,7 +123,7 @@ function delChatMsg(){
     let uuid = document.querySelector("#ws-romeUuid").value;
     let chatId = $("#del-msg-id").val();
     let roomId = $("#ws-romeId").val();
-    ws.close(1000,"Del Chat");
+    //wsClose();
     $.ajax({
         type: "DELETE",
         //async: true, // false 일 경우 동기 요청으로 변경
@@ -127,9 +131,7 @@ function delChatMsg(){
         dataType: "json",
         contentType: "application/json; charset=utf-8"
     }).done(function (resp){
-        //alert(JSON.stringify(resp));
-        wsOpen(name, uuid);
-        ws.send(JSON.stringify(sendDelChatAlarm(chatId)));
+        cws.send(JSON.stringify(sendDelChatAlarm(roomId, uuid, chatId)));
     }).fail(function (error){
         alert('채팅방 생성 실패');
         alert(JSON.stringify(error));
@@ -185,6 +187,7 @@ function initChattingPage(resp, name){
     let joinImg = document.querySelector("#get-chat-userImg-"+roomId);
     let thisImg = document.createElement("div");
     thisImg.className = "joinPeopleImgList"+roomId;
+
     switch (joinCount) {
         case 0 : thisImg.innerHTML = getNonImg();break;
         case 1 : thisImg.innerHTML = getOneImg(resp);break;
@@ -268,8 +271,8 @@ function initChatBody(resp, name){
                                         <div class="flex-shrink-0 avatar me-2" id="get-chat-userImg-${resp.roomInfo.id}">
                                              
                                         </div>
-                                        <div class="d-block flex-grow-1">
-                                            <h6 class="mb-0 mt-1">${resp.roomInfo.viewRoomName}</h6>
+                                        <div class="d-block flex-grow-1" >
+                                            <h6 class="mb-0 mt-1" id="chat-view-name">${resp.roomInfo.viewRoomName}</h6>
                                             <div class="small text-secondary"><i class="fa-solid fa-circle text-success me-1"></i>Online</div>
                                         </div>
                                     </div>
@@ -286,7 +289,7 @@ function initChatBody(resp, name){
                                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-check me-2 fw-icon"></i>상대 프로필 페이지 이동</a></li>
                                                 <li><a class="dropdown-item" onclick="deleteChatRoom(event)"><i class="bi bi-trash me-2 fw-icon"></i>채팅방 나가기</a></li>
                                                 <li class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" onclick="setBasic()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
+                                                <li><a class="dropdown-item" onclick="window.location.reload()" "><i class="bi bi-archive me-2 fw-icon"></i>채팅 목록으로 이동</a></li>
                                             </ul>
                                         </div>
                                         <!-- Card action END -->
@@ -308,7 +311,7 @@ function initChatBody(resp, name){
 
 function cardFooter(){
     return `<div class="d-sm-flex align-items-end">
-                            <textarea style="margin-right: 10px; width: 85%" id="chatting-msg" class="form-control mb-sm-0 mb-3" data-autoresize placeholder="메시지를 입력하세요" rows="1"></textarea>
+                            <textarea style="margin-right: 10px; width: 85%" id="chatting-msg" class="form-control mb-sm-0 mb-3" data-autoresize placeholder="메시지를 입력하세요." rows="1"></textarea>
                             <!--<button class="btn btn-sm btn-danger-soft ms-sm-2"><i class="fa-solid fa-face-smile fs-6"></i></button>-->
                   <div style="padding-left: 10px">
                   <img id="chatpreImg" alt="사진 없음" src="https://kr.object.ncloudstorage.com/noldaga-s3/non-img-blue.png"  style="width: 50px; height: 38px;"/>
@@ -337,6 +340,10 @@ function cardFooter(){
 
 function readURL(input) {
     if (input.files && input.files[0]) {
+        document.getElementById("chatting-msg").readOnly = true;
+
+        document.getElementById("chatting-msg").placeholder = "사진을 전송하세요."
+
         var reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('chatpreImg').src = e.target.result;
@@ -344,6 +351,8 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     } else {
         document.getElementById('chatpreImg').src = "https://kr.object.ncloudstorage.com/noldaga-s3/non-img-blue.png";
+        document.getElementById("chatting-msg").readOnly = false;
+        document.getElementById("chatting-msg").placeholder = "메시지를 입력하세요."
     }
 }
 
@@ -375,14 +384,14 @@ function chatImg_m(resp){
     let sendData = forChatTimestamp(resp.createAt);
     let msg = resp.msg;
     let message = msg.replace("CHATIMG|", "");
-    let id = resp.id;
+    let cid = resp.id;
     return `<div class="w-100">
                       <div class="d-flex flex-column align-items-end">                  
                         <img class="rounded h-200px" src="${message}" alt="">
                         <!-- Images -->  
                         
                            
-                        <a onclick="setDelChatId(${id})" class="nav-link bg-light py-1 px-2 mb-0"
+                        <a onclick="setDelChatId(${cid})" class="nav-link bg-light py-1 px-2 mb-0"
                                         <!--data-bs-toggle="modal"
                                         data-bs-target="#DeleteAlertModalChat"-->
                                     <i class="bi bi-trash3 pe-2"></i>
@@ -424,14 +433,14 @@ function chatImg_o(resp){
 
 function chatSent_m(resp){
     let sendData = forChatTimestamp(resp.createAt);
-    let id = resp.id;
+    let cid = resp.id;
     //console.log(sendData);
     return `<div class="w-100">
                       <div class="d-flex flex-column align-items-end">                  
                         <div class="bg-primary text-white p-2 px-3 rounded-2">${resp.msg}</div>
                         <!-- Images -->
                         <div class="small text-secondary">      
-                        <a onclick="setDelChatId(${id})" class="nav-link bg-light py-1 px-2 mb-0"
+                        <a onclick="setDelChatId(${cid})" class="nav-link bg-light py-1 px-2 mb-0"
                                         <!--data-bs-toggle="modal"
                                         data-bs-target="#DeleteAlertModalChat"-->
                                     <i class="bi bi-trash3 pe-2"></i>
@@ -532,9 +541,6 @@ function forChatTimestamp(timestamp){
 chatting.init();
 /*
 connect();*/
-
-
-
 
 
 /*import{ Client } from '@stomp/stompjs';

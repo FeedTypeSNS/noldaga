@@ -148,7 +148,7 @@ function headerContent(data) {
                   />
                 </div>
                 <div>
-                  <a class="h6 stretched-link" href="#">${data.username}</a>
+                  <a class="h6 stretched-link" id="getUsernameFromHeader" href="#">${data.username}</a>
                   <p class="small m-0">${data.nickname}</p>
                 </div>
               </div>

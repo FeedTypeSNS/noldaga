@@ -2,6 +2,7 @@ package com.noldaga.domain.chatdto;
 
 import com.noldaga.domain.UserSimpleDto;
 import com.noldaga.domain.entity.chat.ChatRead;
+import com.noldaga.domain.entity.chat.ChatRoom;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,11 +21,11 @@ public class ChatReadDto {
         this.readDate = readDate;
     }
 
-    public static ChatReadDto fromEntity(ChatRead check){
+    public static ChatReadDto fromEntity(ChatRead check, ChatRoom room){
         return new ChatReadDto(
                 check.getId(),
                 UserSimpleDto.fromEntity(check.getReadUser()),
-                ChatDto.fromEntity(check.getChat()),
+                ChatDto.fromEntity(check.getChat(), room),
                 check.getReadDate()
         );
     }
