@@ -5,6 +5,7 @@ import com.noldaga.domain.CodeDto;
 import com.noldaga.domain.CodeUserDto;
 import com.noldaga.module.CodeValidator;
 import com.noldaga.module.MailSender;
+import com.noldaga.util.ConstUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,10 @@ public class MailAuthService {
     private final MailSender mailSender;
     private final CodeValidator codeValidator;
 
-
-
     public Integer sendCodeForJoin(String emailAddress) throws MessagingException, UnsupportedEncodingException {
 
         CodeDto codeDto = codeValidator.generateCodeForJoin(emailAddress);
-        String message = "인증코드를 입력해주세요 " + codeDto.getCode();
+        String message = "<b>인증코드를 입력해주세요<br><br>" + codeDto.getCode();
         mailSender.sendEmail(emailAddress,message);
         return codeDto.getCodeId();
     }
@@ -39,13 +38,10 @@ public class MailAuthService {
     }
 
 
-
-
-
     public Integer sendCodeForPassword(String emailAddress, String username) throws MessagingException, UnsupportedEncodingException {
 
         CodeDto codeDto = codeValidator.generateCodeForPassword(emailAddress,username);
-        String message = "인증코드를 입력해주세요   " + codeDto.getCode();
+        String message = "<br>인증코드를 입력해주세요<br><br>" + codeDto.getCode();
         mailSender.sendEmail(emailAddress,message);
         return codeDto.getCodeId();
     }
@@ -54,25 +50,20 @@ public class MailAuthService {
     }
 
 
-
-
-
-
-
     public void sendPassword(String emailAddress, String newPassword) throws MessagingException, UnsupportedEncodingException {
-        String message = "초기화된 비밀번호 입니다   " + newPassword;
+        String message = "<br>초기화된 비밀번호 입니다<br><br>" + newPassword;
         mailSender.sendEmail(emailAddress,message);
     }
 
     public void sendUsernames(String emailAddress, String usernames) throws MessagingException, UnsupportedEncodingException {
-        String message = "해당 이메일로 가입된 아이디 목록입니다   " + usernames;
+        String message = "<br>해당 이메일로 가입된 아이디 목록입니다<br><br>" + usernames;
         mailSender.sendEmail(emailAddress,message);
     }
 
     public Integer sendCodeForEmail(String email) throws MessagingException, UnsupportedEncodingException {
 
         CodeDto codeDto = codeValidator.generateCodeForEmailUpdate(email);
-        String message = "인증코드를 입력해주세요 " + codeDto.getCode();
+        String message = "<br>인증코드를 입력해주세요<br><br>" + codeDto.getCode();
         mailSender.sendEmail(email,message);
         return codeDto.getCodeId();
     }

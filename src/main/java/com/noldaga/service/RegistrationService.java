@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class AnonymousService {
+public class RegistrationService {
 
     private final UserRepository userRepository;
     private final MailAuthService mailAuthService;
