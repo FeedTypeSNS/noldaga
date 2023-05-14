@@ -137,7 +137,7 @@ public class UserController {
     @GetMapping("/me/alarm")
     public Response<Page<AlarmResponse>> getAlarms(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "size", defaultValue = "10") int size,
             Authentication authentication) {
 
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
