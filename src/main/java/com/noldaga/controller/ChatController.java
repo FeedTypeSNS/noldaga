@@ -56,6 +56,12 @@ public class ChatController {
         return Response.success(result);
     }//메시지 보내기 = 보내자마자 저장되야함..
 
+    @PostMapping("/{roomId}/admin")
+    public Response<ChatSendResponse> saveAdminMessage(@RequestBody ChatSendRequest request, @PathVariable Long roomId) throws IOException {
+        ChatSendResponse result = chatService.saveAdminChat(request, roomId);
+        return Response.success(result);
+    }//메시지 보내기 = 보내자마자 저장되야함.
+
     @PostMapping("/{roomId}/img")
     public Response<ChatSendResponse> saveMessageImg(Authentication authentication, @RequestPart(required = false) MultipartFile img, @PathVariable Long roomId) throws IOException {
         ChatSendResponse result = chatService.saveChatImg(authentication.getName(), img, roomId);
@@ -69,7 +75,7 @@ public class ChatController {
     }//메시지 삭제
 
     @DeleteMapping("/{roomId}")
-    public Response<String> deleteChatRoom(Authentication authentication, @PathVariable Long roomId){
+    public Response<String> deleteChatRoom(Authentication authentication, @PathVariable Long roomId) throws UnsupportedEncodingException {
         String result = chatService.deleteChatRoom(authentication.getName(), roomId);
         chatService.reSettingRoom(authentication.getName(), roomId);
         chatService.delChatRoomUserNum(0); //안 삭제된 방 지우기 위해 0명인 방 강제 삭제

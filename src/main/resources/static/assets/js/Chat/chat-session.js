@@ -15,8 +15,10 @@ function setMyinfo(){
 } //내 정보 저장이 가장 먼저 이뤄져야함..
 
 var cws;
-function cwsOpen(name){
+function cwsOpen(){
     //alert("ws://"+location.host+"/chatroom/"+name);
+    let name = document.querySelector("#getUsernameFromHeader").textContent;
+    console.log(name+"님이 채팅창을 열었습니다.");
     if (name==null && name.trim()===''){
         name = $("#ws-username").val();
     }
@@ -28,18 +30,36 @@ function cwsEvt(){
     }
     cws.onmessage = function (data){
         var get = data.data;
-        console.log("받은 데이터: "+JSON.stringify(get))
         if(get!=null && get.trim()!==''){
            var dd = JSON.parse(get);
+            console.log("메시지 타입: "+dd.result.type)
            if(dd.result.type==="ENTER"){
                $("#us-sessionId").val(dd.result.sessionId);
            }else if(dd.result.type==="NEWROOM"){
                getChatListFunc();
-           }else if(dd.result.type==="NEWCHAT"){
+           }else if(dd.result.type==="NEWCHAT"){//알림 추가..
                getChatListFunc();
            }else if(dd.result.type==="DELETEROOM"){
+               let uuid = document.querySelector("#ws-romeUuid").value;
+               let roomId = document.querySelector("#ws-romeId").value;
                getChatListFunc();
-               saveMsg(dd.result.roomInfo.id, dd.result.msg);
+               if(uuid === dd.result.roomInfo.uuid) {
+                   getOneChatRoom(roomId, uuid);
+                   //saveMsg(dd.result.roomInfo.id, dd.result.msg);
+                   showChatMsg(dd.result.data.result.chat, "");
+                   //document.querySelector("#chat-view-name").textContent = dd.result.data.result.chat.room.viewRoomName;
+               }
+           }else if(dd.result.type==="DELETEMSG"){
+               let pRoomId = document.querySelector("#ws-romeId").value;
+               console.log(dd.result.id+"번 메시지 삭제..")
+               let roomId = dd.result.roomInfo.id;
+               //let uuid = dd.result.uuid;
+               let chatId = dd.result.roomInfo.chatId;
+               getChatListFunc();
+               if(pRoomId===roomId){
+                   $("#chat-msg-id-"+chatId+" *").remove();
+                   $("#chat-msg-id-"+chatId).remove();
+               }
            }
         }
     }
@@ -60,7 +80,9 @@ function cwsSend(){
 
 
 var ws;
-function wsOpen(name, uuid){
+function wsOpen(uuid){
+    let name = document.querySelector("#getUsernameFromHeader").textContent;
+    console.log(name+"님이 "+uuid +" 채팅방을 열었습니다.");
     ws = new WebSocket("ws://"+location.host+"/chatting/"+uuid+"/"+encodeURIComponent(name));
     //웹 소켓 전송 시 config에 맞춰, 방 uuid와 name을 같이 보내줌
     //웹소켓 연결 URL에서 파라미터 값을 전달할 때, 한글 등의 문자열을 전송하면 URL 인코딩이 필요
@@ -84,7 +106,7 @@ function wsEvt(){
                     console.log(d.result.username+" 사용자가 입장했습니다.");
                 }
                 else if(d.result.type==="TALK"){
-                    alert(d.result.chat.unread_count);
+                    //alert(d.result.chat.unread_count);
                     if(d.result.chat.unread_count===0){
                         $(".readData-me-send *").remove();
                         $(".readData-me-send").remove();
@@ -94,8 +116,6 @@ function wsEvt(){
                     let name = document.querySelector("#ws-username").value;
                     if(inName === name){ //보낸 세션 id가 같다면 내가 보낸거..
                         showChatMsg(d.result.chat, name); //내가 보낸거
-                    }else if (d.result.chat.sender.role==="ADMIN") {
-                        showChatMsg(d.result.chat, "ADMIN");
                     }else {
                         showChatMsg(d.result.chat, ""); //남이 보낸거
                         console.log(JSON.stringify(sendMsgAlarm()));
@@ -113,11 +133,6 @@ function wsEvt(){
                     $("#pre-msg-create").val(forChatTimestamp(d.result.chat.createAt));
                     $("#pre-msg-id").val(d.result.chat.id);
                 }
-                else if(d.result.type==="DELETEMSG"){
-                    let msgId = d.result.id;
-                    $("#chat-msg-id-"+msgId+" *").remove();
-                    $("#chat-msg-id-"+msgId).remove();
-                }
                 else {
                     console.warn("unknown type!");
                 }
@@ -132,8 +147,8 @@ function wsEvt(){
 }
 function wsClose(){
     if (ws && ws.readyState === WebSocket.OPEN) {
-        console.log("채팅 방 소켓 종료");
         ws.close();
+        console.log("채팅 방 소켓 종료");
     }
 }
 function wsSend(){
@@ -178,6 +193,7 @@ function saveImg(roomId, file){
     }).done(function (resp){
         //alert(JSON.stringify(resp));
         ws.send(JSON.stringify(resp));
+        readURL(null);
     }).fail(function (error){
         alert('채팅 전송 실패');
         alert(JSON.stringify(error));
@@ -186,7 +202,7 @@ function saveImg(roomId, file){
 }
 
 function saveMsg(roomId, message){
-    console.log("saveMSG");
+    //console.log("saveMSG");
     //let name = document.querySelector("#ws-username").value;
     let sendReq = {msg : message};
     $.ajax({
@@ -198,6 +214,29 @@ function saveMsg(roomId, message){
     }).done(function (resp){
         //alert(JSON.stringify(resp));
         ws.send(JSON.stringify(resp));
+        readURL(null);
+    }).fail(function (error){
+        alert('채팅 전송 실패');
+        alert(JSON.stringify(error));
+        throw new Error(error);
+    });
+}
+
+function saveAdminMsg(roomId, userName){
+    //console.log("saveMSG");
+    //let name = document.querySelector("#ws-username").value;
+    let message = userName+"님이 방을 나갔습니다.";
+    let sendReq = {msg : message};
+    $.ajax({
+        type: "POST",
+        url:"/api/chat/"+roomId+"/admin",
+        data:JSON.stringify(sendReq),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
+    }).done(function (resp){
+        //adminCwsOpen();
+        cws.send(JSON.stringify(sendDelRoomAlarm(resp.result.chat.room.uuid, message, roomId, resp)));
+        //adminCws.close();
     }).fail(function (error){
         alert('채팅 전송 실패');
         alert(JSON.stringify(error));
@@ -206,15 +245,12 @@ function saveMsg(roomId, message){
 }
 
 
+
 function delChatShow(username, create, curId){
     let oldU = $("#pre-msg-username").val();
     let oldTime = $("#pre-msg-create").val();
     let curTime = forChatTimestamp(create);
     let preId = $("#pre-msg-id").val();
-    console.log("비교 시작!!!")
-    console.log(oldTime+"\n"+curTime);
-    console.log(oldU+"\n"+username);
-    console.log(curId+"\n"+preId);
 
     if(oldU===username){
         if(oldTime===curTime) {
@@ -228,6 +264,9 @@ function delChatShow(username, create, curId){
     }
 }
 // 채팅을 위한 웹 소켓 세션 관련
+
+
+
 
 
 

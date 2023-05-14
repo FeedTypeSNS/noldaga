@@ -7,19 +7,19 @@ import lombok.Getter;
 @Getter
 public class JoinRoomDto {
     private Long id;
-    private ChatRoomDto room;
+    private String uuid;
     private UserSimpleDto user;
 
-    private JoinRoomDto(Long id, ChatRoomDto room, UserSimpleDto user){
+    private JoinRoomDto(Long id, String room, UserSimpleDto user){
         this.id = id;
-        this.room = room;
+        this.uuid = room;
         this.user = user;
     }
 
     public static JoinRoomDto fromEntity(JoinRoom join){
         return new JoinRoomDto(
                 join.getId(),
-                ChatRoomDto.fromEntity(join.getRoom()),
+                join.getUuid(),
                 UserSimpleDto.fromEntity(join.getUsers())
         );
     }

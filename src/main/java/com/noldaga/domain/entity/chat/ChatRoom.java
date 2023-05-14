@@ -41,16 +41,16 @@ public class ChatRoom {
 
     protected ChatRoom(){}
 
-    public ChatRoom(Long id, String name, String uname, int userNum){
+    public ChatRoom(Long id,String uuid, String name, String uname, int userNum){
         this.id = id;
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = uuid;
         this.roomName = name;
         this.viewRoomName = uname;
         this.userNum = userNum;
     }
 
-    public static ChatRoom of(String name, String viewName, int userNum){
-        return new ChatRoom(null, name, viewName, userNum);
+    public static ChatRoom of(String name,String uuid, String viewName, int userNum){
+        return new ChatRoom(null,uuid, name, viewName, userNum);
     }
 
     public void alterRoomName(String roomName, String viewRoomName){
