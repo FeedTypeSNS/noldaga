@@ -1898,6 +1898,91 @@ Header END -->
 </div>
 <!-- Modal create events END -->
 
+
+<!-- Modal create Feed START -->
+<div
+  class="modal fade"
+  id="modalUserTag"
+  tabindex="-1"
+  aria-labelledby="modalLabelCreateFeed"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Modal feed header START -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabelUserTag">관심사 등록</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <!-- Modal feed header END -->
+      <form enctype="multipart/form-data">
+        <!-- Modal feed body START -->
+        <div class="modal-body">
+          <!-- Add Feed -->
+          <div class="d-flex mb-3">
+            <!-- Avatar -->
+            <!--<div class="avatar avatar-xs me-2">
+              <img
+                      class="avatar-img rounded-circle"
+                      src="assets/images/albums/07.jpg"
+                      alt=""
+              />
+            </div>-->
+            <!-- Feed box  -->
+            <div class="col">
+
+              <div class="row">
+                      <textarea
+                        class="form-control pe-4 fs-3 lh-1 border-0"
+                        rows="4"
+                        placeholder="#해쉬태그 : 해쉬태그 형태로 관심사를 입력해주세요"
+                        autofocus
+                        id="tag-content"
+                      ></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Modal feed body END -->
+        <div class = "row mt-3">
+          <div class="col">
+            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap">
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal feed footer -->
+        <div class="modal-footer row justify-content-between">
+          <!-- Select -->
+          <div class="row">
+            <div class="col-sm-4">
+
+            </div>
+            <div class="col-sm-4">
+
+              <!-- Button -->
+            </div>
+
+            <div class="col-sm-4 text-sm-end">
+              <button type="button" id="user-tag-button" class="btn btn-success-soft" onclick="addMyHashTag()">등록</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- Modal feed footer -->
+    </div>
+  </div>
+</div>
+<!-- Modal create feed END -->
+
+
+
 <!-- =======================
 JS libraries, plugins and custom scripts -->
 
@@ -1922,5 +2007,6 @@ JS libraries, plugins and custom scripts -->
 <script src="/assets/js/Feed/feed-posting.js"></script>
 <script src="/assets/js/Feed/main-page.js"></script>
 <script src="/assets/js/header.js"></script>
+<script src="/assets/js/User/tag-posting.js"></script>
 </body>
 </html>

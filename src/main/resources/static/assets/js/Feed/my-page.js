@@ -326,7 +326,7 @@ function like(data) {
 
     $.ajax({
         type: "GET",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         dataType: "json"
     }).done(function(resp){
         if(resp) like_delete(data,url);
@@ -340,7 +340,7 @@ function like_register(data,url) {
 
     $.ajax({
         type: "POST",
-        url: "api/like/feed/"+data,
+        url: "/api/like/feed/"+data,
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(resp){
@@ -355,7 +355,7 @@ function like_delete(data,url) {
 
     $.ajax({
         type: "DELETE",
-        url: "api/like/feed/"+data
+        url: "/api/like/feed/"+data
     }).done(function(resp){
         window.location.href = url;
     }).fail(function(error){

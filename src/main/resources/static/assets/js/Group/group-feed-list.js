@@ -24,7 +24,7 @@ function init() {
         url: "/api/feeds/group/"+groupId+"/"+page,
         dataType: "json"
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initMainPageSimpleModified(resp.result);
+        setFeedsContent(resp.result);
         //initLoadMoreButton();
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -46,7 +46,7 @@ function loadmore(currentPage, groupId){
         url: "/api/feeds/group"+groupId+"/"+currentPage,
         dataType: "json"
     }).done(function(resp){
-        initMainPageSimpleModified(resp);
+        setFeedsContent(resp);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
@@ -68,15 +68,19 @@ function profileContent(data) {
                 />`;
 }
 
-//댓글 안나오는거
-function initMainPageSimpleModified(data) {
+
+function setFeedsContent(data) {
+    if(data.length == 0) {
+        let GroupNoFeedBox = document.querySelector("#noFeed");
+        GroupNoFeedBox.style.display = "";
+    }
     for(let i=0; i<data.length; i++){
         let feedBox = document.querySelector("#feed");
 
         //카드박스 body
         let cardBox = document.createElement("div"); //<div></div>
         cardBox.className = "card"; //<div class="card"></div>
-        cardBox.innerHTML = getFeedBoxContentRemoveComment(data[i]);
+        cardBox.innerHTML = feedContent(data[i]);
         //카드박스 해쉬태그
         let tagBox = document.createElement("li");
         tagBox.className = "list-inline-item m-0";
@@ -93,7 +97,7 @@ function initMainPageSimpleModified(data) {
     }
 }
 
-function getFeedBoxContentRemoveComment(data) {
+function feedContent(data) {
     return `<div class="card-header border-0 pb-0">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
@@ -178,8 +182,8 @@ function getFeedBoxContentRemoveComment(data) {
                 <!-- Card img -->
                 <img
                   class="card-img"
-                  src="/assets/images/post/3by2/01.jpg"
-                  alt="Post"
+                  src=${data.imageDtoList[0].url}
+                  alt=""
                 />
                 <!-- Feed react START -->
                 <ul class="nav nav-stack py-3 small">
@@ -208,54 +212,9 @@ function getFeedBoxContentRemoveComment(data) {
                       <i class="bi bi-bookmark-check-fill pe-1"></i>저장하기</a
                     >
                   </li>
-                  <!-- Card share action START -->
-                  <li class="nav-item dropdown ms-sm-auto">
-                    <a
-                      class="nav-link mb-0"
-                      href="#"
-                      id="cardShareAction"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="bi bi-reply-fill flip-horizontal ps-1"></i>공유하기(##)
-                    </a>
-                    <!-- Card share action dropdown menu -->
-                    <ul
-                      class="dropdown-menu dropdown-menu-end"
-                      aria-labelledby="cardShareAction"
-                    >
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-envelope fa-fw pe-2"></i>Send via
-                          Direct Message</a
-                        >
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-bookmark-check fa-fw pe-2"></i
-                          >Bookmark
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-link fa-fw pe-2"></i>Copy link to
-                          post</a
-                        >
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-share fa-fw pe-2"></i>Share post via
-                          …</a
-                        >
-                      </li>
-                      <li><hr class="dropdown-divider" /></li>
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to
-                          News Feed</a
-                        >
-                      </li>
-                    </ul>
+                  <li class="nav-item">
+                    <a class="nav-link save" href="#!">
+                      <i class="bi bi-eye pe-1"></i>${data.totalView}</a>
                   </li>
                   <!-- Card share action END -->
                 </ul>

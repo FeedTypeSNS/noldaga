@@ -1,5 +1,6 @@
 package com.noldaga.service;
 
+import com.noldaga.domain.HashTagDto;
 import com.noldaga.domain.alarm.AlarmDto;
 import com.noldaga.domain.entity.Alarm;
 import com.noldaga.domain.userdto.Gender;
@@ -24,7 +25,9 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class UserService {
     private final AlarmRepository alarmRepository;
 
     private final S3Uploader s3Uploader;
+
 
     @Value("${com.noldaga.upload.path}")
     private String directoryPath;
@@ -182,6 +186,8 @@ public class UserService {
 
         alarm.readAlarm();
     }
+
+
 
 
 }

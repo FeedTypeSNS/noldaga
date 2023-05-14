@@ -20,6 +20,8 @@ import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -149,7 +151,7 @@ public class UserController {
 
 
     //알림 삭제
-    @PostMapping("/me/alarm/{alarmId}")
+    @DeleteMapping("/me/alarm/{alarmId}")
     public Response<Void> deleteAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
@@ -160,8 +162,9 @@ public class UserController {
     }
 
 
-    @PostMapping("/me/alarm")
-    public Response<Void> readAlarm(@RequestParam Long alarmId , Authentication authentication){
+    //알림 읽기
+    @PostMapping("/me/alarm/{alarmId}")
+    public Response<Void> readAlarm(@PathVariable Long alarmId , Authentication authentication){
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
@@ -169,4 +172,6 @@ public class UserController {
         userService.readAlarm(loginUserDto.getId(),alarmId);
         return Response.success();
     }
+
+
 }

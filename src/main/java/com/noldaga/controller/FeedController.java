@@ -14,6 +14,7 @@ import com.noldaga.exception.SnsApplicationException;
 import com.noldaga.service.FeedService;
 import com.noldaga.service.UserService;
 import com.noldaga.util.ClassUtils;
+import com.noldaga.util.ConstUtil;
 import com.noldaga.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -191,7 +192,9 @@ public class FeedController {
     //클라우드에서 삭제
     @DeleteMapping("/api/feed/s3Img")
     public Response<String> delS3Img(String url) throws IOException {
-        String fileName = s3Uploader.deleteImage(url);
+        String fileName = null;
+        if(url != ConstUtil.FEED_DEFAULT_IMG_URL)
+            fileName = s3Uploader.deleteImage(url);
         return Response.success(fileName);
     }
 
