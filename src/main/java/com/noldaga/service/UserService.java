@@ -185,6 +185,8 @@ public class UserService {
     }
 
 
-
-
+    public boolean existUnReadAlarm(Long userId) {
+        long unReadAlarmCnt = alarmRepository.countByToUserIdAndUnRead(userId, true);
+        return unReadAlarmCnt>0;
+    }
 }
