@@ -6,6 +6,7 @@ function init(){
     setBasic();
 }
 function setBasic(){
+    cwsOpen();
     getChatBody();
 
     getChatListFunc();
@@ -27,9 +28,6 @@ function getChatListFunc(){
         //alert(JSON.stringify(resp));
         //console.log(resp.result);
         getMyChatListHtml(resp.result);
-
-        let name = document.querySelector("#ws-username").value;
-        cwsOpen(name);
     }).fail(function (error){
         alert("실패");
         alert(JSON.stringify(error));
@@ -40,6 +38,7 @@ function getChatListFunc(){
 
 
 function getChatBody(){
+    reBaseSoketInfoHtml();
     $("#chatting-tool *").remove();
     $("#chatting-tool").remove();
     $(".card-footer *").remove();
@@ -197,7 +196,7 @@ function getBody(){
 }
 
 function getNonImg(){
-    return `<img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="https://kr.object.ncloudstorage.com/noldaga-s3/noldaga-nonImg.png" alt="">`;
+    return `<img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonUser.png" alt="">`;
 }
 function getOneImg(data){
     return`<img style="width:48px; height:48px;" class="avatar-img rounded-circle" src="${data.joinPeoples[0].profileImageUrl}" alt="">`;
@@ -293,6 +292,12 @@ function checkUnread(data) {
     }else if (unread===0){
         $("#unread" + data.roomInfo.id + " *").remove();
     }
+}
+
+function reBaseSoketInfoHtml(){
+    $("#ws-romeUuid").val("");
+    $("#ws-romeId").val("");
+    $("#ws-sessionId").val("");
 }
 
 init();

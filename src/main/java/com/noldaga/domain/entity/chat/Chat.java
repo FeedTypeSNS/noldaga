@@ -20,11 +20,10 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //채팅 순서 = 메시지 순서
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //채팅방 사라질떄 모두 사라져야함
-    @JoinColumn(name = "room_id")//기본 fetchtype eger -> 메시지 보내줄때마다 필요
-    private ChatRoom room;
+    @Column
+    private String uuid;
 
-    @JoinColumn(name = "send_user_id")
+    @JoinColumn(name = "send_user")
     @ManyToOne //회원 정보를 늘 가져올 필요 없음
     private User sender; //채팅 보내는 사람
     //사용자 한명이 편지를 여러개 쓸 수 있음,
@@ -47,16 +46,16 @@ public class Chat {
 
     protected Chat(){}
 
-    public Chat(Long id, ChatRoom room, User sender, String msg, int unread){
+    public Chat(Long id, String uuid, User sender, String msg, int unread){
         this.id = id;
-        this.room = room;
+        this.uuid = uuid;
         this.sender = sender;
         this.msg = msg;
         this.unread = unread;
     }
 
-    public static Chat of (ChatRoom room, User sender, String msg, int unread){
-        return new Chat(null, room, sender, msg, unread);
+    public static Chat of (String uuid, User sender, String msg, int unread){
+        return new Chat(null, uuid, sender, msg, unread);
     }
 
 

@@ -19,9 +19,9 @@ public class JoinRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //기본 인덱스 추가 (편하게 할려고 무의미..)
 
-    @ManyToOne(cascade = CascadeType.REMOVE) //방 삭제시 참가된 사람도 없어야함
-    @JoinColumn(name = "join_room_id")
-    private ChatRoom room; //참여된 채팅방 -> 어디 채팅방?
+    //@ManyToOne(cascade = CascadeType.REMOVE) //방 삭제시 참가된 사람도 없어야함
+    @Column
+    private String uuid; //참여된 채팅방 -> 어디 채팅방?
 
     @ManyToOne/*(cascade = CascadeType.REMOVE) //사용자가 탈퇴하면 방에 나간걸로 처리되야함*/
     @JoinColumn(name = "join_users_id")
@@ -29,14 +29,14 @@ public class JoinRoom {
 
     protected JoinRoom(){}
 
-    public JoinRoom(Long id, ChatRoom room, User users){
+    public JoinRoom(Long id, String room, User users){
         this.id = id;
-        this.room = room;
+        this.uuid = room;
         this.users = users;
     }
 
-    public static JoinRoom of(ChatRoom room, User users){
-        return new JoinRoom(null, room, users);
+    public static JoinRoom of(String uuid, User users){
+        return new JoinRoom(null, uuid, users);
     }
 
 

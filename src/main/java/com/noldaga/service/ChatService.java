@@ -28,15 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import javax.mail.Multipart;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +45,6 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatReadRepository chatReadRepository;
     private final S3Uploader s3Uploader;
-    private Map<Long, ChatRoom> chatRooms;
 
 
     public UserSimpleDto getMyData(String me){
@@ -70,7 +66,9 @@ public class ChatService {
 */
         if (myRoom.size()>0) {
             for (int i = 0; i < myRoom.size(); i++) {
-                ChatRoom chatRoom = myRoom.get(i).getRoom();    //자기가 참가된 i번째 방의
+                String roomUuid = myRoom.get(i).getUuid();
+                ChatRoom chatRoom = chatRoomRepository.findByUuid(roomUuid).orElseThrow(()->
+                        new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));    //자기가 참가된 i번째 방의
                 if (chatRoom.getViewRoomName().equals(chatRoom.getRoomName())) {
                     String userViewName = ChatRoom.getViewName(chatRoom.getRoomName(), me);
                     chatRoom.setViewRoomName(userViewName);
@@ -156,24 +154,24 @@ public class ChatService {
             newRoom = chatRoom.get(); //채팅방 정보
             String userViewName = ChatRoom.getViewName(roomName, me); //사람마다 보여주는 이름 달라져야함..
             log.info("기존에 존재하는 방: "+userViewName);
-            newRoom.setViewRoomName(userViewName);
             userReadCheck(user, newRoom); //바로 들어가지니 나는 모두 읽었다 체크함
             joinPeople = getJpeoples(newRoom); //참가한 사람리스트 반환
             Object[] result = getPastChatAndReader(newRoom);
             pastChat = (List<ChatDto>) result[0];
             chatReads = (List<ChatReadDto>) result[1];
             chatRoomInfo = ChatRoomDto.fromEntity(newRoom);
+            chatRoomInfo.setViewRoomName(userViewName);
             type = "EXISTROOM";
         } else { //처음 채팅방을 생성할 경우
             type = "NEWROOM";
             String[] names = roomName.split(", ");
-
-            newRoom = chatRoomRepository.save(ChatRoom.of(roomName, roomName, nameList.size())); //채팅방 저장
+            String uuid = UUID.randomUUID().toString();
+            newRoom = chatRoomRepository.save(ChatRoom.of(roomName,uuid, roomName, nameList.size())); //채팅방 저장
 
             for (int i = 0; i < names.length; i++) {
                 User join = userRepository.findByUsername(names[i]).orElseThrow(() ->
                         new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));;
-                joinRoomRepository.save(JoinRoom.of(newRoom, join)); //초대된 회원 joinRoom에 저장
+                joinRoomRepository.save(JoinRoom.of(uuid, join)); //초대된 회원 joinRoom에 저장
                 UserSimpleDto u = UserSimpleDto.fromEntity(join);
                 joinPeople.add(u);
             } //채팅방 참가 회원 저장
@@ -197,28 +195,27 @@ public class ChatService {
     public ChatSendResponse saveChat(String me, ChatSendRequest request, Long id) throws IOException {
             ChatRoom room = chatRoomRepository.findById(id).orElseThrow(() ->
                     new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
-
-             if (request.getMsg().contains("/")){
-            String[] parts = request.getMsg().split("/");
-            String admin = parts[parts.length-1];
-            if (admin.equals("ADMINSENDDELETE")){
-                String msg = "/ADMINSENDDELETE";
-                User user = userRepository.findFirstByRole(UserRole.valueOf("ADMIN")).get();
-                Chat chat = chatRepository.save(Chat.of(room, user, request.getMsg().replace(msg, ""), room.getUserNum()));
-                log.info("채팅: "+chat.getMsg());
-                return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat));
-            }
-        }//삭제시 메시지 저장하는거 따로 빼는게 날듯..
-
             User user = userRepository.findByUsername(me).orElseThrow(() ->
                     new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
 
             String msg = request.getMsg();
 
-            Chat chat = chatRepository.save(Chat.of(room, user, msg, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
+            Chat chat = chatRepository.save(Chat.of(room.getUuid(), user, msg, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
             //chatReadRepository.save(ChatRead.of(user, chat)); //보낸 사람은 읽음 처리 해줘야함
             log.info("채팅: "+chat.getMsg());
-            return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat)/*, receivers*/);
+            return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat, room)/*, receivers*/);
+    }
+
+    @Transactional
+    public ChatSendResponse saveAdminChat(ChatSendRequest request, Long id) {
+        ChatRoom room = chatRoomRepository.findById(id).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
+
+
+                User user = userRepository.findFirstByRole(UserRole.valueOf("ADMIN")).get();
+                Chat chat = chatRepository.save(Chat.of(room.getUuid(), user, request.getMsg(), 0));
+                log.info("채팅: "+chat.getMsg());
+                return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat, room));
     }
 
     @Transactional
@@ -232,10 +229,10 @@ public class ChatService {
         String imgurl = "CHATIMG|";
         imgurl += s3Uploader.upload(img, "/chat/img");
 
-        Chat chat = chatRepository.save(Chat.of(room, user, imgurl, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
+        Chat chat = chatRepository.save(Chat.of(room.getUuid(), user, imgurl, room.getUserNum() - 1)); //채팅 저장(자신은 읽은 거니 -1)
         //chatReadRepository.save(ChatRead.of(user, chat)); //보낸 사람은 읽음 처리 해줘야함
         log.info("채팅: "+chat.getMsg());
-        return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat)/*, receivers*/);
+        return ChatSendResponse.returnResponse(ChatDto.fromEntity(chat, room)/*, receivers*/);
     }
 
     //메시지 삭제
@@ -266,20 +263,19 @@ public class ChatService {
 
     //채팅방 삭제
     @Transactional
-    public String deleteChatRoom(String me, Long id){
+    public String deleteChatRoom(String me, Long id) throws UnsupportedEncodingException {
         User user = userRepository.findByUsername(me).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", me)));
         ChatRoom room = chatRoomRepository.findById(id).orElseThrow(()->
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
         userReadCheck(user, room); //삭제전 우선 모두 읽음 처리 시키기
 
-        List<JoinRoom> people = joinRoomRepository.findAllByRoom(room);
-        JoinRoom meJoin = joinRoomRepository.findByUsersAndRoom(user, room).orElseThrow(()->
-                new SnsApplicationException(ErrorCode.ALREADY_OUT_ROOM));
-        log.info("방에 참가한 사람들"+String.valueOf(people));
 
-        List<Chat> chatList = chatRepository.findAllByRoom(room); //방안의 채팅 내역
-        log.info("방에 채팅내역"+String.valueOf(chatList));
+        List<JoinRoom> people = joinRoomRepository.findAllByUuid(room.getUuid());
+        JoinRoom meJoin = joinRoomRepository.findByUsersAndUuid(user, room.getUuid()).orElseThrow(()->
+                new SnsApplicationException(ErrorCode.ALREADY_OUT_ROOM));
+
+        List<Chat> chatList = chatRepository.findAllByUuid(room.getUuid()); //방안의 채팅 내역
         if (room.getUserNum()==0) { throw new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM, "This room id already delete");
         }else {
             if (people.size() == 1 ) { //내가 마지막 남은 사람이면 내가 사라지면 전부 삭제해야함
@@ -290,6 +286,15 @@ public class ChatService {
                     //그냥 deleteAll은  delete 쿼리가 하나씩 날아감,
                     //deleteAllInBatch 한번에 실행되서 성능이 훨 좋음
                 } //읽음 정보 모두 삭제
+
+                String url = "%CHATIMG|https://kr.object.ncloudstorage.com/noldaga-s3/chat/img%";
+                List<String> s3imgs = chatRepository.findbyRoomImgs(room.getUuid(), url);
+                for (int i=0; i<s3imgs.size(); i++){
+                    log.info(s3imgs.get(i));
+                    String deleteUrl = s3imgs.get(i).replace("%CHATIMG|", "");
+                    s3Uploader.deleteImage(deleteUrl);
+                } //포함된 이미지 네이버 클라우드 오브젝트 스토리지에서 모두 삭제
+
                 chatRepository.deleteAllInBatch(chatList);
                 joinRoomRepository.deleteAllInBatch(people);
                 log.info("방 완전 삭제");
@@ -321,7 +326,7 @@ public class ChatService {
         Optional<ChatRoom> rooms = chatRoomRepository.findById(id);
         if(rooms.isPresent()) {
             ChatRoom room = rooms.get();
-            List<JoinRoom> people = joinRoomRepository.findAllByRoom(room);
+            List<JoinRoom> people = joinRoomRepository.findAllByUuid(room.getUuid());
 
 
             String roomName = ChatRoom.getViewName(room.getRoomName(), me);
@@ -344,7 +349,7 @@ public class ChatService {
 
     //읽었는지 체크
     public void userReadCheck(User user, ChatRoom room) {
-        List<Chat> chatlist = chatRepository.findAllByRoom(room);
+        List<Chat> chatlist = chatRepository.findAllByUuid(room.getUuid());
 
         for (int i = 0; i < chatlist.size(); i++) {
             Chat chat = chatlist.get(i);
@@ -379,7 +384,7 @@ public class ChatService {
     }
 
     //가장 최근 채팅이 없는 경우 관리자가 생성해 전달해줌..
-    private Chat getChatFromAdmin(ChatRoom chatRoom, int jps) {
+    private Chat getChatFromAdmin(ChatRoom chatRoom) {
         Chat recentChat;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
@@ -387,7 +392,7 @@ public class ChatService {
 
         User admin = userRepository.findFirstByRole(UserRole.ADMIN).get();
 
-        recentChat = Chat.of(chatRoom, admin, "채팅을 시작해보세요", jps);
+        recentChat = Chat.of(chatRoom.getUuid(), admin, "채팅을 시작해보세요", 0);
         recentChat.setCreatedAt(LocalDateTime.parse(rt));
         //최근 메시지가 없는 경우 관리자가 임의의 메시지를 보내줘야, 정렬이 가능함..
         return recentChat;
@@ -396,7 +401,7 @@ public class ChatService {
     //해당 채팅방의  참여한 사람 리스트 반환
     private List<UserSimpleDto> getJpeoples(ChatRoom chatRoom) {
         List<UserSimpleDto> joinPeoples = new ArrayList<>(); //각 방에 참가한 사람 리스트들 반환
-        List<JoinRoom> jp = joinRoomRepository.findAllByRoom(chatRoom); //참가한 사람들
+        List<JoinRoom> jp = joinRoomRepository.findAllByUuid(chatRoom.getUuid()); //참가한 사람들
         for (int j = 0; j < jp.size(); j++) {
             joinPeoples.add(UserSimpleDto.fromEntity(jp.get(j).getUsers())); //참가한 사람 정보
         }
@@ -405,28 +410,28 @@ public class ChatService {
 
     //해당 채팅방의  가장 최근 채팅 반환
     private ChatDto getRChat(ChatRoom chatRoom, int i) {
-        Optional<Chat> rc = chatRepository.findFirstByRoomOrderByCreatedAtDesc(chatRoom);//방안의 가장 최근 채팅
+        Optional<Chat> rc = chatRepository.findFirstByUuidOrderByCreatedAtDesc(chatRoom.getUuid());//방안의 가장 최근 채팅
         Chat recentChat = null;
 
         if(rc.isEmpty()){
-            recentChat = getChatFromAdmin(chatRoom, i);
+            recentChat = getChatFromAdmin(chatRoom);
         }else {
             recentChat = rc.get();
         }
 
-        return ChatDto.fromEntity(recentChat);
+        return ChatDto.fromEntity(recentChat, chatRoom);
     }
 
     //과거 채팅 내역  + 채팅 읽은 사람 리스트 반환
     private Object[] getPastChatAndReader(ChatRoom chatRoom) {
         List<ChatDto> pastChat = new ArrayList<>();
         List<ChatReadDto> chatReads = new ArrayList<>();
-        List<Chat> pc = chatRepository.findAllByRoomWithSort(chatRoom.getId()); //과거 채팅 내역 반환
+        List<Chat> pc = chatRepository.findAllByRoomWithSort(chatRoom.getUuid()); //과거 채팅 내역 반환
         for (int i=0; i<pc.size(); i++){
-            pastChat.add(ChatDto.fromEntity(pc.get(i)));
+            pastChat.add(ChatDto.fromEntity(pc.get(i), chatRoom));
             List<ChatRead> cr = chatReadRepository.findAllByChat(pc.get(i)); //하나의 채팅에 대해 읽은 사람 반환
             for (int j=0; j<cr.size(); j++){
-                chatReads.add(ChatReadDto.fromEntity(cr.get(j))); //그 안에 하나하나 넣어줌
+                chatReads.add(ChatReadDto.fromEntity(cr.get(j), chatRoom)); //그 안에 하나하나 넣어줌
             }
         }
         Object[] result = new Object[2];
@@ -464,7 +469,7 @@ public class ChatService {
     private int getUnreadCount(ChatRoom chatRoom, User user) {
         int c = 0;
 
-        List<Chat> chatList = chatRepository.findAllByRoom(chatRoom); //모든 채팅 리스트 반환
+        List<Chat> chatList = chatRepository.findAllByUuid(chatRoom.getUuid()); //모든 채팅 리스트 반환
         for(int i=0; i<chatList.size(); i++){
             if(chatList.get(i).getUnread()!=0){
                 log.info("일치 여부: "+!(chatList.get(i).getSender().getId().equals(user.getId())));
@@ -494,4 +499,6 @@ public class ChatService {
         }
     }*/
     //chatRoom에 초대되어 있는 사람인지 확인하기..
+
+
 }

@@ -104,7 +104,7 @@ public class ChattingSocketHandler extends TextWebSocketHandler {
                 new SnsApplicationException(ErrorCode.CAN_NOT_FIND_CHATROOM));
 
 
-        Optional<JoinRoom> joinAuth = joinRoomRepository.findByUsersAndRoom(user, room);
+        Optional<JoinRoom> joinAuth = joinRoomRepository.findByUsersAndUuid(user, room.getUuid());
         //만약 방에 존재하지 않는 회원이라면 -> 허락받지 못한 회원이니 에러 던져줘야함..
         //이렇게 확인을 해주면 만약 방에 참가하지 않은 사용자가 어떻게 해킹해 고유의 uuid를 찾아
         //특정 채팅방에 들어갈려해도, 초대되지 않은 방이다보니 방에 들어갈 수 없어서 보안성 향상

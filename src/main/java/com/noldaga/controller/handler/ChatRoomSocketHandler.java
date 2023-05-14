@@ -50,15 +50,16 @@ public class ChatRoomSocketHandler extends TextWebSocketHandler {
         JSONObject obj = jsonToObjectParser(msg);
         JSONObject result = (JSONObject) obj.get("result");
         String type = (String) result.get("type");
-        log.info("메시지: " + msg);
-        log.info("타입: " + type);
+        log.info("타입은 : "+type);
         JSONObject rooms = (JSONObject) result.get("roomInfo");
         String uuid =  rooms.get("uuid").toString();
-
+        log.info("uuid은 : "+uuid);
         Optional<ChatRoom> room = chatRoomRepository.findByUuid(uuid);
+        /*if (type.equals("DELETEROOM")){
 
+        }*/
         if (room.isPresent()) {//방이 존재하면 해당 방에 들어가있는 현재 접속 중인 모든 사람들에게 전송해야함..
-            List<JoinRoom> users = joinRoomRepository.findAllByRoom(room.get());//세션 모두 찾기
+            List<JoinRoom> users = joinRoomRepository.findAllByUuid(room.get().getUuid());//세션 모두 찾기
             //해당 방에 들어간 세션들만 찾아서 메시지 발송
             for (int i = 0; i < users.size(); i++) {
                 Optional<UserSession> us = userSessionRepository.findByUser(users.get(i).getUsers());
