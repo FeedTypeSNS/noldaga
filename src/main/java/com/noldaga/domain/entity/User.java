@@ -17,10 +17,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EntityListeners(AuditingEntityListener.class)
 @Getter //Dto 만들때 쓰임
-@ToString
 @Table(name="users") //db 테이블 만들때 예약어는 피해야하는것을 염두해야함
 @Entity
 @SQLDelete(sql = "update users set deleted_at = now() where user_id=? ") //소프트 delete를 위함...
@@ -47,6 +47,7 @@ public class User {
 
     private String profileImageUrl;
     private String profileMessage;
+
 
     @Column(length = 100,nullable = false)
     private String email;

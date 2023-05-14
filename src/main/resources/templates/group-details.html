@@ -207,11 +207,33 @@ Header END -->
                 </div>
 
                 <!-- Share feed END -->
+                <div class="card card-body" style="display: none;" id="noMemberFeed">
+                  <div class="my-sm-5 py-sm-5 text-center">
+                    <!-- Icon -->
+                    <i class="display-1 text-muted bi bi-person"> </i>
+                    <!-- Title -->
+                    <h4 class="mt-2 mb-3 text-body">비밀그룹은 가입후 게시글을 볼 수 있습니다.</h4>
+
+                  </div>
+                </div>
+
 
                 <!-- FeedBox START -->
                 <div id="feed">
+                  <div class="card card-body" style="display: none;" id="noFeed">
+                    <div class="my-sm-5 py-sm-5 text-center">
+                      <!-- Icon -->
+                      <i class="display-1 text-muted bi bi-book"> </i>
+                      <!-- Title -->
+                      <h4 class="mt-2 mb-3 text-body">게시글이 없습니다.</h4>
 
+                    </div>
+                  </div>
                 </div>
+
+
+
+
                 <!-- FeedBox END -->
 
                 <!-- Load more button START -->
@@ -242,11 +264,26 @@ Header END -->
 
           <!-- Gruop About tab END -->
           <div class="tab-pane fade show" id="group-tab-2">
-            <div id="group-master-info" class="card card-body">
+            <div class="row g-4">
+              <!-- Main content START -->
+              <div class="col-md-8 col-lg-6 vstack gap-4">
+                <div id="group-master-info" class="card card-body">
 
-            </div>
-            <div id="group-member-info" class="card card-body">
+                </div>
+                <div id="group-member-info" class="card card-body">
 
+                </div>
+
+                <div class="card card-body" style="display: none;" id="noMember">
+                  <div class="my-sm-5 py-sm-5 text-center">
+                    <!-- Icon -->
+                    <i class="display-1 text-muted bi bi-person"> </i>
+                    <!-- Title -->
+                    <h4 class="mt-2 mb-3 text-body">가입한 그룹원이 없습니다.</h4>
+
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <!-- Gruop About tab END -->

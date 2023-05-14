@@ -70,6 +70,12 @@ function getDetailGroupMemberPage(group, master) {
             // API 응답을 성공적으로 받았을 때 실행되는 코드
             // 응답 데이터는 'response' 매개변수로 전달됨
             // 그룹 목록을 렌더링할 HTML 문자열 생성
+            if(response.result == 0) {
+                let GroupNoMember = document.querySelector("#noMember");
+                let GroupMember = document.querySelector("#group-member-info");
+                GroupMember.style.display = "none";
+                GroupNoMember.style.display = "";
+            }
             var groupsHtml = '';
             $.each(response.result, function(index, user) {
                 groupsHtml += '<div class="d-md-flex align-items-center mb-4">';
