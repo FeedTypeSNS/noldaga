@@ -215,9 +215,6 @@ function photoCardContent(data) {
                 <div class="d-sm-flex align-items-start">
                   <h6 class="small ms-sm-2 mb-0">${profileMessage}</h6 >
                 </div>
-                <div class="d-sm-flex align-items-start">
-                  <h6 class="small mb-0">팔로워수 :  팔로잉수 : </h6 >
-                </div>
                 <!-- Connections END -->
               </div>
               <!-- Button -->
