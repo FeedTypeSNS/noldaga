@@ -17638,3 +17638,88 @@ a.badge:hover {
 }
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */
+
+/* Style for the preview screen container */
+.preview-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Style for each preview item */
+.preview-item {
+  width: 285px;
+  height: 185px;
+  margin: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+/* Style for the preview item image */
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Style for the preview item text */
+.preview-item .text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Style for the preview item text when hovered */
+.preview-item:hover .text {
+  opacity: 1;
+}
+
+/* Style for the preview item image when hovered */
+.preview-item:hover img {
+  transform: scale(1.1);
+}
+
+
+.rec-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 2000px;
+  margin: auto;
+}
+
+.preview-item, .recommend-Info {
+  flex-basis: calc(50% - 10px);
+  margin: 5px;
+}
+
+@media (max-width: 600px) {
+  .preview-item, .recommend-Info {
+    flex-basis: 100%;
+  }
+}
+
+/*추천 부분 스타일*/
+.recommend-box{
+  margin: 5px;
+  padding: 5px
+}
+
+.recommend-Info{
+  background: white;
+  margin-top: 10px;
+  border-radius: 13px;
+  margin-bottom: 10px;
+}
