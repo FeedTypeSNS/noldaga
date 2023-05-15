@@ -64,7 +64,8 @@ public enum ErrorCode {
     EMAIL_LIMIT_EXCEEDED(HttpStatus.CONFLICT,"This Email has exceeded the limit"),
 
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "Alarm not founded"),
-    ;
+    INVALID_GROUP_ID(HttpStatus.UNAUTHORIZED,"Invalid Group Id"),
+    ALREADY_JOINED(HttpStatus.CONFLICT,"Already joined" );
 
     private HttpStatus status;
     private String message;

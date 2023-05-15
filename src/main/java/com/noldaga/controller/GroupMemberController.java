@@ -1,11 +1,12 @@
 package com.noldaga.controller;
 
+import com.noldaga.controller.response.GroupJoinUrlResponse;
 import com.noldaga.controller.response.Response;
-import com.noldaga.domain.GroupDto;
+import com.noldaga.domain.CodeDto;
 import com.noldaga.domain.GroupMemberDto;
 import com.noldaga.domain.entity.Group;
-import com.noldaga.domain.entity.GroupMember;
 import com.noldaga.domain.entity.User;
+import com.noldaga.domain.userdto.UserDto;
 import com.noldaga.service.GroupMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -84,4 +85,23 @@ public class GroupMemberController {
         List<Group> FavorGroupList = groupMemberService.getUserFavorGroupList(user_id, authentication.getName());
         return Response.success(FavorGroupList);
     }
+
+
+
+    @GetMapping("/groups/member/link") //그룹 가입 링크 반환
+    public Response<GroupJoinUrlResponse> getGroupJoinLink(@RequestParam Long groupId){
+        CodeDto codeDto =groupMemberService.getGroupJoinLink(groupId);
+        return Response.success(GroupJoinUrlResponse.fromCodeDto(codeDto));
+    }
+
+    @GetMapping("/groups/member/join-by-link") //그룹 가입 링크로 그룹 가입
+    public Response<Long> joinGroupByLink(Integer codeId,String code, Long groupId,Authentication authentication) {
+
+        Long resultGroupId = groupMemberService.joinGroupByLink(codeId, code, groupId, authentication.getName());
+
+        return Response.success(resultGroupId);
+    }
+
+
+
 }

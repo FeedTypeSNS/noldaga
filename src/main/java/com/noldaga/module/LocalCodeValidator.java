@@ -158,6 +158,16 @@ public class LocalCodeValidator implements CodeValidator {
         return codeGenerator.generateRandomString(CODE_SIZE);
     }
 
+    @Override
+    public CodeDto generateCodeForGroup(Long groupId) {
+        return null;
+    }
+
+    @Override
+    public void validateCodeForGroup(Integer codeId, String code, Long groupId) {
+
+    }
+
 
 }
 

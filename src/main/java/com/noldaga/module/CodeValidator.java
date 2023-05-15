@@ -25,4 +25,7 @@ public interface CodeValidator {
 
     String generateRandomString();
 
+    CodeDto generateCodeForGroup(Long groupId);
+
+    void validateCodeForGroup(Integer codeId, String code, Long groupId);
 }

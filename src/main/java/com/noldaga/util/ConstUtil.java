@@ -10,4 +10,8 @@ public class ConstUtil {
     public static final String FEED_DEFAULT_IMG_URL = "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg-feed.png";
 
     public static final String EMAIL_SERVICE_LOGO_URL = "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-admin2.png";
+
+
+    //    public static final String DOMAIN_URL= "115.85.183.215:8080";
+    public static final String DOMAIN_URL = "localhost:8080";
 }
