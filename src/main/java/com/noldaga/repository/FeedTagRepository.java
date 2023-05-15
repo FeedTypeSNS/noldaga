@@ -1,6 +1,7 @@
 package com.noldaga.repository;
 
 import com.noldaga.domain.entity.FeedTag;
+import com.noldaga.domain.entity.HashTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface FeedTagRepository extends JpaRepository<FeedTag, Long> {
     @Modifying
     @Query("delete from FeedTag ft where ft.feed.id=:feedId")
     void deleteByFeedId(Long feedId);
+
+    List<FeedTag> findByHashTag(HashTag tag);
+
 }

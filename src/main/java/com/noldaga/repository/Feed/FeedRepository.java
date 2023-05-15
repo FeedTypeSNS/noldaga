@@ -2,14 +2,14 @@ package com.noldaga.repository.Feed;
 
 
 import com.noldaga.domain.entity.Feed;
-import com.noldaga.domain.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.noldaga.domain.entity.HashTag;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +22,17 @@ public interface FeedRepository extends JpaRepository<Feed,Long>, SearchFeed {
     @EntityGraph(attributePaths = {"comment"})
     @Query("select f from Feed f where f.id=:id")
     Optional<Feed> findByIdWithComment(Long id);
+
+    //최신순으로  n개 가져오기
+    //List<Feed> findTopNAOrderByFeedLikesDesc(long n);
+
+    //많이본 순으로 n개 가져오기
+    //List<Feed> findTopNAOrderByTotalViewDesc(long n);
+
+    //랜덤 두 개 가져오기
+    @Query(value = "SELECT * FROM feed ORDER BY RAND() LIMIT 2", nativeQuery = true)
+    List<Feed> findRandomTwo();
+
+
+
 }
