@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class RegistrationService {
+public class AnonymousService {
 
     private final UserRepository userRepository;
     private final MailAuthService mailAuthService;
@@ -35,7 +35,7 @@ public class RegistrationService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
     private final int INIT_PASSWORD_SIZE =10;
-    private final int MAX_ACCOUNTS_PER_EMAIL=3;
+    private final int MAX_ACCOUNTS_PER_EMAIL=10;
 
     //회원가입 1 : 아이디 중복검사
     public void validateDuplication(String username){
