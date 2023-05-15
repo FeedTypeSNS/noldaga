@@ -4,6 +4,7 @@ package com.noldaga.domain.entity;
 import com.noldaga.domain.alarm.AlarmArgs;
 import com.noldaga.domain.alarm.AlarmType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
@@ -16,7 +17,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -34,6 +34,8 @@ public class Code {
 
     private String username;
 
+    private Long groupId;
+
 
     @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
@@ -48,10 +50,15 @@ public class Code {
 
     protected Code(){}
 
-    private Code(String randomString, String email, String username) {
-        this.randomCode = randomString;
+    private Code(String randomCode, String email, String username) {
+        this.randomCode = randomCode;
         this.email = email;
         this.username = username;
+    }
+
+    private Code(String randomCode,Long groupId){
+        this.randomCode = randomCode;
+        this.groupId = groupId;
     }
 
     public static Code of(String randomString, String email, String username){
@@ -60,5 +67,13 @@ public class Code {
 
     public static Code of(String randomString,String email){
         return new Code(randomString,email,null);
+    }
+
+    public static Code of(String randomString){
+        return new Code(randomString, null, null);
+    }
+
+    public static Code of(String randomString,Long groupId){
+        return new Code(randomString, groupId);
     }
 }

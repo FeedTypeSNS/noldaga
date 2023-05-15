@@ -1,5 +1,6 @@
 package com.noldaga.service;
 
+import com.noldaga.domain.CodeDto;
 import com.noldaga.domain.GroupDto;
 import com.noldaga.domain.GroupMemberDto;
 import com.noldaga.domain.alarm.AlarmArgs;
@@ -12,6 +13,7 @@ import com.noldaga.domain.entity.GroupMember;
 import com.noldaga.domain.entity.User;
 import com.noldaga.exception.ErrorCode;
 import com.noldaga.exception.SnsApplicationException;
+import com.noldaga.module.CodeValidator;
 import com.noldaga.repository.AlarmRepository;
 import com.noldaga.repository.GroupMemberRepository;
 import com.noldaga.repository.GroupRepository;
@@ -34,6 +36,8 @@ public class GroupMemberService {
 
     private final AlarmRepository alarmRepository;
 
+    private final CodeValidator codeValidator;
+
     @Transactional
     public GroupMemberDto registerGroup(Long groupId, String username) {
         // 유저 정보
@@ -43,6 +47,10 @@ public class GroupMemberService {
         // 그룹 정보
         Group group = groupRepository.findById(groupId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.GROUP_NOT_FOUND, String.format("%s not founded", groupId)));
+
+        if (groupMemberRepository.existsAllByGroupAndUser(group, user)) {
+            throw new SnsApplicationException(ErrorCode.ALREADY_JOINED);
+        }
 
         //그룹 가입
         GroupMember groupMember = groupMemberRepository.save(GroupMember.of(group, user, 0));
@@ -206,5 +214,16 @@ public class GroupMemberService {
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", user_id)));
 
         return groupMemberRepository.findAllByUserAndFavor(user);
+    }
+
+    public CodeDto getGroupJoinLink(Long groupId) {
+        return codeValidator.generateCodeForGroup(groupId);
+    }
+
+    public Long joinGroupByLink(Integer codeId, String code, Long groupId,String username) {
+        codeValidator.validateCodeForGroup(codeId,code,groupId);
+
+        return registerGroup(groupId, username).getGroupDto().getId();
+
     }
 }

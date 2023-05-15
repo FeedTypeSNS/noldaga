@@ -4,12 +4,13 @@ function getUser() {
         type: "GET",
         url: "/api/group/getuser",
         async: false
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+    }).done(function (resp) {//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         getGroupMember(resp);
-    }).fail(function(error){
+    }).fail(function (error) {
         alert(JSON.stringify(error));
     });
 }
+
 getUser();
 
 function getGroupMember(user) {
@@ -18,16 +19,14 @@ function getGroupMember(user) {
     const groupId = urlParams.get('id');
     $.ajax({
         type: "GET",
-        url: "/api/group/member/"+ groupId,
+        url: "/api/group/member/" + groupId,
         dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+    }).done(function (resp) {//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         init2(user, resp.result);
-    }).fail(function(error){
+    }).fail(function (error) {
         init2(user, null);
     });
 }
-
-
 
 
 function init2(user, groupMember) {
@@ -36,12 +35,12 @@ function init2(user, groupMember) {
     const groupId = urlParams.get('id');
     $.ajax({
         type: "GET",
-        url: "/api/group/"+ groupId,
+        url: "/api/group/" + groupId,
         dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+    }).done(function (resp) {//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         initDetailGroupPage(resp.result, user, groupMember);
         initDetailGroupPostPage(resp.result, user, groupMember);
-    }).fail(function(error){
+    }).fail(function (error) {
         alert(JSON.stringify(error));
     });
 }
@@ -66,7 +65,7 @@ function getDetailGroupPage(group, user, groupMember) {
     let hiddenType4 = "";
     let hiddenType5 = "hidden";
 
-    if(groupMember != null) {
+    if (groupMember != null) {
         hiddenType = groupMember.userDto.id === user.id ? "hidden" : "";
         hiddenType2 = groupMember.userDto.id === user.id ? "" : "hidden";
         hiddenType4 = groupMember.favor === 1 ? "" : "hidden";
@@ -74,7 +73,7 @@ function getDetailGroupPage(group, user, groupMember) {
     }
 
     let profile = "";
-    if(group.profile_url != "") {
+    if (group.profile_url != "") {
 
     } else {
         profile = "/assets/images/avatar/placeholder.jpg";
@@ -96,6 +95,12 @@ function getDetailGroupPage(group, user, groupMember) {
     </div>
     <!-- Button -->
     <div class="d-flex justify-content-center justify-content-md-start align-items-center mt-3 ms-lg-auto">
+    
+<!--    <button onclick="getLink(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button">-->
+<!--        <i class="bi bi-people">가입 링크</i>-->
+<!--        </button>-->
+    
+    
         <button onclick="favorGroup(${group.id})" class="btn btn-sm btn-primary-soft me-2" type="button" ${hiddenType2} ${hiddenType5}>
         <i class="bi bi-bookmark-star"></i>
         </button>
@@ -214,15 +219,15 @@ function initDetailGroupPostPage(group, user, groupMember) {
     let GroupFeedBox = document.querySelector("#feed");
     let GroupNoMemberFeedBox = document.querySelector("#noMemberFeed");
 
-    if(user.id === group.userDto.id) {
+    if (user.id === group.userDto.id) {
         GroupPostBox.style.display = "";
-    } else if(groupMember != null ){
-        if(groupMember.userDto.id === user.id) {
+    } else if (groupMember != null) {
+        if (groupMember.userDto.id === user.id) {
             GroupPostBox.style.display = "";
         }
     } else {
         GroupPostBox.style.display = "none";
-        if(group.open == 0) {
+        if (group.open == 0) {
             GroupFeedBox.style.display = "none";
             GroupNoMemberFeedBox.style.display = "";
         }
@@ -235,7 +240,7 @@ function favorGroup(groupId) {
         url: "/api/group/member/favor/" + groupId,
         method: "GET",
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             // API 응답을 성공적으로 받았을 때 실행되는 코드
             // 응답 데이터는 'response' 매개변수로 전달됨
             if (response.resultCode === 'SUCCESS') {
@@ -245,7 +250,7 @@ function favorGroup(groupId) {
                 alert('즐겨찾기 실패');
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.log('API Error:', error);
             alert('그룹 즐거찾기에 실패하였습니다.');
         }
@@ -257,7 +262,7 @@ function unfavorGroup(groupId) {
         url: "/api/group/member/unfavor/" + groupId,
         method: "GET",
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             // API 응답을 성공적으로 받았을 때 실행되는 코드
             // 응답 데이터는 'response' 매개변수로 전달됨
             if (response.resultCode === 'SUCCESS') {
@@ -267,10 +272,45 @@ function unfavorGroup(groupId) {
                 alert('즐겨찾기삭제 실패');
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.log('API Error:', error);
             alert('그룹 즐거찾기삭제에 실패하였습니다.');
         }
     });
 }
 
+function getLink(groupId){
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/api/groups/member/link?groupId=${groupId}`,true);
+    xhr.onreadystatechange=function(){
+        if (this.readyState === XMLHttpRequest.DONE) {
+            const response = JSON.parse(this.responseText);
+            if(response.resultCode==='SUCCESS'){
+                copyToClipboard(response.result.url);
+                alert("가입 링크가 클립보드에 복사되었습니다.");
+            }
+            else{
+
+            }
+
+        }
+    }
+    xhr.send();
+}
+
+function copyToClipboard(text) {
+    // 텍스트를 복사하기 위해 임시로 <textarea> 엘리먼트를 생성합니다.
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+
+    // <textarea>를 동적으로 문서에 추가합니다.
+    document.body.appendChild(textarea);
+
+    // <textarea>의 내용을 선택하고 복사합니다.
+    textarea.select();
+    document.execCommand('copy');
+
+    // <textarea>를 제거합니다.
+    document.body.removeChild(textarea);
+}
