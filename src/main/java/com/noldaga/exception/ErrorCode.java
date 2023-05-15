@@ -55,7 +55,7 @@ public enum ErrorCode {
 
 
     //File
-    CONVERT_MULTIPART_FILE_FAILE(HttpStatus.CONFLICT, "Conversion of multipart file failed."),
+    CONVERT_MULTIPART_FILE_FAIL(HttpStatus.CONFLICT, "Conversion of multipart file failed."),
     FILE_NOT_EXIST(HttpStatus.BAD_REQUEST, "This file does not exist."),
     FILE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "Wrong image format. (Must be jpg,jpeg,png format)"),
 
