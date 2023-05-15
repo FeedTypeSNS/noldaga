@@ -561,7 +561,7 @@ function showUploadFile(images){
         </div><!-- card -->`
 
 
-        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg.png") {
+        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg-feed.png") {
             uploadResult.innerHTML += str;
             imageList.push(`${images[i].url}`);
         }
