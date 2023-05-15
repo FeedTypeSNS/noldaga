@@ -21,7 +21,6 @@ bin/
 
 ### Private Data(ex.properties..) ###
 application-database.properties
-application.yaml
 
 
 ### Generated -> Q~ ###
