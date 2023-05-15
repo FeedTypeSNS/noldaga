@@ -30,10 +30,12 @@ import java.util.Optional;
 @Log4j2
 @Component
 public class ChattingSocketHandler extends TextWebSocketHandler {
-    HashMap<String, WebSocketSession> sessionMap = new HashMap<>(); //웹소켓 세션을 담아둘 맵
-    //WebSocketSession을 직접 jpa에 넣는것은 불가능 -> WebSocketSession은 HTTP 요청과 연결된 객체이므로 엔티티로 직접 저장불가능
-    //하지만 for 문을 돌려 찾는 것은 비효율적 -> 세션아이디만 받아와서 repository를 생성하고 이를 세션의 수명에 맞게 같이 관리하면
-    //jpa를 통해 빠른 조회로 map과 비교해 세션을 찾아 보내줄 수 있음
+    HashMap<String, WebSocketSession> sessionMap = new HashMap<>(); // 현재 연결된 WebSocketSession 관리
+    // WebSocketSession은 영속화할 수 없는 객체이므로 메모리에서 관리한다.
+    // 대신 sessionId를 ChatSession 엔티티에 저장하여
+    // 사용자, 채팅방, 접속 세션의 관계를 관리한다.
+    // 메시지 전송 시에는 ChatSession으로 대상 사용자를 조회한 뒤,
+    // sessionId를 통해 실제 WebSocketSession을 찾아 전송한다.
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatSessionRepository chatSessionRepository;
@@ -162,21 +164,16 @@ public class ChattingSocketHandler extends TextWebSocketHandler {
 
 }
 /*
-WebSocketSession의 경우, 연결 &종료가 빈번하고 메시지를 보내기위한 검색이 빈번하다.
-하지만 WebSocketSession은 HTTP 요청과 연결된 객체이므로 주로 HashMap에 의해 관리되고 사용된다.
+WebSocketSession은 영속화할 수 없는 객체이므로 HashMap에서 관리한다.
 
-여기서 채팅의 경우 각 방에 들어와있는 사람들만 서로 연결되어 대화가 주고받을 수 있어야한다.
-방을 구분하는 걸 List<HashMap>과 같이 외부에서 방들을 구분해주게 된다면 비효율적이다.
-   -> List<HashMap>을 사용하는 경우 검색 속도가 느리며, 데이터 무결성을 보장하지 않음, 또한 객체 지향적인 코드 작성이 어렵고, 불필요한 코드 양이 많아질 수 있음.
+다만 채팅 서비스에서는 단순히 세션만 관리하는 것이 아니라
+현재 어떤 사용자가 어떤 채팅방에 접속 중인지 알아야 한다.
 
-따라서, 생성, 삭제, 조회가 자주 일어나는 WebSocketSession에서 각 방안에서 채팅하기 위해서는
-고유의 값인 seesion.getId()를 이용해 JPA에 저장하여 각 crd가 일어날때 고유값을 통해
-HashMap의 키값으로 WebSocketSession을 찾아와 사용하는 것이 더 효율적이다 생각해 위와 같은 코드로 작성했다.
+이를 위해 sessionId, User, ChatRoom 정보를
+ChatSession 엔티티로 관리하였다.
 
--> JPA+HashMap을 통해 List<HashMap>에 비해
-    1. 검색 속도: JPA는 내부적으로 캐싱과 인덱싱을 사용하여 검색 속도를 빠름
-    2. 객체 지향적인 코드: JPA는 객체 지향적인 코드 작성을 촉진, 이는 코드 유지 보수성과 가독성을 향상
-    3. 데이터 무결성: JPA는 데이터베이스 무결성 제약 조건을 강제 적용하므로 데이터 일관성과 무결성이 유지
-    4. 불필요한 코드 감소: JPA는 CRUD 작업을 처리하는 데 필요한 코드 양을 줄임
-    과 같은 장점으로 효율성과 무결성을 얻을 수 있다..
+HashMap은 실제 WebSocketSession 조회를 담당하고,
+ChatSession은 채팅방 참여자 조회 및 읽음 처리와 같은
+비즈니스 로직을 수행하기 위한 연결 정보를 제공한다.
 */
+
