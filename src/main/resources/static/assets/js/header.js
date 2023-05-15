@@ -70,12 +70,16 @@ function headerContent(data) {
                 class="nav mt-3 mt-lg-0 flex-nowrap align-items-center px-4 px-lg-0"
         >
           <div class="nav-item w-100">
+              <div>
               <button
                       class="btn bg-transparent px-2 py-1 position-absolute"
                       type="button"
+                      style="width: 36px; height: 38px;"
               >
                 <i class="bi bi-search fs-5"> </i>
               </button>
+              </div>
+              <div>
               <input
                       class="form-control ps-5 bg-light"
                       type="search"
@@ -83,6 +87,7 @@ function headerContent(data) {
                       aria-label="Search"
                       id="search-content"
               />
+              </div>
           </div>
         </div>
         <!-- Nav Search END -->
