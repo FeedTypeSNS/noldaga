@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 //@Component
 @RequiredArgsConstructor
 public class LocalCodeValidator implements CodeValidator {
-    //todo 시간 제한을 두어서 코드가 사라지게끔 해야함 -> redis에서 시간제한 해서 사용하면될듯
+
     private final Map<Integer, String> storage = new ConcurrentHashMap<>();
     private final AtomicInteger keyGenerator = new AtomicInteger(0);
 
@@ -31,6 +34,15 @@ public class LocalCodeValidator implements CodeValidator {
         String code = generateRandomString();
         int key = keyGenerator.incrementAndGet();
         storage.put(key, code + DELIMITER + email);
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(() -> {
+            if (storage.containsKey(key)) {
+                storage.remove(key);
+            }
+        }, 5, TimeUnit.MINUTES);
+        executorService.shutdown();
+
         return CodeDto.of(key, code);
     }
 

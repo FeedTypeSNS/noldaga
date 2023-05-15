@@ -11,6 +11,8 @@ import com.noldaga.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,6 @@ import javax.mail.MessagingException;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -137,14 +137,13 @@ public class UserController {
     @GetMapping("/me/alarm")
     public Response<Page<AlarmResponse>> getAlarms(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size,
-            Authentication authentication)
-    {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            Authentication authentication) {
 
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
-        PageRequest pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("unRead").descending().and(Sort.by("id").descending()));
         Page<AlarmResponse> alarmResponsePage = userService.getAlarms(loginUserDto.getId(), pageable).map(AlarmResponse::fromAlarmDto);
         return Response.success(alarmResponsePage);
     }
@@ -162,16 +161,37 @@ public class UserController {
     }
 
 
-    //알림 읽기
+    //알림 read로 처리
     @PostMapping("/me/alarm/{alarmId}")
-    public Response<Void> readAlarm(@PathVariable Long alarmId , Authentication authentication){
+    public Response<Void> readAlarm(@PathVariable Long alarmId, Authentication authentication) {
         UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
 
 
-        userService.readAlarm(loginUserDto.getId(),alarmId);
+        userService.readAlarm(loginUserDto.getId(), alarmId);
         return Response.success();
     }
 
+    //안읽은 알림 있으면 true , 안읽은 알림 없으면 false
+    @GetMapping("/me/alarm/check")
+    public Response<Boolean> existUnReadAlarm(Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        boolean existUnRead = userService.existUnReadAlarm(loginUserDto.getId());
+
+        return Response.success(existUnRead);
+    }
+
+    //안읽은 알람 몇개 인지 개수 반환
+    @GetMapping("/me/alarm/un-read")
+    public Response<Long> countUnReadAlarm(Authentication authentication){
+        UserDto loginUserDto = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to UserDto class failed"));
+
+        Long cntUnReadAlarm = userService.countUnReadAlarm(loginUserDto.getId());
+
+        return Response.success(cntUnReadAlarm);
+    }
 
 }

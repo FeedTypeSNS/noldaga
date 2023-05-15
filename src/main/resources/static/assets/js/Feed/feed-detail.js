@@ -289,7 +289,7 @@ function getDetailPage_comment_others(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
@@ -333,7 +333,7 @@ function getDetailPage_comment_mine(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="/assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">

@@ -6,7 +6,8 @@ function init() {
         async: false
     }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
         makeHeader(resp);
-        makeLeftNav(resp);
+        getAlarm(resp);
+        //makeLeftNav(resp);
         headerGetGroups();
     }).fail(function(error){
         alert(JSON.stringify(error));
@@ -257,13 +258,26 @@ function headerContent(data) {
       </ul>`;
 }
 
-
-function makeLeftNav(data){
-    let NavBox = document.querySelector("#leftNav");
-    NavBox.innerHTML = leftNavContent(data);
+function getAlarm(data){
+    $.ajax({
+        type: "GET",
+        url: "/api/users/me/alarm/check",
+        async: false
+    }).done(function(resp){
+        makeLeftNav(resp.result,data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
 }
 
-function leftNavContent(data) {
+function makeLeftNav(alarmCheck,data){
+    let NavBox = document.querySelector("#leftNav");
+    NavBox.innerHTML = leftNavContent(alarmCheck,data);
+}
+
+function leftNavContent(alarmCheck,data) {
+    const alarmClass = Boolean(alarmCheck) ? "bi bi-bell-fill nav-icon" : "bi bi-bell nav-icon";
+
     return `<div class="nav-sidenav p-4 bg-mode h-100 custom-scrollbar">
           <!-- Card START -->
           <!-- Side Nav START -->
@@ -294,7 +308,7 @@ function leftNavContent(data) {
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/nol/notifications">
-                <i class="bi bi-bell nav-icon"></i>
+                <i class='${alarmClass}'></i>
                 <span class="nav-text">알림 </span></a
               >
             </li>

@@ -148,6 +148,7 @@ public class SearchFeedImpl extends QuerydslRepositorySupport implements SearchF
     public Page<Feed> findAllBySearch(String q, Pageable pageable) {
         JPQLQuery<Feed> query = jpaQueryFactory.selectFrom(feed)
                 .where((feed.content.contains(q)).or(feed.title.contains(q)))
+                .where(feed.range.eq(0))
                 .where(feed.delDate.isNull())
                 .orderBy(feed.regDate.desc());
 
