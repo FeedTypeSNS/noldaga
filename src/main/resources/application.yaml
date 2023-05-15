@@ -1,0 +1,101 @@
+debug: false
+
+logging:
+  level:
+    com.noldaga: debug
+    org.springframework:
+      data: debug
+      web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+spring:
+  datasource:
+    #url: jdbc:mysql://localhost8080:3306/noldaga?verifyServerCertificate=false&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useLegacyAuth=true
+    url: jdbc:mysql://27.96.135.118:3306/noldaga?verifyServerCertificate=false&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useLegacyAuth=true
+    username: noldaga
+    password: noldaga
+    driver-class-name: com.mysql.cj.jdbc.Driver
+      # urL: jdbc:h2:mem:testdb;mode=mysql
+    # driver-class-name: org.h2.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: f48bee07b722f8f68eb3dccbd004eef7
+            client-secret: PhgZvXFzRfaE6f7RSQz7p3iURh8NGnga
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            #쌍따옴표를 안하면 {}를 문자열 그대로 인식함
+            #            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+
+            client-authentication-method: POST
+        #            client-name: Kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+  sql.init.mode: always
+
+  h2:
+    console:
+      enabled: true
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+  freemarker:
+    cache: false
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+jwt:
+  secret-key: this-Key-Is-Over-32Bytes-For-HmacShaKey
+  #30days
+  token.expired-time-ms: 2592000000
+
+
+
+com:
+  noldaga:
+    upload:
+      path: C:\\upload
+
+server:
+  port: 8080
+
+#mail
+mail:
+  id: wldn8813 #네이버 아이디
+  password: wlals8813? #네이버 비번
+  smtp-server: smtp.naver.com
+  sender: wldn8813@naver.com  #해당되는 메일
+
+#navercloud-object-storage
+cloud:
+  aws:
+    credentials:
+      access-key: DAD51C8D71043FBC99E6
+      secret-key: C8EDFF036843234D8880F8CE2CA8D45E136806CA
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    s3:
+      endpoint: https://kr.object.ncloudstorage.com
+      bucket: noldaga-s3
