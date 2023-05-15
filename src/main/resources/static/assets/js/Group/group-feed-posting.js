@@ -1,13 +1,31 @@
 let imageList = [];
 let post = {
-    init:function() {
+    getGroup:function () {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const groupId = urlParams.get('id');
+        const self = this;
+        $.ajax({
+            type: "GET",
+            url: "/api/group/"+ groupId,
+            dataType: "json"
+        }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+            console.log(resp.result);
+            self.init(resp.result);
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    },
+
+    init:function(group) {
+        const self = this;
         $("#posting-button").on("click",()=>{
-            this.posting();
+            self.posting(group);
         }); //on(1,2) 1에는 어떤 이벤트인지 적어주고 2에 그 이벤트시 어떤일이 일어날지 적는다
 
         $("#enter-content-input").on("keydown",(e)=>{
             if (e.keyCode === 13) {
-                this.enterkey();
+                self.enterkey(group);
             }
         });
 
@@ -16,14 +34,20 @@ let post = {
         });
     },
 
-    posting:function(){
+    posting:function(group){
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const group_id = urlParams.get('id');
+        let range
+        if(group.open == 1) {
+            range = 0;
+        } else if(group.open == 0) {
+            range = 1;
+        }
         let data={
             title: $("#title").val(),
             content: $("#content").val(),
-            range: $("#open_range").val(),
+            range: range,
             groupId: group_id,
             urls : imageList
         };
@@ -107,14 +131,20 @@ let post = {
         });
     },
 
-    enterkey:function(){
+    enterkey:function(group){
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const group_id = urlParams.get('id');
+        let range
+        if(group.open == 1) {
+            range = 0;
+        } else if(group.open == 0) {
+            range = 1;
+        }
         let data={
             content: $("#enter-content-input").val(),
             title: $("#enter-content-input").val().substring(0, 10),
-            range: "0",
+            range: range,
             groupId: group_id
         };
 
@@ -152,7 +182,7 @@ let post = {
 
 };
 
-post.init();
+post.getGroup();
 
 
 let remove = {
