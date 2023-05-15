@@ -80,8 +80,8 @@ server:
 
 #mail
 mail:
-  id: wldn8813 #네이버 아이디
-  password: wlals8813? #네이버 비번
+  id:  #네이버 아이디
+  password:  #네이버 비번
   smtp-server: smtp.naver.com
   sender: wldn8813@naver.com  #해당되는 메일
 
