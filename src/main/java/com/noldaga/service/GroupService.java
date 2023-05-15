@@ -104,12 +104,7 @@ public class GroupService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
         }
 
-        //s3스토리지에 있는 사진 삭제
-        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
-        } else {
-            s3Uploader.deleteImage(group.getProfile_url());
-        }
 
         String url = "";
         if(img == null) {
@@ -141,12 +136,7 @@ public class GroupService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", username, id));
         }
 
-        //s3스토리지에 있는 사진도 함께 삭제
-        if(group.getProfile_url().equals("") || group.getProfile_url() == ConstUtil.GROUP_DEFAULT_IMG_URL) {
 
-        } else {
-            s3Uploader.deleteImage(group.getProfile_url());
-        }
 
         //그룹에 속한 멤버들 가져오기
         List<User> members = groupMemberRepository.findAllByGroup(group);
