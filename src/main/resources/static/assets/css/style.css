@@ -17693,9 +17693,11 @@ a.badge:hover {
 }
 
 
-.container {
+.rec-container {
   display: flex;
   flex-wrap: wrap;
+  max-width: 2000px;
+  margin: auto;
 }
 
 .preview-item, .recommend-Info {
@@ -17707,4 +17709,17 @@ a.badge:hover {
   .preview-item, .recommend-Info {
     flex-basis: 100%;
   }
+}
+
+/*추천 부분 스타일*/
+.recommend-box{
+  margin: 5px;
+  padding: 5px
+}
+
+.recommend-Info{
+  background: white;
+  margin-top: 10px;
+  border-radius: 13px;
+  margin-bottom: 10px;
 }

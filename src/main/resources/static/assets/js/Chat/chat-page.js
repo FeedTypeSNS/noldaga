@@ -50,11 +50,11 @@ function getChatBody(){
     body.innerHTML = getBody();
     chatBody.append(body);
 }
-
+let unread = 0;
 function getMyChatListHtml(result){
     $(".myChatList *").remove();
     $(".myChatList").remove();
-
+    unread = 0;
     let active = document.querySelector("#active-chat-count");
     active.textContent = '';
     let num = 0;
@@ -84,12 +84,18 @@ function getMyChatListHtml(result){
         let joinImg = document.querySelector("#joinListImg"+roomId);
         let thisJoinImg = document.createElement("div");
         thisJoinImg.className = "joinPeopleImgList"+roomId;
+
+        let name = document.querySelector("#getUsernameFromHeader").textContent;
+        const filteredData = data.joinPeoples.filter(person => person.nickname !== 'name');
+        alert(JSON.stringify(filteredData));
+        //만약 맞다면 바꿔주기..
+
         switch (joinCount) {
             case 0 : thisJoinImg.innerHTML = getNonImg();break;
-            case 1 : thisJoinImg.innerHTML = getOneImg(data);break;
-            case 2 : thisJoinImg.innerHTML = getTwoImg(data);break;
-            case 3 : thisJoinImg.innerHTML = getThreeImg(data);break;
-            default : thisJoinImg.innerHTML = getFourImg(data);break;
+            case 1 : thisJoinImg.innerHTML = getOneImg(filteredData);break;
+            case 2 : thisJoinImg.innerHTML = getTwoImg(filteredData);break;
+            case 3 : thisJoinImg.innerHTML = getThreeImg(filteredData);break;
+            default : thisJoinImg.innerHTML = getFourImg(filteredData);break;
 
         }
         joinImg.append(thisJoinImg);
@@ -152,7 +158,7 @@ function getMyChatListImg(data){
                     </div>    
                     <div  class="flex-grow-1 d-block" >
                         <h6 class="mb-0 mt-1">${data.roomInfo.viewRoomName}</h6>
-                        <div class="small text-secondary">${data.recentChat.sender.username}: 사진을 보냈습니다. · ${ago}
+                        <div class="small text-secondary">${data.recentChat.sender.username}: 사진을 보냈습니다. · ${ago}<br>
                         <img class="rounded h-100px" src="${message}"  alt="">
                           <div class="position-relative" style="margin-left: 3px;" id="unread-${data.roomInfo.id}"></div>
                         </div>
@@ -278,7 +284,7 @@ function forAgoChatTimestamp(timestamp){
 
 } //날짜 포맷, 온지 얼마나 됬는지
 
-let unread = 0;
+
 function checkUnread(data) {
     unread += data.unreadCount;
     console.log("총안읽은 메시지 수 :"+unread);
@@ -287,7 +293,7 @@ function checkUnread(data) {
         let unr = document.querySelector("#unread-" + data.roomInfo.id)
         let un = document.createElement("span");
         un.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
-        un.innerHTML = `${unread}`;
+        un.innerHTML = `${data.unreadCount}`;
         unr.append(un);
     }else if (unread===0){
         $("#unread" + data.roomInfo.id + " *").remove();
