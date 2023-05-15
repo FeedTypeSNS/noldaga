@@ -1,16 +1,19 @@
 package com.noldaga.domain;
 
+import com.noldaga.domain.entity.Comment;
 import com.noldaga.domain.entity.Feed;
-import lombok.AllArgsConstructor;
+import com.noldaga.domain.userdto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
-@Getter //response 로 변환해줄때 필요 등
+@Getter
 public class FeedDto {
     private Long id;
     private String title;
@@ -18,20 +21,49 @@ public class FeedDto {
     private UserDto userDto;
     private Long groupId;
     private int range;
-    private LocalDateTime modDate;
-    private LocalDateTime regDate;
+    private String modDate;
+    private String regDate;
+    private LocalDateTime delDate;
     private Long totalView;
+    private Long totalLike;
+    private Long totalComment;
+    private List<CommentDto> commentList;
+    private List<FeedTagDto> feedTagDtoList;
+    private List<ImageDto> imageDtoList;
 
-    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, Long totalView) {
+    //댓글 있음
+    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, LocalDateTime delDate, Long totalView, Long totalLike, Long totalComment, List<CommentDto> commentList, List<FeedTagDto> feedTagDtoList) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.userDto = userDto;
         this.groupId = groupId;
         this.range = range;
-        this.modDate = modDate;
-        this.regDate = regDate;
+        this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.delDate = delDate;
         this.totalView = totalView;
+        this.totalLike = totalLike;
+        this.totalComment = totalComment;
+        this.commentList = commentList;
+        this.feedTagDtoList = feedTagDtoList;
+    }
+
+    //댓글 없음
+    private FeedDto(Long id, String title, String content, UserDto userDto, Long groupId, int range, LocalDateTime modDate, LocalDateTime regDate, LocalDateTime delDate, Long totalView, Long totalLike, Long totalComment, List<FeedTagDto> feedTagDtoList) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.userDto = userDto;
+        this.groupId = groupId;
+        this.range = range;
+        this.modDate = modDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.delDate = delDate;
+        this.totalView = totalView;
+        this.totalLike = totalLike;
+        this.totalComment = totalComment;
+        this.feedTagDtoList = feedTagDtoList;
     }
 
     public static FeedDto fromEntity(Feed feed) {
@@ -39,12 +71,36 @@ public class FeedDto {
                 feed.getId(),
                 feed.getTitle(),
                 feed.getContent(),
-                UserDto.fromEntity(feed.getUser()), //user 엔티티가 아니라 userDto 이어야함
+                UserDto.fromEntity(feed.getUser()),
                 feed.getGroupId(),
                 feed.getRange(),
                 feed.getModDate(),
                 feed.getRegDate(),
-                feed.getTotalView()
+                feed.getDelDate(),
+                feed.getTotalView(),
+                feed.getLikeCount(),
+                feed.getCommentCount(),
+                CommentDto.listFromEntity(feed.getComment()),
+                FeedTagDto.fromEntityList(feed.getFeedTags())
+        );
+    }
+
+    //지연로딩 반영을 위해 댓글이 없는 dto생성
+    public static FeedDto fromEntityWithoutComment(Feed feed) {
+        return new FeedDto(
+                feed.getId(),
+                feed.getTitle(),
+                feed.getContent(),
+                UserDto.fromEntity(feed.getUser()),
+                feed.getGroupId(),
+                feed.getRange(),
+                feed.getModDate(),
+                feed.getRegDate(),
+                feed.getDelDate(),
+                feed.getTotalView(),
+                feed.getLikeCount(),
+                feed.getCommentCount(),
+                FeedTagDto.fromEntityList(feed.getFeedTags())
         );
     }
 

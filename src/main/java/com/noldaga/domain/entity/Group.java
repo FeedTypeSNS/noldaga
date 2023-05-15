@@ -26,7 +26,7 @@ public class Group {
     @Column(name = "group_pw", length = 20)
     private String pw;
 
-    @Column(name = "group_profile_url", length = 100)
+    @Column(name = "group_profile_url", length = 300)
     private String profile_url;
 
     @Column(name = "group_intro")

@@ -1,54 +1,245 @@
-function init() {
+let imageList = [];
+let imageLength = null;
 
+function getUser() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed/getuser",
+        async: false
+    }).done(function(loginUser){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        getFeedData(loginUser);
+        getGroups();
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+
+    $("#modify-uploadFile").on("change",(e)=>{
+        image_save();
+    });
+}
+getUser();
+
+
+function getGroups() {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/groups/member",
+        dataType: "json"
+    }).done(function(resp){
+        setModalGroupSelectBox(resp.result);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+
+function setModalGroupSelectBox(data){
+    for(let i=0; i<data.length; i++){
+        let modifyGroupSelectBox = document.querySelector("#modify_group_id");
+
+        let selectOption = document.createElement("option"); //<option></option>
+        selectOption.value = `${data[i].id}`;
+        selectOption.innerHTML = `${data[i].name}`;
+        modifyGroupSelectBox.append(selectOption);
+    }
+}
+
+function getFeedData(loginUser) {
     const queryString = window.location.search;
+    var comment_page = 0;
+    let responseData;
 
     $.ajax({
         type: "GET",
         url: "/api/feed"+ queryString,
         dataType: "json"
-    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
-        initDetailPage(resp);
+    }).done(function(feedData){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        responseData = feedData.result;
+        setDetailPage(feedData.result,comment_page,loginUser);//여기서 넘길 때 로그인한 회원도 받아서 올 수 있다면
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
 
+    $("#comment-loadmore-button").on("click",()=>{
+        loadmoreComments(responseData,++comment_page,loginUser);
+    });
 }
 
-init();
 
-function initDetailPage(data){
+function loadmoreComments(feedData,comment_page,loginUser){
+    let page = Math.ceil(feedData.totalComment/10);
+
+    if(comment_page < page) { //아직 보여줄 댓글이 남음
+
+        for (let i = comment_page*10; i < comment_page*10+10; i++) {
+            let replyBox = document.querySelector("#FeedReplycontent");
+
+            let replyCard = document.createElement("div");
+            if(feedData.commentList[i].userResponse.username == loginUser.username)
+                replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
+            else
+                replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
+            replyBox.append(replyCard);
+        }
+    }
+    else{
+        //load more버튼을 없애는게 목표
+    }
+}
+
+function setDetailPage(feedData,comment_page,loginUser){
+    //피드 사진
+    let imageBox = document.querySelector("#FeedImages");
+
+    //피드 내용 들어가는 부분
     let feedBox = document.querySelector("#FeedDetailcontent");
-    let cardBox = document.createElement("div");
+    let feedCard = document.createElement("div");
 
-    cardBox.innerHTML = getDetailPage_Feed(data);
+    //좋아요 버튼, 댓글, 수정, 삭제 버튼 라인
+    let feedReactBox = document.querySelector("#FeedReact");
+    let feedReactCard = document.createElement("div");
 
-    feedBox.append(cardBox);
+    //댓글 입력창
+    let replySubmitBox = document.querySelector("#replyFormBox");
+    let replySubmitForm = document.createElement("form");
+    replySubmitForm.className = "nav nav-item w-100 position-relative";
 
-    let ReplyBox = document.querySelector("#FeedReplycontent");
-    let cardBox2 = document.createElement("div");
+    imageBox.innerHTML = getFeedImages(feedData.imageDtoList);
 
-    cardBox2.innerHTML = getDetailPage_comment(data);
+    feedCard.innerHTML = getDetailPage_Feed(feedData);
+    feedBox.append(feedCard);
 
-    ReplyBox.append(cardBox2);
+    if(feedData.userResponse.id == loginUser.id) {
+        if(feedData.delDate == null)
+            feedReactCard.innerHTML = getReactButtonsMine(feedData); //내가 쓴 글은 수정 삭제 보임
+        else
+            feedReactCard.innerHTML = getReactButtonsOthers(feedData);
+    }
+    else
+        feedReactCard.innerHTML = getReactButtonsOthers(feedData); //남이 쓴 글은 수정 삭제 버튼 없음
+
+    feedReactBox.append(feedReactCard);
+
+    replySubmitForm.innerHTML = reply_submit_form(feedData);
+    replySubmitBox.append(replySubmitForm);
+
+    let page = Math.ceil(feedData.totalComment/10);
+
+    if(comment_page < page) { //아직 보여줄 댓글이 남음
+
+        for (let i = comment_page*10; i < comment_page*10+10; i++) {
+            let replyBox = document.querySelector("#FeedReplycontent");
+
+            let replyCard = document.createElement("div");
+            if(feedData.commentList[i].userResponse.username == loginUser.username) {
+                replyCard.innerHTML = getDetailPage_comment_mine(feedData.commentList[i]); //내가 쓴 댓글에는 수정/삭제버튼 보임
+            }
+            else
+                replyCard.innerHTML = getDetailPage_comment_others(feedData.commentList[i]); //남이 쓴 댓글은 안보임
+            replyBox.append(replyCard);
+        }
+    }
+    else{
+        //load more버튼을 없애는게 목표
+    }
+}
+
+function getReactButtonsMine(data){
+    return `<ul class="nav nav-stack flex-wrap small mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" onclick="feedLike(${data.id})"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(${data.totalLike})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-eye pe-1"></i>(${data.totalView})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                        href="#"
+                                        class="nav-link bg-light py-1 px-2 mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#ModifyModal"
+                                        id="modify"
+                                        onclick="show()"
+                                >
+                                    <i class="bi bi-brush pe-2"></i
+                                    >수정
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a
+                                        href="#"
+                                        class="nav-link bg-light py-1 px-2 mb-0"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#DeleteAlertModal"
+                                >
+                                    <i class="bi bi-trash3 pe-2"></i
+                                    >삭제
+                                </a>
+                            </li>
+
+                            <!-- Card share action END -->
+                        </ul>`;
+}
+
+function getReactButtonsOthers(data){
+    return `<ul class="nav nav-stack flex-wrap small mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" onclick="feedLike(${data.id})"> <i class="bi bi-hand-thumbs-up-fill pe-1"></i>(${data.totalLike})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-chat-fill pe-1"></i>(${data.totalComment})</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!"> <i class="bi bi-eye pe-1"></i>(${data.totalView})</a>
+                            </li>
+                            <!-- Card share action START -->
+                            <li class="nav-item dropdown ms-sm-auto">
+                                <a class="nav-link mb-0" href="#" id="cardShareAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>(3)
+                                </a>
+                                <!-- Card share action dropdown menu -->
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction">
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
+                                </ul>
+                            </li>
+
+                            <!-- Card share action END -->
+                        </ul>`;
+}
+
+function getFeedImages(images){
+    let result = "";
+    imageLength = images.length-1;
+    for(let i=0; i<images.length; i++) {
+        result += `<img class="feedimage" src=${images[i].url} alt="">`;
+    }
+    return result;
 }
 
 function getDetailPage_Feed(data){
-    return `<!-- Fees images --><!-- 함수에 넣을 부분 시작 -->
-                            <img class="card-img rounded" src="assets/images/post/16by9/big/01.jpg" alt="">
-                            <!-- Feed meta START -->
-                            <div class="d-flex align-items-center justify-content-between my-3">
+    return `<div class="d-flex align-items-center justify-content-between my-3">
                                 <div class="d-flex align-items-center">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-story me-2">
-                                        <a href="#!"> <img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt=""> </a>
+                                        <a href="/nol/mypage?user_id=${data.userResponse.id}"> <img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""> </a>
                                     </div>
                                     <!-- Info -->
                                     <div>
                                       <div class="nav nav-divider">
-                                        <h6 class="nav-item card-title mb-0"> <a href="#!"> ${data.users.name} </a></h6>
-                                        <span class="nav-item small">  ${data.modDate} </span>
+                                        <h6 class="nav-item card-title mb-0"> <a href="#!"> ${data.userResponse.username} </a></h6>
+                                        <span class="nav-item small">  </span>
                                       </div>
-                                      <p class="mb-0 medium">${data.title}</p>
+                                      <p class="mb-0 medium">${data.modDate}</p>
                                     </div>
                                 </div>
                                 <!-- Card feed action dropdown START -->
@@ -74,137 +265,112 @@ function getDetailPage_Feed(data){
                             <!-- 함수에 넣을 부분 끝 -->`;
 }
 
-function getDetailPage_comment(data){
+function reply_submit_form(data){
+    return `<textarea
+                            data-autoresize
+                            class="form-control pe-5 bg-light"
+                            rows="1"
+                            placeholder="댓글을 입력하세요"
+                            id="replyContent"
+                    ></textarea>
+                            <input type ="hidden" id="feedId" value="${data.id}"/>
+                            <button
+                                    class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0"
+                                    type="button" id="reply-button" onclick="reply()"
+                            >
+                                <i class="bi bi-send-fill"> </i>
+                            </button>`;
+}
+
+function getDetailPage_comment_others(data){
     return `<ul class="comment-wrap list-unstyled">
-                            <!-- Comment item START -->
-                            <li class="comment-item">
-                                <div class="d-flex position-relative">
-                                    <!-- Avatar -->
-                                    <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
-                                    </div>
-                                    <div class="ms-2">
-                                        <!-- Comment by -->
-                                        <div class="bg-light rounded-start-top-0 p-3 rounded">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> Frances Guerrero </a></h6>
-                                                <small class="ms-2">5hr</small>
-                                            </div>
-                                            <p class="small mb-0">Removed demands expense account in outward tedious do. Particular way thoroughly unaffected projection.</p>
-                                        </div>
-                                        <!-- Comment react -->
-                                        <ul class="nav nav-divider py-2 small">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#!"> Like (3)</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#!"> Reply</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="#!"> View 5 replies</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <!-- Comment item nested START -->
-                                <ul class="comment-item-nested list-unstyled">
-                                    <!-- Comment item START -->
-                                    <li class="comment-item">
-                                        <div class="d-flex">
-                                            <!-- Avatar -->
-                                            <div class="avatar avatar-xs">
-                                                <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt=""></a>
-                                            </div>
-                                            <!-- Comment by -->
-                                            <div class="ms-2">
-                                                <div class="bg-light p-3 rounded">
-                                                    <div class="d-flex justify-content-between">
-                                                        <h6 class="mb-1"> <a href="#!"> Lori Stevens </a> </h6>
-                                                        <small class="ms-2">2hr</small>
-                                                    </div>
-                                                    <p class="small mb-0">See resolved goodness felicity shy civility domestic had but Drawings offended yet answered Jennings perceive.</p>
-                                                </div>
-                                                <!-- Comment react -->
-                                                <ul class="nav nav-divider py-2 small">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#!"> Like (5)</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#!"> Reply</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- Comment item END -->
-                                    <!-- Comment item START -->
-                                    <li class="comment-item">
-                                        <div class="d-flex">
-                                            <!-- Avatar -->
-                                            <div class="avatar avatar-story avatar-xs">
-                                                <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/07.jpg" alt=""></a>
-                                            </div>
-                                            <!-- Comment by -->
-                                            <div class="ms-2">
-                                                <div class="bg-light p-3 rounded">
-                                                    <div class="d-flex justify-content-between">
-                                                        <h6 class="mb-1"> <a href="#!"> Billy Vasquez </a> </h6>
-                                                        <small class="ms-2">15min</small>
-                                                    </div>
-                                                    <p class="small mb-0">Wishing calling is warrant settled was lucky.</p>
-                                                </div>
-                                                <!-- Comment react -->
-                                                <ul class="nav nav-divider py-2 small">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#!"> Like</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#!"> Reply</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- Comment item END -->
-                                </ul>
-                                <!-- Load more replies -->
-                                <a href="#!" role="button" class="btn btn-link btn-link-loader btn-sm text-secondary d-flex align-items-center mb-3 ms-5" data-bs-toggle="button" aria-pressed="true">
-                                    <div class="spinner-dots me-2">
-                                        <span class="spinner-dot"></span>
-                                        <span class="spinner-dot"></span>
-                                        <span class="spinner-dot"></span>
-                                    </div>
-                                    Load more replies
-                                </a>
-                                <!-- Comment item nested END -->
-                            </li>
-                            <!-- Comment item END -->
                             <!-- Comment item START -->
                             <li class="comment-item">
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt=""></a>
+                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> Frances Guerrero </a> </h6>
-                                                <small class="ms-2">4min</small>
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
+                                                <small class="ms-2">${data.modDate}</small>
                                             </div>
-                                            <p class="small mb-0">Removed demands expense account in outward tedious do. Particular way thoroughly unaffected projection.</p>
+                                            <p class="small mb-0">${data.content}</p>
                                         </div>
                                         <!-- Comment react -->
                                         <ul class="nav nav-divider pt-2 small">
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#!"> Like (1)</a>
+                                                <a
+                                                  class="nav-link"
+                                                  href="#!"
+                                                  data-bs-container="body"
+                                                  data-bs-toggle="tooltip"
+                                                  data-bs-placement="top"
+                                                  data-bs-html="true"
+                                                  data-bs-custom-class="tooltip-text-start"
+                                                  data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
+                                                  onclick="commentLike(${data.id})"
+                                                >
+                                                  <i class="bi bi-hand-thumbs-up-fill pe-1"></i>Liked
+                                                  (${data.totalLike})</a
+                                                >
+                                             </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Comment item END -->
+                        </ul>`;
+}
+
+function getDetailPage_comment_mine(data){
+    return `<ul class="comment-wrap list-unstyled">
+                            <!-- Comment item START -->
+                            <li class="comment-item">
+                                <div class="d-flex">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-xs">
+                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
+                                    </div>
+                                    <!-- Comment by -->
+                                    <div class="ms-2">
+                                        <div class="bg-light p-3 rounded">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
+                                                <small class="ms-2">${data.modDate}</small>
+                                            </div>
+                                            <p class="small mb-0">${data.content}</p>
+                                        </div>
+                                        <!-- Comment react -->
+                                        <ul class="nav nav-divider pt-2 small">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#!" onclick="commentLike(${data.id})"> Like (${data.totalLike})</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#!"> Reply</a>
+                                                <a
+                                                        href="#"
+                                                        class="nav-link py-1 px-2 mb-0"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#CommentModifyModal"
+                                                        onclick="showComment(${data.id})"
+                                                >
+                                                <i class="bi bi-brush pe-2"></i>수정
+                                                </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="#!"> View 6 replies</a>
+                                                <a
+                                                        href="#"
+                                                        class="nav-link py-1 px-2 mb-0"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#CommentDeleteModal"
+                                                        onclick="setDeleteComment(${data.id})"
+                                                >
+                                                    <i class="bi bi-trash3 pe-2"></i
+                                                    >삭제
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -213,3 +379,304 @@ function getDetailPage_comment(data){
                             <!-- Comment item END -->
                         </ul>`;
 }
+
+function reply() {
+    const queryString = window.location.search;
+    let content={
+        content: $("#replyContent").val(),
+        feedId: $("#feedId").val()
+    };
+    $.ajax({
+        type: "POST",
+        url: "/api/comment",
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        alert('댓글 등록 완료');
+        window.location.href = "/nol/feed"+queryString;
+    }).fail(function(error){
+        alert('댓글 등록 실패');
+        alert(JSON.stringify(error));
+    });
+}
+
+function feedLike(data) {
+    $.ajax({
+        type: "GET",
+        url: "/api/like/feed/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) feed_like_delete(data);
+        else feed_like_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function feed_like_register(data) {
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "POST",
+        url: "/api/like/feed/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/nol/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/nol/feed"+ queryString;
+    });
+}
+
+function feed_like_delete(data) {
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "DELETE",
+        url: "/api/like/feed/"+data
+    }).done(function(resp){
+        window.location.href = "/nol/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/nol/feed"+ queryString;
+    });
+}
+
+
+function commentLike(data) {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/like/comment/"+data,
+        dataType: "json"
+    }).done(function(resp){
+        if(resp) comment_like_delete(data);
+        else comment_like_register(data);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function comment_like_register(data) {
+    const queryString = window.location.search;
+    $.ajax({
+        type: "POST",
+        url: "/api/like/comment/"+data,
+        data: JSON.stringify(content),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = "/nol/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/nol/feed"+ queryString;
+    });
+}
+
+function comment_like_delete(data) {
+    const queryString = window.location.search;
+    $.ajax({
+        type: "DELETE",
+        url: "/api/like/comment/"+data
+    }).done(function(resp){
+        window.location.href = "/nol/feed"+ queryString;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = "/nol/feed"+ queryString;
+    });
+}
+
+function showComment(id) {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/comment/"+ id,
+        dataType: "json"
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        setCommentModifyModal(resp);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+
+    function setCommentModifyModal(data){
+        $('#commentContent').val(data.result.content);
+        $('#commentId').val(data.result.id);
+    }
+}
+
+function setDeleteComment(id){
+    $('#deleteId').val(id);
+}
+
+function getImageUrl(data){
+    let result = "";
+    for(let i=0; i<data.length; i++) {
+        result += `<img
+            className="card-img"
+            src=${data[i].url}
+            alt="Post"
+        />`;
+    }
+    return result;
+}
+
+function show() {
+
+    const queryString = window.location.search;
+
+    $.ajax({
+        type: "GET",
+        url: "/api/feed"+ queryString,
+        dataType: "json"
+    }).done(function(resp){//이렇게 받으면 이미 알아서 js객체로 바꿔줬기 때문에 JSON.parse(resp)하면 안됨
+        setModifyModal(resp);
+        showUploadFile(resp.result.imageDtoList);
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+
+    function setModifyModal(data){
+        $('#modify_title').val(data.result.title);
+        $('#modify_content').val(data.result.content);
+        $('#modify_id').val(data.result.id);
+        $("#modify_open_range").val(data.result.range).prop("selected", true);
+        $("#modify_group_id").val(data.result.groupId).prop("selected", true);
+    }
+
+}
+
+function showUploadFile(images){
+    for (let i = 0; i < images.length; i++) {
+        const uploadResult = document.querySelector(".modify-uploadResult");
+        const str = `<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                <button type="button" onclick="removeAlreadySavedFile('${images[i].url}',this)">삭제</button>
+            </div>
+            <div class="card-body">
+                 <img src=${images[i].url}>
+            </div>
+        </div><!-- card -->`
+
+
+        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg.png") {
+            uploadResult.innerHTML += str;
+            imageList.push(`${images[i].url}`);
+        }
+    }
+}
+
+function shownewUploadFile(images){
+    for (let i = 0; i < images.length; i++) {
+        const uploadResult = document.querySelector(".modify-uploadResult");
+        const str = `<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                <button type="button" onclick="removeNewFile('${images[i]}',this)">삭제</button>
+            </div>
+            <div class="card-body">
+                 <img src=${images[i]}>
+            </div>
+        </div><!-- card -->`
+
+        uploadResult.innerHTML += str
+        imageList.push(`${images[i]}`);
+    }
+}
+
+function image_save(){
+    const formImageData = new FormData();
+
+    var images = $("#modify-uploadFile")[0];
+    for(let i=0; i<images.files.length; i++) {
+        formImageData.append("images", images.files[i]);
+    }
+
+    $.ajax({
+        type:'post',
+        enctype:"multipart/form-data",  // 업로드를 위한 필수 파라미터
+        url: '/api/feed/imgs',
+        data: formImageData,
+        processData: false,
+        contentType: false
+    }).done((resp)=>{
+        shownewUploadFile(resp.result);
+    }).fail(function(error){
+        alert('업로드실패');
+        alert(JSON.stringify(error));
+    });
+}
+
+function removeAlreadySavedFile(url,obj){
+    const targetDiv = obj.closest(".card");
+
+    //db에서 삭제
+    removeFromDB(url);
+    //서버에서 삭제
+    removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+    var index = imageList.indexOf(url);
+    imageList.splice(index, 1);
+}
+
+function removeNewFile(url,obj){
+    const targetDiv = obj.closest(".card");
+    //서버에서 삭제
+    removeFileFromServer(url);
+    //모달창에서 삭제
+    targetDiv.remove();
+}
+
+function removeFileFromServer(url){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/feed/s3Img?url="+url,
+        contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+function removeFromDB(url){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/feed/dbImg?url="+url,
+        contentType: "application/json; charset=utf-8"
+    }).done(function(resp){
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
+}
+
+
+////????
+//function modify(){
+//    const queryString = window.location.search;
+//
+//    let data={
+//        title: $("#title").val(),
+//        content: $("#content").val(),
+//        range: $("#open_range").val(),
+//        groupId: $("#group_id").val()
+//    };
+//
+//    alert(JSON.stringify(data));
+//
+//    $.ajax({
+//        type: "PUT",
+//        url: "/api/feed"+queryString,
+//        data: JSON.stringify(data),
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json"
+//    }).done(function(resp){
+//        alert('수정 완료');
+//        location.href = "/";
+//    }).fail(function(error){
+//        alert('수정 실패');
+//        alert(JSON.stringify(error));
+//    });
+//
+//}

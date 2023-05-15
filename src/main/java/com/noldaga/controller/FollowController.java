@@ -2,12 +2,9 @@ package com.noldaga.controller;
 
 import com.noldaga.controller.response.FollowResponse;
 import com.noldaga.controller.response.Response;
-import com.noldaga.domain.UserDto;
 import com.noldaga.domain.UserSimpleDto;
-import com.noldaga.domain.entity.User;
 import com.noldaga.service.FollowService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +19,14 @@ public class FollowController {
     @PostMapping("/follow/{userId}")
     public Response<FollowResponse> doFollow(Authentication authentication, @PathVariable Long userId){
         FollowResponse msg = followService.doFollow(authentication.getName(), userId);
+        followService.setFollowCount(authentication.getName(), userId);
         return Response.success(msg);
     }//팔로우 하기
 
     @PostMapping("/unfollow/{userId}")
     public Response<FollowResponse> unFollow(Authentication authentication, @PathVariable Long userId){
         FollowResponse msg = followService.unFollow(authentication.getName(), userId);
+        followService.setFollowCount(authentication.getName(), userId);
         return Response.success(msg);
     }//언팔로우 하기
 
