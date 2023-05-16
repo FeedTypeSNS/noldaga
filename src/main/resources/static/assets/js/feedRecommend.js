@@ -1,9 +1,18 @@
 function init(){
     getRecFeedListFunc();
+
+    $("#loadmore-rec").on("click", (event)=>{
+        //alert("채팅방 생성");
+        event.preventDefault();// 이벤트 기본 동작 취소
+        $(".dotdot *").remove();
+        $(".dotdot").remove();
+        getRecFeedListFunc();
+    });
+
 }
 
 
-function loadmoreRec(currentPage){
+/*function loadmoreRec(currentPage){
     $.ajax({
         type: "GET",
         url: "/api/feeds/"+currentPage,
@@ -15,7 +24,7 @@ function loadmoreRec(currentPage){
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
-}
+}*/
 
 function getRecFeedListFunc(){
     $.ajax({
@@ -54,16 +63,18 @@ function getMyFeedListHtml(resp){
         let tagInfo = document.querySelector("#TagRec"+data.id);
         let tagCard = document.createElement("li");
         tagCard.className = "list-inline-item m-0";
-        let n = data.feedTagDtoList.length;
-        if (n>2){n=2}
-        for(let j=0; j<n; j++){
+
+        let nn = data.feedTagDtoList.length;
+        console.log("태그 게수 : "+nn);
+        if (nn>1){nn=2}
+        for(let j=0; j<nn; j++){
             tagCard.innerHTML += `<a class="btn btn-light btn-sm" href="/nol/hashtag?tag_id=${data.feedTagDtoList[j].hashTagDto.id}&tag_name=${data.feedTagDtoList[j].hashTagDto.tagName.substr(1)}">${data.feedTagDtoList[j].hashTagDto.tagName}</a>&nbsp`;
         }
 
         tagInfo.append(tagCard);
         //n = data.id;
     }
-    recContainer.after(getdot());
+
 }
 
 function getMyRecList(data){
@@ -71,59 +82,57 @@ function getMyRecList(data){
     let result = str.substring(0, 10);
     let date = forAgoChatTimestamprec(data.date);
 
-    return ` <div class="preview-item">
-                  <div class = "basic img" id="">
-                    <img style="width: 300px; height: 200px" src="${data.imageUrl}" alt="Video Preview 1">
-                  </div>
-                  <div class="text">
-                    <h3>${data.title}</h3>
-                    <p>${result}...</p>
-                  </div>
-                </div>
-                <div class="recommend-Info">
-                <div style="padding-left: 5px; padding-top: 10px" class="d-flex" >
-                 <a href="/nol/mypage?user_id=${data.userSimpleDto.id}">
-                  <img style="width:48px; height:48px; margin-right: 5px" class="avatar-img rounded-circle" src="${data.userSimpleDto.profileImageUrl}" alt="">
-                  </a>
-                  <div class="flex-grow-1 d-block">
-                    <h6 class="mb-0 mt-1"><a href="/nol/feed?id=${data.id}">${data.userSimpleDto.username}</a></h6>
-                    <div class="small text-secondary">${data.userSimpleDto.nickname}</div>
-                  </div>
-                </div>
-                <br>
-                        <a class="nav-link save" href="#!">
-                        <i class="bi bi-calendar-event pe-1"></i>${data.modiDate} - ${date}</a>
+    return `<div class="preview-item">
+    <div class = "basic img">
+        <img style="width: 300px; height: 200px;" src="${data.imageUrl}">
+    </div>
+    <div class="text">
+        <h3 style="color:lightskyblue;">${data.title}</h3>
+        <p>${result} ...</p>
+    </div>
+</div>
+<div class="recommend-Info">
+    <div style="padding-left: 5px; padding-top: 10px" class="d-flex" >
+        <a href="/nol/mypage?user_id=${data.userSimpleDto.id}">
+            <img style="width:48px; height:48px; margin-right: 5px" class="avatar-img rounded-circle" src="${data.userSimpleDto.profileImageUrl}" alt="">
+        </a>
+        <div class="flex-grow-1 d-block">
+            <h6 class="mb-0 mt-1"><a href="/nol/feed?id=${data.id}">${data.userSimpleDto.username}</a></h6>
+            <div class="small text-secondary">${data.userSimpleDto.nickname}</div>
+        </div>
+    </div>
+    <br>
+    <a class="nav-link save" href="#!">
+        <i class="bi bi-calendar-event pe-1"></i>${data.modiDate} - ${date}</a>
 
-                  <div style="padding-left: 10px; padding-bottom: 15px;">
-                <ul class="nav nav-stack py-3 small">
-                  <li class="nav-item">
-                  <a
-                      class="nav-link like"
-                      href="#!"
-                      data-bs-container="body"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-html="true"
-                      data-bs-custom-class="tooltip-text-start"
-                      data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
-                      onclick="like(${data.id})"
-                      id="like-button-zzzzz"
-                    >
-                    <a class="nav-link like" href="#!" data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="tooltip-text-start" data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford" onclick="like(2)" id="like-button-zzzzz">
-                      <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/nol/mypage?user_id=${data.userSimpleDto.id}">
-                      <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link save" href="#!">
-                      <i class="bi bi-eye pe-1"></i>${data.totalView}</a>
-                  </li>
-                </ul>
-                <div id="TagRec${data.id}"></div>
-                  </div>
-                  </div>
+    <div style="padding-left: 10px; padding-bottom: 15px;">
+        <ul class="nav nav-stack py-3 small">
+            <li class="nav-item">
+                <a
+                        class="nav-link like"
+                        href="#!"
+                        data-bs-container="body"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-html="true"
+                        data-bs-custom-class="tooltip-text-start"
+                        data-bs-title="Frances Guerrero<br> Lori Stevens<br> Billy Vasquez<br> Judy Nguyen<br> Larry Lawson<br> Amanda Reed<br> Louis Crawford"
+                        onclick="like(${data.id})"
+                        id="like-button-zzzzz">
+                        <i class="bi bi-hand-thumbs-up-fill pe-1"></i>좋아요(${data.totalLike})</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/nol/mypage?user_id=${data.userSimpleDto.id}">
+                    <i class="bi bi-chat-fill pe-1"></i>댓글(${data.totalComment})</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link save" href="#!">
+                    <i class="bi bi-eye pe-1"></i>${data.totalView}</a>
+            </li>
+        </ul>
+        <div id="TagRec${data.id}"></div>
+    </div>
+</div> 
 `;
 }
 
@@ -155,7 +164,7 @@ function forAgoChatTimestamprec(timestamp){
 
 
 function getdot(){
-    return `div class="d-flex mb-1">
+    return `<div class="d-flex mb-1">
               <div class="flex-grow-1">
                 <div class="w-100">
                   <div class="d-flex flex-column align-items-center">

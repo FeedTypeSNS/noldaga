@@ -17640,14 +17640,14 @@ a.badge:hover {
 /*# sourceMappingURL=style.css.map */
 
 /* Style for the preview screen container */
-.preview-container {
+/*.preview-container {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-}
+  justify-content: space-between; !*center;*!
+}*/
 
 /* Style for each preview item */
 .preview-item {
@@ -17693,23 +17693,30 @@ a.badge:hover {
 }
 
 
-.rec-container {
+/*.rec-container {
   display: flex;
   flex-wrap: wrap;
-  max-width: 2000px;
-  margin: auto;
-}
 
-.preview-item, .recommend-Info {
-  flex-basis: calc(50% - 10px);
-  margin: 5px;
-}
+}*/
+
 
 @media (max-width: 600px) {
   .preview-item, .recommend-Info {
     flex-basis: 100%;
   }
 }
+
+.preview-item, .recommend-Info {
+  display: flex;
+  flex-direction: column;
+}
+
+.basic.img, .text {
+  width: 100%;
+}
+
+
+
 
 /*추천 부분 스타일*/
 .recommend-box{
@@ -17722,4 +17729,21 @@ a.badge:hover {
   margin-top: 10px;
   border-radius: 13px;
   margin-bottom: 10px;
+  max-width: 300px;
+}
+.recommend-box{
+  max-width: 300px;
+  flex-basis: calc(25% - 20px);
+  margin-bottom: 20px;
+}
+/*.recommend-info-for-user{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 10px;
+}*/
+
+.recommend-info-for-user{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

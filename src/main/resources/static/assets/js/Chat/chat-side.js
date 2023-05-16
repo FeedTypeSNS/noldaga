@@ -16,7 +16,7 @@ let side = {
             url:"/api/following/my",
             contentType:"application/json; charset=utf-8"
         }).done(function (resp){
-            alert(JSON.stringify(resp));
+            //alert(JSON.stringify(resp));
             followlist(resp);
         }).fail(function (error){
             alert(JSON.stringify(error));
