@@ -58,7 +58,7 @@ function setSearchGroups(groups){
 }
 
 function setGroupCardContent(group) {
-    var groupOpen = (group.open === 0)? "비밀그룹" : "공개그룹";
+    var groupOpen = (group.open === 0)? "<i class='bi bi-lock pe-1'></i>비밀그룹" : "<i class='bi bi-globe pe-1'></i>공개그룹";
 
     return `<div class="card">
         <div class="h-40px rounded-top"></div>
@@ -67,7 +67,7 @@ function setGroupCardContent(group) {
             <img class="avatar-img rounded-circle border border-white border-3 bg-white" src="${group.profile_url}" alt="">
           </div>
           <h5 class="mb-0"><a href="group?id=${group.id}">${group.name}</a></h5>
-          <small><i class="bi bi-lock pe-1"></i>${groupOpen}</small>
+          <small>${groupOpen}</small>
           <div class="hstack gap-2 gap-xl-3 justify-content-center mt-3">
             <div>
               <small class="mb-0">${group.intro}</small>
