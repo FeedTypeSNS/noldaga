@@ -42,7 +42,9 @@ public class FollowService {
         Optional<Follow> value = followRepository.findByFollowingAndFollower(following, follower);
 
         if(value.isPresent()){
-            throw new SnsApplicationException(ErrorCode.ALREADY_FOLLOW, String.format("%s has already follow %s",following.getUsername(), follower.getUsername()));
+            FollowResponse fo = unFollow(me, follow);
+
+            return fo;
         }else {
             Boolean both = false;
             Optional<Follow> bothF = followRepository.findByFollowingAndFollower(follower, following);
@@ -153,4 +155,16 @@ public class FollowService {
         userRepository.save(other);
     }
 
+    public String followok(Long id, String mi){
+        User user = userRepository.findById(id).get();
+        User me = userRepository.findByUsername(mi).get();
+        Optional<Follow> o = followRepository.findByFollowingAndFollower(me, user);
+
+        if (o.isPresent()){
+            return "언팔로우";
+        }
+        else {
+            return "팔로우";
+        }
+    }
 }
