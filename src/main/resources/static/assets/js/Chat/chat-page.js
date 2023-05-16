@@ -86,16 +86,16 @@ function getMyChatListHtml(result){
         thisJoinImg.className = "joinPeopleImgList"+roomId;
 
         let name = document.querySelector("#getUsernameFromHeader").textContent;
-        const filteredData = data.joinPeoples.filter(person => person.nickname !== 'name');
-        alert(JSON.stringify(filteredData));
+        const filteredData = data.joinPeoples.filter(person => person.username !== name);
+        //alert(JSON.stringify(filteredData));
         //만약 맞다면 바꿔주기..
 
         switch (joinCount) {
             case 0 : thisJoinImg.innerHTML = getNonImg();break;
-            case 1 : thisJoinImg.innerHTML = getOneImg(data);break;
-            case 2 : thisJoinImg.innerHTML = getTwoImg(data);break;
-            case 3 : thisJoinImg.innerHTML = getThreeImg(data);break;
-            default : thisJoinImg.innerHTML = getFourImg(data);break;
+            case 1 : thisJoinImg.innerHTML = getOneImg(filteredData);break;
+            case 2 : thisJoinImg.innerHTML = getTwoImg(filteredData);break;
+            case 3 : thisJoinImg.innerHTML = getThreeImg(filteredData);break;
+            default : thisJoinImg.innerHTML = getFourImg(filteredData);break;
 
         }
         joinImg.append(thisJoinImg);
