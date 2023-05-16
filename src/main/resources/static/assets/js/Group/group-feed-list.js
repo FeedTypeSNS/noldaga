@@ -46,7 +46,7 @@ function loadmore(currentPage, groupId){
         dataType: "json"
     }).done(function(resp){
         if(resp.result.length == 0) alert("마지막 페이지입니다");
-        setFeedsContent(resp);
+        setFeedsContent(resp.result);
     }).fail(function(error){
         alert(JSON.stringify(error));
     });
