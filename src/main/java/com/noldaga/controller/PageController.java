@@ -142,4 +142,9 @@ public class PageController {
         return "sign-in";
     }
 
+    @GetMapping("/nol/recommend")
+    public String recommend(){return "recommend";}
+
+    @GetMapping("/nol/exr")
+    public String ex(){return "exr";}
 }

@@ -363,3 +363,19 @@ function like_delete(data,url) {
         window.location.href = url;
     });
 }
+
+
+function follow(userId){
+    const url = window.location.href;
+
+    $.ajax({
+        type: "POST",
+        url: "/api/follow/"+userId,
+        dataType: "json"
+    }).done(function(resp){
+        window.location.href = url;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+        window.location.href = url;
+    });
+}

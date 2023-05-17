@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Future;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -26,5 +27,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u from User u where u.username like %?1%")
     List<User> findAllBySearch(String q);
 
+    //가장 팔로워 수 많은 가입자
+    @Query(nativeQuery = true, value = "select * from users u order by u.total_follower DESC LIMIT :n, 1")
+    Optional<User> findNthByOrderByTotalFollowerDesc(Long n);
+    //가장 팔로잉 수 많은 가입자
+    @Query(nativeQuery = true, value = "select * from users u order by u.total_follower DESC LIMIT :n, 1")
+    Optional<User> findNthByOrderByTotalFollowingDesc(Long n);
 
+    //Optional<User> findFirstByOrderByCreatedAtDesc();
 }

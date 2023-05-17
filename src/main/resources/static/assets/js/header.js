@@ -294,7 +294,7 @@ function leftNavContent(alarmCheck,data) {
               >
             </li>-->
             <li class="nav-item">
-              <a class="nav-link" href="my-profile-origin.html">
+              <a class="nav-link" href="/nol/recommend">
                 <i class="bi bi-card-checklist nav-icon"></i>
                 <span class="nav-text">탐색 </span></a
               >

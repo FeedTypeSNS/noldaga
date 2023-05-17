@@ -193,7 +193,7 @@ function saveImg(roomId, file){
     }).done(function (resp){
         //alert(JSON.stringify(resp));
         ws.send(JSON.stringify(resp));
-        readURL(null);
+        readURL();
     }).fail(function (error){
         alert('채팅 전송 실패');
         alert(JSON.stringify(error));
@@ -214,7 +214,7 @@ function saveMsg(roomId, message){
     }).done(function (resp){
         //alert(JSON.stringify(resp));
         ws.send(JSON.stringify(resp));
-        readURL(null);
+        readURL();
     }).fail(function (error){
         alert('채팅 전송 실패');
         alert(JSON.stringify(error));
