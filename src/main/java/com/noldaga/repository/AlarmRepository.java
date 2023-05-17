@@ -19,8 +19,9 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Alarm a where a.id= :id")
+    @Query("delete Alarm a where a.id= :id") //영속성컨텐츠 동기화 없이 바로 쿼리 날라감
     void deleteById(Long id);
+    //그렇지 않으면 조회를한후에 delete 를 하든 soft delete 를 하게됨
 
 
     long countByToUserIdAndUnRead(Long toUserid,boolean unRead);

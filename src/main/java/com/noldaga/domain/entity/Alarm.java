@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 )
 @TypeDef(name= "json", typeClass= JsonType.class)
 @SQLDelete(sql= "update alarm set deleted_at = now() where alarm_id=?")
-@Where(clause = "deleted_at is NULL")
+@Where(clause = "deleted_at is NULL") //조회할때 이 조건절이 붙음
 public class Alarm {
 
     @Id

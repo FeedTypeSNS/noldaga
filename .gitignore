@@ -389,3 +389,4 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/intellij,intellij+all,intellij+iml,gradle,java,windows,macos,visualstudiocode
 /src/test/resources/data.sql
 /src/test/java/com/noldaga/repository/UserRepositoryTest.java
+/src/main/resources/application.yaml
