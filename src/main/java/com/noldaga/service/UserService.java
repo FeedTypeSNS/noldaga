@@ -166,6 +166,9 @@ public class UserService {
 
     @Transactional
     public void deleteAlarm(Long alarmId, UserDto loginUserDto) {
+
+        //소프트 delete 처리된 알람은 @Where(clause = "deleted_at is NULL") 이거때문에 조회가 안됨
+        //그래서 삭제 로직이 안돌아감ㅁ
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new SnsApplicationException(ErrorCode.ALARM_NOT_FOUND));
         if (loginUserDto.getId() != alarm.getToUserId()) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION);
