@@ -54,4 +54,11 @@ public class FollowController {
         List<UserSimpleDto> following = followService.getFollowingList(userName);
         return Response.success(following);
     }//다른 사람 팔로잉 리스트반환
+
+    @GetMapping("/follower/yes/{id}")
+    public Response<String> followYes(@PathVariable Long id, Authentication authentication) {
+        String f = followService.followok(id, authentication.getName());
+        return Response.success(f);
+    }
+
 }

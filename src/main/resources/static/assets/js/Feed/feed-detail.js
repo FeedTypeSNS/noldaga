@@ -289,13 +289,13 @@ function getDetailPage_comment_others(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
+                                        <a href="/nol/mypage?user_id=${data.userResponse.id}"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="/nol/mypage?user_id=${data.userResponse.id}"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -333,13 +333,13 @@ function getDetailPage_comment_mine(data){
                                 <div class="d-flex">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-xs">
-                                        <a href="#!"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
+                                        <a href="/nol/mypage?user_id=${data.userResponse.id}"><img class="avatar-img rounded-circle" src=${data.userResponse.profileImageUrl} alt=""></a>
                                     </div>
                                     <!-- Comment by -->
                                     <div class="ms-2">
                                         <div class="bg-light p-3 rounded">
                                             <div class="d-flex justify-content-between">
-                                                <h6 class="mb-1"> <a href="#!"> ${data.userResponse.username} </a> </h6>
+                                                <h6 class="mb-1"> <a href="/nol/mypage?user_id=${data.userResponse.id}"> ${data.userResponse.username} </a> </h6>
                                                 <small class="ms-2">${data.modDate}</small>
                                             </div>
                                             <p class="small mb-0">${data.content}</p>
@@ -561,7 +561,7 @@ function showUploadFile(images){
         </div><!-- card -->`
 
 
-        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg.png") {
+        if(images[i].url != "https://kr.object.ncloudstorage.com/noldaga-s3/util/noldaga-nonImg-feed.png") {
             uploadResult.innerHTML += str;
             imageList.push(`${images[i].url}`);
         }
