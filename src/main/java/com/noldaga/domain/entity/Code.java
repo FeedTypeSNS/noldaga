@@ -34,7 +34,7 @@ public class Code {
 
     private String username;
 
-    private Long groupId;
+//    private Long groupId;
 
 
     @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
@@ -56,10 +56,10 @@ public class Code {
         this.username = username;
     }
 
-    private Code(String randomCode,Long groupId){
-        this.randomCode = randomCode;
-        this.groupId = groupId;
-    }
+//    private Code(String randomCode,Long groupId){
+//        this.randomCode = randomCode;
+//        this.groupId = groupId;
+//    }
 
     public static Code of(String randomString, String email, String username){
         return new Code(randomString,email,username);
@@ -73,7 +73,7 @@ public class Code {
         return new Code(randomString, null, null);
     }
 
-    public static Code of(String randomString,Long groupId){
-        return new Code(randomString, groupId);
-    }
+//    public static Code of(String randomString,Long groupId){
+//        return new Code(randomString, groupId);
+//    }
 }

@@ -119,28 +119,38 @@ public class DataBaseCodeValidator implements CodeValidator{
 
     @Override
     public CodeDto generateCodeForGroup(Long groupId) {
-
-        String randomString = generateRandomString();
-        Code code = Code.of(randomString,groupId);
-        codeRepository.saveAndFlush(code);
-
-        return CodeDto.of(code.getId(), code.getRandomCode(), code.getGroupId());
+        return null;
     }
 
     @Override
-    public void validateCodeForGroup(Integer codeId, String randomCode, Long groupId) {
-        Code code = codeRepository.findById(codeId).orElseThrow(() ->
-                new SnsApplicationException(ErrorCode.INVALID_CODE_ID)
-        );
-
-        if (!code.getRandomCode().equals(randomCode)) {
-            throw new SnsApplicationException(ErrorCode.INVALID_CODE);
-        }
-
-        if (code.getGroupId() != groupId) {
-            throw new SnsApplicationException(ErrorCode.INVALID_GROUP_ID);
-        }
+    public void validateCodeForGroup(Integer codeId, String code, Long groupId) {
 
     }
+
+//    @Override
+//    public CodeDto generateCodeForGroup(Long groupId) {
+//
+//        String randomString = generateRandomString();
+//        Code code = Code.of(randomString,groupId);
+//        codeRepository.saveAndFlush(code);
+//
+//        return CodeDto.of(code.getId(), code.getRandomCode(), code.getGroupId());
+//    }
+
+//    @Override
+//    public void validateCodeForGroup(Integer codeId, String randomCode, Long groupId) {
+//        Code code = codeRepository.findById(codeId).orElseThrow(() ->
+//                new SnsApplicationException(ErrorCode.INVALID_CODE_ID)
+//        );
+//
+//        if (!code.getRandomCode().equals(randomCode)) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_CODE);
+//        }
+//
+//        if (code.getGroupId() != groupId) {
+//            throw new SnsApplicationException(ErrorCode.INVALID_GROUP_ID);
+//        }
+
+//    }
 
 }

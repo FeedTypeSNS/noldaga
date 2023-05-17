@@ -61,7 +61,7 @@ public class UserService {
 
         String afterUrl = beforeUrl;
         if(containImageFile(multipartFile)) {
-            afterUrl =s3Uploader.upload(multipartFile,"/user");
+            afterUrl =s3Uploader.upload(multipartFile,"/sample");
             if (isNotDefaultImage(beforeUrl)) {
                 s3Uploader.deleteImage(beforeUrl);
             }

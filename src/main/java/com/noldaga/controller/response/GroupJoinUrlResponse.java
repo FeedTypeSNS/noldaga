@@ -1,3 +1,4 @@
+/*
 package com.noldaga.controller.response;
 
 
@@ -28,3 +29,4 @@ public class GroupJoinUrlResponse {
         return new GroupJoinUrlResponse(url);
     }
 }
+*/
