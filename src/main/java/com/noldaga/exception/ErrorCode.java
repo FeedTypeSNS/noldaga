@@ -11,19 +11,19 @@ public enum ErrorCode {
     INVALID_CODE(HttpStatus.UNAUTHORIZED,"Code is invalid"),
     INVALID_CODE_ID(HttpStatus.UNAUTHORIZED, "CodeId is invalid"),
     INVALID_EMAIL(HttpStatus.UNAUTHORIZED, "Email is not authenticated"),
-    DUPLICATED_USERNAME(HttpStatus.CONFLICT,"User Id is duplicated"), //회원가입시 이미 회원가입된 username
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"), //로그인시 회원가입이 안된 username
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"), //로그인시 틀린 password
+    DUPLICATED_USERNAME(HttpStatus.CONFLICT,"User Id is duplicated"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"),
 
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),//토큰필터개발에서 추가됨
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),
 
-    FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "Feed not founded"),//피드수정개발할때 추가됨
-    INVALID_PERMISSION(HttpStatus.FORBIDDEN, "Permission is invalid"),//피드수정개발할때 추가됨.
+    FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "Feed not founded"),
+    INVALID_PERMISSION(HttpStatus.FORBIDDEN, "Permission is invalid"),
 
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),//런타임 예외등(UserService 회원가입 트랜잭션 런타임예외 하면서 추가한듯.?)
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
 
     //feedLike
-    ALREADY_LIKED(HttpStatus.CONFLICT, "User has already liked the Feed"), //feedLike 개발하면서 추가
+    ALREADY_LIKED(HttpStatus.CONFLICT, "User has already liked the Feed"),
     FEEDLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "FeedLike not founded"),
     COMMENTLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "CommentLike not founded"),
 
@@ -45,13 +45,13 @@ public enum ErrorCode {
 
     UPLOAD_SIZE_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE,"File size too large"),
 
-    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Invalid data value"), //@Validated 실패시
+    INVALID_DATA_VALUE(HttpStatus.BAD_REQUEST,"Invalid data value"),
 
 
     ENDED_SESSION(HttpStatus.NOT_FOUND, "This Session is already close"),
 
     //Group
-    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),//피드수정개발할때 추가됨
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "Group not founded"),
 
 
     //File
