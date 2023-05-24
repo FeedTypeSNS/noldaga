@@ -17,9 +17,9 @@
 |이름|대표 기능|세부 구현|
 |-----|---|---|
 |<a href="https://github.com/ggiou">마지우</a>|채팅||
-|채지완|그룹||
-|한아름|피드||
-|홍재윤|회원||
+|<a href="https://github.com/Chaejiwan">채지완</a>|그룹||
+|<a href="https://github.com/areumh01">한아름</a>|피드||
+|<a href="https://github.com/deliciousdev">홍재윤</a>|회원||
 
 # 💫 UI & 기능 소개
 ### 1) oo페이지 : 간략한 설명
