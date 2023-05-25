@@ -19,7 +19,7 @@
 |<a href="https://github.com/ggiou">마지우</a>|<div align="center">채팅</div>||
 |<a href="https://github.com/Chaejiwan">채지완</a>|<div align="center">그룹</div>||
 |<a href="https://github.com/areumh01">한아름</a>|<div align="center">피드</div>||
-|<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
+|<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
 
 # 💫 UI & 기능 소개
 ### 1) oo페이지 : 간략한 설명
