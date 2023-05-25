@@ -36,7 +36,7 @@
 ###### : 이미지 첨부
 
 ## 🟨 ERD 
-###### :<img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/ef7e234b-48dc-4224-9208-fbeb34d17b0b">
+###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/62a443be-4773-47b9-ac2b-42f25e8a053a">
 
 ## 🟩 API 
 ###### : 이건 노션에 정리하고 링크 걸든.. 너무 많아서 스샷을 대충하고 노션에 다 정리해서 링크걸든 하는게 좋을 듯
