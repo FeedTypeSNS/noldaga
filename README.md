@@ -1,4 +1,4 @@
-# 🌐noldaga project
+# <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/bba0781b-5c72-4f27-bfbb-493b7ba8917b" height="38"> noldaga project
 ###### : 브로셔 넣기
 
 # 🗣 프로젝트 소개
