@@ -13,7 +13,7 @@
 2023.04. ~ 2023.05.15
 ###### : wbs를 넣을까 말까?
 
-# 👥 팀 멤버 & 담당 기능
+# <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/bba0781b-5c72-4f27-bfbb-493b7ba8917b" height="38"> 팀 멤버 & 담당 기능
 |이름|대표 기능|세부 구현|
 |-----|---|---|
 |<a href="https://github.com/ggiou">마지우</a>|채팅||
