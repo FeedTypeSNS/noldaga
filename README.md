@@ -37,7 +37,7 @@
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/e347a11f-4f57-42bd-bc6f-89021448920d" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/7cfa608c-f8a2-46a6-ae86-cea8961782ba" width="150">
 
 ### 1) 검색페이지 : 게시글, 해시태그, 사람, 그룹 검색
-###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> 
+###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/5f42c983-4957-421d-8030-b0198e3b34ef" width="150">
 
 ### 1) 탐색페이지 : public 노출....
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/3ad6e45a-4b50-4c3c-9d18-cf4c66a1f5e7" width="150">
