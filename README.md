@@ -22,12 +22,12 @@
 |<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
 
 # 💫 UI & 기능 소개
-### 1) 메인페이지 ,사이드바  : private 노출 등...
-######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/081d6ae7-277b-4afc-ad2a-845b8e5a33ec" width="150">
+### 1) 메인페이지 , 헤더 사이드바: private 노출.... 
+######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/081d6ae7-277b-4afc-ad2a-845b8e5a33ec" width="150">   <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/cab8f255-877d-42f7-a16c-85d5c93adc0f" width="150">
+
 
 ### 1) 마이페이지 : 저장됨,좋아요 친구목록,프로필수정 등...
 ######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/42bdde70-71d1-4a36-9699-4cb9278a1c59" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/e66a5b67-001e-4b70-8ea7-ebb84ef3a1e7" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/392e6ba7-d196-4ae6-aad8-1c6a691d51c3" width="150">
-
   
 
 ### 1) 그룹페이지 : 그룹 탈퇴, 그룹 생성, 내그룹 보기 등....
@@ -40,7 +40,7 @@
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> 
 
 ### 1) 탐색페이지 : public 노출 등....
-###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/b6c46f16-4afa-4a6a-a1d9-1309574e3d18" width="150"> 
+###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/3ad6e45a-4b50-4c3c-9d18-cf4c66a1f5e7" width="150">
 
 ### 1) 피드상세페이지 : 이미지 , 댓글, 피드좋아요 , 댓글좋아요 , 조회수
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/6402a023-1d89-41be-9875-2e33d40a6fea" width="150">
