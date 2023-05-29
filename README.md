@@ -22,40 +22,40 @@
 |<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
 
 # 💫 UI & 기능 소개
-### 1) 메인페이지 , 헤더 사이드바: private 노출.... 
+### 1) 메인페이지 : private 노출, 헤더 및 사이드바....
 ######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/081d6ae7-277b-4afc-ad2a-845b8e5a33ec" width="150">   <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/cab8f255-877d-42f7-a16c-85d5c93adc0f" width="150">
 
 
-### 1) 마이페이지 : 저장됨,좋아요 친구목록,프로필수정 등...
+### 1) 마이페이지 : 내가올린 게시물, 저장된 그룹 게시물 ,좋아요한 게시물, 친구목록, 즐겨찾기한 그룹, 프로필수정 
 ######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/42bdde70-71d1-4a36-9699-4cb9278a1c59" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/e66a5b67-001e-4b70-8ea7-ebb84ef3a1e7" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/392e6ba7-d196-4ae6-aad8-1c6a691d51c3" width="150">
   
 
-### 1) 그룹페이지 : 그룹 탈퇴, 그룹 생성, 내그룹 보기 등....
+### 1) 그룹페이지 : 내가 만든 그룹, 내가 가입한 그룹, 그룹 생성, 그룹탈퇴, 그룹 삭제  
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/efc55305-8621-4fc3-b77b-f3516b297468" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/c597e4b6-26e1-428d-8b32-21acd21f577b" width="150">
 
-### 1) 그룹상세페이지 : 그룹피드목록, 멤버목록, 즐겨찾기 등...
+### 1) 그룹상세페이지 : 그룹 게시물 목록, 그룹게시물 등록, 그룹 멤버 목록, 그룹 즐겨찾기 하기, 그룹탈퇴하기 ,그룹 멤버 강퇴, 그룹 정보 수정
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/e347a11f-4f57-42bd-bc6f-89021448920d" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/7cfa608c-f8a2-46a6-ae86-cea8961782ba" width="150">
 
-### 1) 검색페이지 : 게시글, 해시태그, 사람, 그룹 검색 등...
+### 1) 검색페이지 : 게시글, 해시태그, 사람, 그룹 검색
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> 
 
-### 1) 탐색페이지 : public 노출 등....
+### 1) 탐색페이지 : public 노출....
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/3ad6e45a-4b50-4c3c-9d18-cf4c66a1f5e7" width="150">
 
-### 1) 피드상세페이지 : 이미지 , 댓글, 피드좋아요 , 댓글좋아요 , 조회수
+### 1) 피드상세페이지 : 피드 이미지 목록, 댓글, 좋아요, 피드 수정 및 삭제, 댓글 좋아요 , 조회수
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/6402a023-1d89-41be-9875-2e33d40a6fea" width="150">
 
-### 1) 채팅페이지 : 실시간 채팅 파일첨부, 채팅방 목록, 채팅방 관리 등...
+### 1) 채팅페이지 : 실시간 채팅 ,파일첨부, 채팅방 만들기, 채팅방 목록, 채팅방 관리 등..
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/31b4fd75-3d87-4bc3-b9ca-e9782c6c7849" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/2dbd2740-e917-422f-bd15-e3d3f9394b2c" width="150">
 
-### 1) 알림페이지 : 이벤트 알림, 알림 확인, 알림 삭제, 이벤트 관련 링크 등.
+### 1) 알림페이지 : 이벤트 알림, 알림 확인, 알림 삭제, 알림 관련 이동 링크
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/be1fe375-a53a-4036-8778-173b9e5341f8" width="150">
 
 ### 1) 회원정보 수정 페이지
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/383aebfb-00f0-4582-9c5d-7dc6a7136ab5" width="150">
 
 
-### 1) 회원가입,로그인 : 일반회원가입, 로그인 ,소셜 회원가입,아이디,비번찾기 등.. 
+### 1) 회원가입,로그인 : 일반회원가입, 로그인 ,소셜 회원가입,아이디,비밀번호 찾기 ,이메일 인증
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/25ce32f4-e14c-4e7e-bfd4-e777751ec321" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/138e3949-ea86-438c-9fe5-690b24924580" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0c2b7fc0-5911-45af-a476-04932a0628c7" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/341adf48-8b85-4381-8247-f6d2dfa01d48" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/5f388e06-af4e-4904-85a4-7a20c9c1f396" width="150">
 
 
