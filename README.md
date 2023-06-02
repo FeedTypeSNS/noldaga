@@ -17,7 +17,7 @@
 # <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/bba0781b-5c72-4f27-bfbb-493b7ba8917b" height="38"> 팀 멤버 & 담당 기능
 |이름|대표 기능|세부 구현|
 |-----|---|---|
-|<a href="https://github.com/ggiou">마지우</a>|<div align="center">채팅</div>||
+|<a href="https://github.com/ggiou">마지우</a>|<div align="center">채팅</div>|실시간 채팅(+ 메신저), 팔로우 서비스, 피드 추천 알고리즘, 이미지 업로드를 위한 ObjectStorage(S3)연동, NaverCloudPlatform 서버 배포 및 유지보수|
 |<a href="https://github.com/Chaejiwan">채지완</a>|<div align="center">그룹</div>||
 |<a href="https://github.com/areumh01">한아름</a>|<div align="center">피드</div>||
 |<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
