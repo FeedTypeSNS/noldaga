@@ -65,8 +65,9 @@
 
 
 # 📸 시연 영상
-[![시연영상 링](https://github.com/FeedTypeSNS/noldaga/assets/110371892/b48dcf92-0a5f-41d2-928f-eed419bb8a6c)](https://youtu.be/N70LYCafH-o)
-###### <이미지 클릭시 링크 이동합니다.>
+![](https://github.com/FeedTypeSNS/noldaga/assets/110371892/b48dcf92-0a5f-41d2-928f-eed419bb8a6c)
+
+(https://youtu.be/N70LYCafH-o)
 
 # 📑 분석 설계 문서
 ## 🟥 플로우 차트
