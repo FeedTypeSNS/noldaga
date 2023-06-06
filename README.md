@@ -24,7 +24,7 @@
 |-----|---|---|
 |<a href="https://github.com/ggiou">마지우</a>|<div align="center">채팅</div>|실시간 채팅(+ 메신저), 팔로우 서비스, 피드 추천 알고리즘, 이미지 업로드를 위한 ObjectStorage(S3)연동, NaverCloudPlatform 서버 배포 및 유지보수|
 |<a href="https://github.com/Chaejiwan">채지완</a>|<div align="center">그룹</div>||
-|<a href="https://github.com/areumh01">한아름</a>|<div align="center">피드</div>|피드 서비스, 댓글 서비스, 해시태그, 좋아요, 저장하기, 검색 기능(피드,회원,해시태그,그룹), 페이지 구성(헤더, 마이페이지, 메인페이지)|
+|<a href="https://github.com/areumh01">한아름</a>|<div align="center">피드</div>|피드 서비스, 댓글 서비스, 해시태그, 좋아요, 저장하기, 검색 기능, 페이지 구성(헤더, 마이페이지, 메인페이지)|
 |<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
 
 # 💫 UI & 기능 소개
