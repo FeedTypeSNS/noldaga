@@ -39,13 +39,13 @@
 ### 3) 그룹페이지 : 내가 만든 그룹, 내가 가입한 그룹, 그룹 생성, 그룹탈퇴, 그룹 삭제  
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/efc55305-8621-4fc3-b77b-f3516b297468" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/c597e4b6-26e1-428d-8b32-21acd21f577b" width="150">
 
-### 4) 그룹상세페이지 : 그룹 게시물 목록, 그룹게시물 등록, 그룹 멤버 목록, 그룹 즐겨찾기 하기, 그룹탈퇴하기 ,그룹 멤버 강퇴, 그룹 정보 수정
+### 4) 그룹상세페이지 (폐쇄 공간) : 그룹 게시물 목록, 그룹게시물 등록, 그룹 멤버 목록, 그룹 즐겨찾기 하기, 그룹탈퇴하기 ,그룹 멤버 강퇴, 그룹 정보 수정
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/e347a11f-4f57-42bd-bc6f-89021448920d" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/7cfa608c-f8a2-46a6-ae86-cea8961782ba" width="150">
 
 ### 5) 검색페이지 : 게시글, 해시태그, 사람, 그룹 검색
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/5f42c983-4957-421d-8030-b0198e3b34ef" width="150">
 
-### 6) 탐색페이지 : 오픈형 노출 (피드 추천 기능)
+### 6) 탐색페이지 (오픈 공간): 오픈형 노출 (피드 추천 기능)
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/3ad6e45a-4b50-4c3c-9d18-cf4c66a1f5e7" width="150">
 
 ### 7) 피드상세페이지 : 피드 이미지 목록, 댓글, 좋아요, 피드 수정 및 삭제, 댓글 좋아요 , 조회수
