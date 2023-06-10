@@ -28,7 +28,7 @@
 |<a href="https://github.com/deliciousdev">홍재윤</a>|<div align="center">회원</div>|로그인, 소셜로그인, 회원가입, 비밀번호찾기, 아이디찾기, 회원정보수정, 이벤트 알림|
 
 # 💫 UI & 기능 소개
-### 1) 메인페이지 : private 노출, 헤더 및 사이드바....
+### 1) 메인페이지 : 폐쇄형 노출(팔로우 팔로워 피드 노출), 헤더 및 사이드바
 ######  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/081d6ae7-277b-4afc-ad2a-845b8e5a33ec" width="150">   <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/cab8f255-877d-42f7-a16c-85d5c93adc0f" width="150">
 
 
@@ -45,13 +45,13 @@
 ### 5) 검색페이지 : 게시글, 해시태그, 사람, 그룹 검색
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/0e764238-bf98-4844-b278-a210e2411e8e" width="150"> <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/5f42c983-4957-421d-8030-b0198e3b34ef" width="150">
 
-### 6) 탐색페이지 : public 노출....
+### 6) 탐색페이지 : 오픈형 노출 (피드 추천 기능)
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/3ad6e45a-4b50-4c3c-9d18-cf4c66a1f5e7" width="150">
 
 ### 7) 피드상세페이지 : 피드 이미지 목록, 댓글, 좋아요, 피드 수정 및 삭제, 댓글 좋아요 , 조회수
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/6402a023-1d89-41be-9875-2e33d40a6fea" width="150">
 
-### 8) 채팅페이지 : 실시간 채팅 ,파일첨부, 채팅방 만들기, 채팅방 목록, 채팅방 관리 등..
+### 8) 채팅페이지 : 실시간 채팅 ,파일첨부, 채팅방 만들기, 채팅방 목록, 채팅방 관리
 ###### <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/31b4fd75-3d87-4bc3-b9ca-e9782c6c7849" width="150">  <img src="https://github.com/FeedTypeSNS/noldaga/assets/127002082/2dbd2740-e917-422f-bd15-e3d3f9394b2c" width="150">
 
 ### 9) 알림페이지 : 이벤트 알림, 알림 확인, 알림 삭제, 알림 관련 이동 링크
