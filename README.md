@@ -92,7 +92,7 @@
 <자세히 보기> [https://docs.google.com/spreadsheets/d/154Tt38Vx4_lT0dUWdUqUL00T53AQoVPn/edit?usp=sharing&ouid=105172390124794587485&rtpof=true&sd=true]
 
 # 🔗 서비스 아키텍쳐 
-![image](https://github.com/FeedTypeSNS/noldaga/assets/110371892/b6963edc-65d2-4dcf-8034-56e01dbcb35f)
+![서비스아키텍처 drawio](https://github.com/FeedTypeSNS/noldaga/assets/127002082/bbcb3cf0-ab39-4768-82ad-c2c89dd7239d)
 
 # 🛠 기술 Stack & Tools
 **협업 Tools** : 
