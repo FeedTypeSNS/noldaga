@@ -83,7 +83,7 @@
 
 
 ## 🟨 ERD 
-###### ![Copy of 프로젝트 erd](https://github.com/FeedTypeSNS/noldaga/assets/127002082/6ff95264-e0cd-4839-8bde-0fbd35fd275f)
+###### ![Copy of 프로젝트 erd](https://github.com/FeedTypeSNS/noldaga/assets/127002082/21357762-d7b0-446d-8251-eff3cfbe18bb)
 
 ## 🟩 API 
 ![그림3](https://github.com/FeedTypeSNS/noldaga/assets/110371892/df78b66c-8ed7-44d9-816b-ff95d0de16aa)
