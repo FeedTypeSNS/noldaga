@@ -9,7 +9,6 @@
 
 - **배포 사이트** : ~~http://115.85.183.215:8080/~~ (현재 서버 종료)
 - **GitHub** : https://github.com/FeedTypeSNS/noldaga/
-- **Notion** : https://www.notion.so/SNS-noldaga-4cbbd09fafa34842ad911d8cf814ab36/
 
 # 📆 제작 기간
 2023.04. ~ 2023.05.15
