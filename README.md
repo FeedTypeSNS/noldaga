@@ -12,7 +12,7 @@
 
 # 📆 제작 기간
 2023.04. ~ 2023.05.15
-- **WBS** : https://docs.google.com/spreadsheets/d/1Y6PZ-zWfpOCU71fzrhAVTVkcvBFr1WhH/edit#gid=1103703618
+- **WBS** : [https://docs.google.com/spreadsheets/d/1Y6PZ-zWfpOCU71fzrhAVTVkcvBFr1WhH/edit#gid=1103703618](https://docs.google.com/spreadsheets/d/17FatFmPbSSIHAuui88b7qba0udlrOq3LGPukVAjpWVw/edit#gid=0)
 
 ![WBS1](https://github.com/FeedTypeSNS/noldaga/assets/110371892/ba033ab3-4c7a-40a5-a781-bf339de21e56)
 ![WBS2](https://github.com/FeedTypeSNS/noldaga/assets/110371892/ed262b53-6701-4795-a8bb-3c5f80c0e758)
